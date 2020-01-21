@@ -645,6 +645,12 @@ engineer, construction, leadership, medical, surgery, pilot, police, powerloader
 	surgery = SKILL_SURGERY_AMATEUR
 	powerloader = SKILL_POWERLOADER_DABBLING
 
+/datum/skills/imperial/astartes/captain //Astartes equivalent of an SL
+	name = "Space Marine Captain"
+	leadership = SKILL_LEAD_MASTER
+	engineer = SKILL_ENGINEER_MASTER //SL bonuses
+	construction = SKILL_CONSTRUCTION_MASTER
+
 /datum/skills/imperial/astartes/apothecary
 	name = "Space Marine Apothecary" // a slightly less stronger space marine with medical skills
 	cqc = 4 // below SKILL_CQC_MASTER, no define for it
@@ -653,3 +659,17 @@ engineer, construction, leadership, medical, surgery, pilot, police, powerloader
 	medical = SKILL_MEDICAL_EXPERT
 	surgery = SKILL_SURGERY_EXPERT
 
+/datum/skills/imperial/inquisitor
+	name = "Inquisitor"
+	leadership = SKILL_LEAD_BEGINNER
+	firearms = SKILL_FIREARMS_TRAINED
+	pistols = SKILL_PISTOLS_TRAINED
+	shotguns = SKILL_SHOTGUNS_TRAINED
+	rifles = SKILL_RIFLES_TRAINED
+	smgs = SKILL_SMGS_TRAINED
+
+/datum/skills/imperial/inquisitor/lord
+	name = "Lord Inquisitor"
+	leadership = SKILL_LEAD_EXPERT
+	engineer = SKILL_ENGINEER_ENGI //SL bonuses
+	construction = SKILL_CONSTRUCTION_ADVANCED

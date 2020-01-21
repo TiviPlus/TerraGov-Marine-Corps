@@ -109,6 +109,75 @@
 	G.reload(H, new /obj/item/cell/lasgun/M43/highcap(G)) // starts out reloaded
 	H.equip_to_slot_or_del(G, SLOT_S_STORE)
 
+/datum/job/imperial/guardsman/krieg //Basically a guardsman reskin
+	title = "Krieg Guardsman"
+	comm_title = "Krieg Guard"
+	outfit = /datum/outfit/job/imperial/guardsman/krieg
+
+/datum/outfit/job/imperial/guardsman/krieg
+	name = "Imperial Krieg Guardsman"
+	jobtype = /datum/job/imperial/guardsman/krieg
+
+	wear_suit = /obj/item/clothing/suit/storage/marine/imperial
+	head = /obj/item/clothing/head/helmet/marine/imperial
+
+/datum/outfit/job/imperial/guardsman/krieg/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
+	. = ..()
+
+	H.equip_to_slot_or_del(new /obj/item/reagent_containers/hypospray/autoinjector/tricordrazine, SLOT_IN_HEAD)
+	H.equip_to_slot_or_del(new /obj/item/reagent_containers/hypospray/autoinjector/oxycodone, SLOT_IN_HEAD)
+
+	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/frag, SLOT_IN_SUIT)
+	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/incendiary, SLOT_IN_SUIT)
+
+	H.equip_to_slot_or_del(new /obj/item/reagent_containers/food/snacks/enrg_bar, SLOT_IN_BACKPACK)
+	H.equip_to_slot_or_del(new /obj/item/reagent_containers/food/snacks/enrg_bar, SLOT_IN_BACKPACK)
+
+	H.equip_to_slot_or_del(new /obj/item/cell/lasgun/M43, SLOT_IN_BELT)
+	H.equip_to_slot_or_del(new /obj/item/cell/lasgun/M43, SLOT_IN_BELT)
+	H.equip_to_slot_or_del(new /obj/item/cell/lasgun/M43, SLOT_IN_BELT)
+	H.equip_to_slot_or_del(new /obj/item/cell/lasgun/M43, SLOT_IN_BELT)
+	H.equip_to_slot_or_del(new /obj/item/cell/lasgun/M43, SLOT_IN_BELT)
+
+	var/obj/item/weapon/gun/energy/lasgun/M43/G = new /obj/item/weapon/gun/energy/lasgun/M43(H)
+	G.reload(H, new /obj/item/cell/lasgun/M43(G)) // starts out full
+	H.equip_to_slot_or_del(G, SLOT_S_STORE)
+
+/datum/job/imperial/guardsman/sergeant/krieg
+	title = "Krieg Guardsman Sergeant"
+	comm_title = "Sergeant"
+	outfit = /datum/outfit/job/imperial/sergeant/krieg
+
+/datum/outfit/job/imperial/sergeant/krieg
+	name = "Krieg Guardsman Sergeant"
+	jobtype = /datum/job/imperial/guardsman/sergeant/krieg
+
+	wear_suit = /obj/item/clothing/suit/storage/marine/imperial/sergeant
+	head = /obj/item/clothing/head/helmet/marine/imperial/sergeant
+
+/datum/outfit/job/imperial/sergeant/krieg/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
+	. = ..()
+
+	H.equip_to_slot_or_del(new /obj/item/reagent_containers/hypospray/autoinjector/tricordrazine, SLOT_IN_HEAD)
+	H.equip_to_slot_or_del(new /obj/item/reagent_containers/hypospray/autoinjector/oxycodone, SLOT_IN_HEAD)
+
+	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/frag, SLOT_IN_SUIT)
+	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/incendiary, SLOT_IN_SUIT)
+	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/incendiary, SLOT_IN_SUIT)
+
+	H.equip_to_slot_or_del(new /obj/item/reagent_containers/food/snacks/enrg_bar, SLOT_IN_BACKPACK)
+	H.equip_to_slot_or_del(new /obj/item/reagent_containers/food/snacks/enrg_bar, SLOT_IN_BACKPACK)
+
+	H.equip_to_slot_or_del(new /obj/item/cell/lasgun/M43/highcap, SLOT_IN_BELT)
+	H.equip_to_slot_or_del(new /obj/item/cell/lasgun/M43/highcap, SLOT_IN_BELT)
+	H.equip_to_slot_or_del(new /obj/item/cell/lasgun/M43/highcap, SLOT_IN_BELT)
+	H.equip_to_slot_or_del(new /obj/item/cell/lasgun/M43/highcap, SLOT_IN_BELT)
+	H.equip_to_slot_or_del(new /obj/item/cell/lasgun/M43/highcap, SLOT_IN_BELT)
+
+	var/obj/item/weapon/gun/energy/lasgun/M43/G = new /obj/item/weapon/gun/energy/lasgun/M43(H)
+	G.reload(H, new /obj/item/cell/lasgun/M43/highcap(G)) // starts out reloaded
+	H.equip_to_slot_or_del(G, SLOT_S_STORE)
+
 /datum/job/imperial/guardsman/medicae
 	title = "Guardsman Medicae"
 	comm_title = "Medicae"
@@ -175,6 +244,175 @@
 	back = /obj/item/storage/backpack/lightpack
 
 /datum/outfit/job/imperial/commissar/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
+	. = ..()
+
+	H.equip_to_slot_or_del(new /obj/item/storage/firstaid/adv, SLOT_IN_L_POUCH)
+
+	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/frag, SLOT_IN_SUIT)
+	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/incendiary, SLOT_IN_SUIT)
+
+	H.equip_to_slot_or_del(new /obj/item/reagent_containers/food/snacks/enrg_bar, SLOT_IN_BACKPACK)
+	H.equip_to_slot_or_del(new /obj/item/reagent_containers/food/snacks/enrg_bar, SLOT_IN_BACKPACK)
+
+	H.equip_to_slot_or_del(new /obj/item/weapon/claymore/mercsword/commissar_sword, SLOT_S_STORE)
+
+
+
+/datum/job/imperial/astartes
+	title = "Adeptus Astartes Space Marine"
+	comm_title = "Space Marine"
+	skills_type = /datum/skills/imperial/marine
+	paygrade = "Space Marine"
+	outfit = /datum/outfit/job/imperial/marine
+
+/datum/outfit/job/imperial/astartes
+	name = "Imperial Space Marine"
+	jobtype = /datum/job/imperial/astartes
+
+	belt = 
+	w_uniform = 
+	wear_suit = 
+	gloves = 
+	head = 
+	l_store = /obj/item/storage/pouch/medkit
+	r_store = 
+	back = /obj/item/storage/backpack/lightpack
+
+/datum/outfit/job/imperial/astartes/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
+	. = ..()
+
+	H.equip_to_slot_or_del(new /obj/item/storage/firstaid/adv, SLOT_IN_L_POUCH)
+
+	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/frag/m15, SLOT_IN_SUIT)
+	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/incendiary, SLOT_IN_SUIT)
+
+	H.equip_to_slot_or_del(new /obj/item/reagent_containers/food/snacks/enrg_bar, SLOT_IN_BACKPACK)
+	H.equip_to_slot_or_del(new /obj/item/reagent_containers/food/snacks/enrg_bar, SLOT_IN_BACKPACK)
+
+	H.equip_to_slot_or_del(new /obj/item/weapon/claymore/mercsword/commissar_sword, SLOT_S_STORE)
+
+/datum/job/imperial/astartes/captain //Space marine SL
+	title = "Adeptus Astartes Space Marine Captain"
+	comm_title = "Marine Captain"
+	skills_type = /datum/skills/imperial/astartes/captain
+	paygrade = "Space Marine"
+	outfit = /datum/outfit/job/imperial/astartes/captain
+
+/datum/outfit/job/imperial/astartes/captain
+	name = "Imperial Space Marine Captain"
+	jobtype = /datum/job/imperial/astartes/captain
+
+	belt = 
+	w_uniform = 
+	wear_suit = 
+	gloves = 
+	head = 
+	l_store = 
+	r_store = 
+	back = /obj/item/storage/backpack/lightpack
+
+/datum/outfit/job/imperial/astartes/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
+	. = ..()
+
+	H.equip_to_slot_or_del(new /obj/item/storage/firstaid/adv, SLOT_IN_L_POUCH)
+
+	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/frag/m15, SLOT_IN_SUIT)
+	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/incendiary, SLOT_IN_SUIT)
+
+	H.equip_to_slot_or_del(new /obj/item/reagent_containers/food/snacks/enrg_bar, SLOT_IN_BACKPACK)
+	H.equip_to_slot_or_del(new /obj/item/reagent_containers/food/snacks/enrg_bar, SLOT_IN_BACKPACK)
+
+	H.equip_to_slot_or_del(new /obj/item/weapon/claymore/mercsword/commissar_sword, SLOT_S_STORE)
+
+/datum/job/imperial/astartes/captain //Space marine medic
+	title = "Adeptus Astartes Space Marine Captain"
+	comm_title = "Marine Apothecary"
+	skills_type = /datum/skills/imperial/astartes/apothecary
+	paygrade = "Space Marine"
+	outfit = /datum/outfit/job/imperial/astartes/apothecary
+
+/datum/outfit/job/imperial/astartes/apothecary
+	name = "Imperial Space Marine Apothecary"
+	jobtype = /datum/job/imperial/astartes/apothecary
+
+	belt = /obj/item/storage/belt/combatLifesaver
+	wear_suit = 
+	head = 
+	glasses = /obj/item/clothing/glasses/hud/health
+	l_store = /obj/item/storage/pouch/medkit
+	r_store = /obj/item/storage/pouch/autoinjector
+	back = /obj/item/storage/backpack/lightpack
+
+/datum/outfit/job/imperial/astartes/apothecary/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
+	. = ..()
+
+	H.equip_to_slot_or_del(new /obj/item/storage/firstaid/adv, SLOT_IN_L_POUCH)
+
+	H.equip_to_slot_or_del(new /obj/item/reagent_containers/hypospray/autoinjector/tricordrazine, SLOT_IN_HEAD)
+	H.equip_to_slot_or_del(new /obj/item/reagent_containers/hypospray/autoinjector/oxycodone, SLOT_IN_HEAD)
+
+	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/frag/m15, SLOT_IN_SUIT)
+	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/incendiary, SLOT_IN_SUIT)
+
+	H.equip_to_slot_or_del(new /obj/item/reagent_containers/food/snacks/enrg_bar, SLOT_IN_BACKPACK)
+	H.equip_to_slot_or_del(new /obj/item/reagent_containers/food/snacks/enrg_bar, SLOT_IN_BACKPACK)
+
+	H.equip_to_slot_or_del(new /obj/item/weapon/claymore/mercsword/commissar_sword, SLOT_S_STORE)
+
+/datum/job/imperial/inquisitor
+	title = "Imperial Inquistor"
+	comm_title = "Inquisitor"
+	skills_type = /datum/skills/imperial/marine/inquisitor
+	paygrade = "Inquisitor"
+	outfit = /datum/outfit/job/imperial/marine/inquisitor
+
+/datum/outfit/job/imperial/marine/inquisitor
+	name = "Imperial Inquisitor"
+	jobtype = /datum/job/imperial/marine/inquisitor
+
+	belt = 
+	w_uniform = 
+	wear_suit = 
+	gloves = 
+	head = 
+	l_store = 
+	r_store = 
+	back = /obj/item/storage/backpack/lightpack
+
+/datum/outfit/job/imperial/inquisitor/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
+	. = ..()
+
+	H.equip_to_slot_or_del(new /obj/item/storage/firstaid/adv, SLOT_IN_L_POUCH)
+
+	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/frag, SLOT_IN_SUIT)
+	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/incendiary, SLOT_IN_SUIT)
+
+	H.equip_to_slot_or_del(new /obj/item/reagent_containers/food/snacks/enrg_bar, SLOT_IN_BACKPACK)
+	H.equip_to_slot_or_del(new /obj/item/reagent_containers/food/snacks/enrg_bar, SLOT_IN_BACKPACK)
+
+	H.equip_to_slot_or_del(new /obj/item/weapon/claymore/mercsword/commissar_sword, SLOT_S_STORE)
+
+/datum/job/imperial/inquisitor/lord //Inquisitor SL
+	title = "Imperial High Inquistor"
+	comm_title = "High Inquisitor"
+	skills_type = /datum/skills/imperial/marine/inquisitor/lord
+	paygrade = "High Inquisitor"
+	outfit = /datum/outfit/job/imperial/marine/inquisitor/lord
+
+/datum/outfit/job/imperial/marine/inquisitor/lord
+	name = "Imperial High Inquisitor"
+	jobtype = /datum/job/imperial/marine/inquisitor/lord
+
+	belt = 
+	w_uniform = 
+	wear_suit = 
+	gloves = 
+	head = 
+	l_store = 
+	r_store = 
+	back = /obj/item/storage/backpack/lightpack
+
+/datum/outfit/job/imperial/inquisitor/lord/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
 	. = ..()
 
 	H.equip_to_slot_or_del(new /obj/item/storage/firstaid/adv, SLOT_IN_L_POUCH)

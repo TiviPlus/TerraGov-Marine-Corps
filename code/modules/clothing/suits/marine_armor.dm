@@ -387,6 +387,12 @@
 	item_state = "guardarmor"
 	armor = list("melee" = 75, "bullet" = 65, "laser" = 60, "energy" = 60, "bomb" = 50, "bio" = 0, "rad" = 0, "fire" = 60, "acid" = 60)
 
+/obj/item/clothing/suit/storage/marine/imperial/krieg
+	name = "\improper Krieg Guardsman armor"
+	desc = "The fearsome armor worn by the fearless killing machines conscripted on the imperial death world of Krieg"
+	icon_state = 
+	item_state = 
+
 /obj/item/clothing/suit/storage/marine/imperial/sergeant
 	// SL armour, better than flak, covers more
 	name = "\improper Imperial Guard sergeant armour"
@@ -396,6 +402,12 @@
 	armor = list("melee" = 85, "bullet" = 85, "laser" = 85, "energy" = 85, "bomb" = 85, "bio" = 25, "rad" = 25, "fire" = 85, "acid" = 85)
 	brightness_on = 6 // better light
 	pockets = /obj/item/storage/internal/suit/imperial
+
+/obj/item/clothing/suit/storage/marine/imperial/sergeant/krieg
+	name = "\improper Krieg Sergeant armor"
+	desc = "The fearsome armor worn by the leader of the fearless killing machines conscripted on the imperial death world of Krieg"
+	icon_state = 
+	item_state = 
 
 /obj/item/storage/internal/suit/imperial
 	storage_slots = 3
@@ -415,29 +427,42 @@
 	slowdown = SLOWDOWN_ARMOR_HEAVY
 	armor = list("melee" = 90, "bullet" = 90, "laser" = 90, "energy" = 90, "bomb" = 90, "bio" = 30, "rad" = 30, "fire" = 90, "acid" = 90)
 
-/obj/item/clothing/suit/storage/marine/imperial/power
-	// Should this maybe require recharging?
-	name = "\improper salvaged Space Marine power armour"
-	desc = "A power armour that was once broken, is functional once again. However this version isn't as powerful as the real power armour."
-	//icon_state
-	armor = list("melee" = 75, "bullet" = 60, "laser" = 55, "energy" = 40, "bomb" = 45, "bio" = 15, "rad" = 15, "fire" = 40, "acid" = 40)
-	brightness_on = 6
-	pockets = /obj/item/storage/internal/suit/imperial
-
-/obj/item/clothing/suit/storage/marine/imperial/power/astartes
+/obj/item/clothing/suit/storage/marine/imperial/astartes
 	// This should either be admin only or only given to one person
 	name = "\improper Space Marine power armour"
 	desc = "You feel a chill running down your spine just looking at this. This is the power armour that the Space Marines wear themselves. The servos inside the power armour allow you to move at incredible speeds."
-	//icon_state
+	icon_state = 
+	item_state = 
 	slowdown = SLOWDOWN_ARMOR_LIGHT // beefed up space marine inside an armor that boosts speed
 	armor = list("melee" = 95, "bullet" = 95, "laser" = 95, "energy" = 95, "bomb" = 95, "bio" = 95, "rad" = 95, "fire" = 95, "acid" = 95)
+	brightness_on = 6
+	pockets = /obj/item/storage/internal/suit/imperial
+
+/obj/item/clothing/suit/storage/marine/imperial/astartes/apothecary //Medic variant
+	name = "\improper Space Marine Apothecary power armour"
+	icon_state = 
+	item_state = 
+
+/obj/item/clothing/suit/storage/marine/imperial/astartes/captain
+	name = "\improper Space Marine Captain power armour"
+	desc = "You feel a chill running down your spine just looking at this. This armor set has been modified and tweaked. The servos inside the power armour allow you to move at incredible speeds."
+	armor = list("melee" = 100, "bullet" = 100, "laser" = 100, "energy" = 100, "bomb" = 100, "bio" = 100, "rad" = 100, "fire" = 100, "acid" = 100)
+	icon_state = 
+	item_state = 
 
 /obj/item/clothing/suit/storage/marine/imperial/commissar
 	name = "\improper commissar coat"
 	desc = "A armored coat worn by commissars of the Imperial Army."
-	icon_state = "commissar_coat"
-	item_state = "commissar_coat"
+	icon_state = 
+	item_state = 
 	armor = list("melee" = 75, "bullet" = 60, "laser" = 55, "energy" = 40, "bomb" = 45, "bio" = 15, "rad" = 15, "fire" = 40, "acid" = 40)
+
+/obj/item/clothing/suit/storage/marine/imperial/inquisitor
+	name = "\improper Inquisitors coat"
+	desc = "A menacing armored coat worn by Imperial Inquisitors."
+	icon_state = 
+	item_state = 
+	armor = list("melee" = 80, "bullet" = 65, "laser" = 60, "energy" = 45, "bomb" = 50, "bio" = 20, "rad" = 20, "fire" = 45, "acid" = 45)
 
 //===========================//U.P.P\\================================
 
