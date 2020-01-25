@@ -269,7 +269,7 @@
 	name = "Imperial Space Marine"
 	jobtype = /datum/job/imperial/astartes
 
-	belt = 
+	belt
 	w_uniform = 
 	wear_suit = 
 	gloves = 
