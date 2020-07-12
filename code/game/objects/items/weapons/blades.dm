@@ -39,6 +39,15 @@
 	attack_speed = 12
 	w_class = WEIGHT_CLASS_BULKY
 
+/obj/item/weapon/claymore/mercsword/commissar_sword
+	name = "\improper commissars sword"
+	desc = "The pride of an imperial commissar, held high as they charge into battle."
+	icon_state = "comsword"
+	item_state = "comsword"
+	force = 80
+	attack_speed = 10
+	w_class = WEIGHT_CLASS_BULKY
+
 /obj/item/weapon/claymore/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	playsound(loc, 'sound/weapons/bladeslice.ogg', 25, 1)
 	return ..()
@@ -75,7 +84,7 @@
 	icon = 'icons/obj/items/weapons.dmi'
 	icon_state = "combat_knife"
 	item_state = "combat_knife"
-	desc = "The standard issue survival knife issued to TerraGov Marine Corps soldiers. You can slide this knife into your boots, and can be field-modified to attach to the end of a rifle."
+	desc = "A standard survival knife of decent quality. You can slide this knife into your boots, and can be field-modified to attach to the end of a rifle with cable coil."
 	flags_atom = CONDUCT
 	sharp = IS_SHARP_ITEM_ACCURATE
 	materials = list(/datum/material/metal = 200)
@@ -152,3 +161,34 @@
 /obj/item/weapon/unathiknife/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	playsound(loc, 'sound/weapons/bladeslice.ogg', 25, 1)
 	return ..()
+
+/obj/item/weapon/chainsword
+	name = "chainsword"
+	desc = "chainsword thing"
+	icon = 'icons/obj/items/weapons.dmi'
+	icon_state = "chainswordoff"
+	attack_verb = list("gored", "slashed", "cut")
+	force = 10
+	throwforce = 5
+	var/on = FALSE
+
+/obj/item/weapon/chainsword/attack_self(mob/user)
+	. = ..()
+	if(!on)
+		on = !on
+		icon_state = "chainswordon"
+		force = 40
+		throwforce = 30
+	else
+		on = !on
+		icon_state = initial(icon_state)
+		force = initial(force)
+		throwforce = initial(icon_state)
+
+/obj/item/weapon/chainsword/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
+	playsound(loc, 'sound/weapons/chainsawhit.ogg', 100, 1)
+	return ..()
+
+/obj/item/weapon/chainsword/suicide_act(mob/user)
+	user.visible_message("<span class='danger'>[user] is falling on the [src.name]! It looks like [user.p_theyre()] trying to commit suicide.</span>")
+	return(BRUTELOSS)

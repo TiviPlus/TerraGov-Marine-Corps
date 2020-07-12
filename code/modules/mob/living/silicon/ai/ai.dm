@@ -4,12 +4,13 @@
 	icon = 'icons/mob/AI.dmi'
 	icon_state = "ai"
 	anchored = TRUE
+	move_resist = MOVE_FORCE_OVERPOWERING
 	density = TRUE
 	canmove = FALSE
-	job = "AI"
 	status_flags = CANSTUN|CANKNOCKOUT
 	sight = SEE_TURFS | SEE_MOBS | SEE_OBJS
 	hud_type = /datum/hud/ai
+	buckle_flags = NONE
 
 	var/list/available_networks = list("marinemainship", "marine", "dropship1", "dropship2")
 	var/obj/machinery/camera/current
@@ -60,6 +61,12 @@
 
 	create_eye()
 
+	if(!job)
+		var/datum/job/terragov/silicon/ai/ai_job = SSjob.type_occupations[/datum/job/terragov/silicon/ai]
+		if(!ai_job)
+			stack_trace("Unemployment has reached to an AI, who has failed to find a job.")
+		apply_assigned_role_to_spawn(ai_job)
+
 	GLOB.ai_list += src
 
 
@@ -74,7 +81,7 @@
 	return FALSE
 
 
-/mob/living/silicon/ai/incapacitated(ignore_restraints)
+/mob/living/silicon/ai/incapacitated(ignore_restrained, restrained_flags)
 	if(control_disabled)
 		return TRUE
 	return ..()
@@ -184,7 +191,7 @@
 	if(iscarbon(speaker))
 		var/mob/living/carbon/S = speaker
 		if(S.job)
-			jobpart = "[S.job]"
+			jobpart = "[S.job.title]"
 	else
 		jobpart = "Unknown"
 

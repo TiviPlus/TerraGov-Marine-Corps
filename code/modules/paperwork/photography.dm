@@ -153,7 +153,7 @@
 	set category = "Object"
 	set src in usr
 
-	var/n_name = copytext(sanitize(input(usr, "What would you like to label the photo?", "Photo Labelling", null)  as text), 1, MAX_NAME_LEN)
+	var/n_name = stripped_input(usr, "What would you like to label the photo?", "Photo Labelling")
 	if((loc == usr || loc.loc && loc.loc == usr) && usr.stat == CONSCIOUS && !usr.incapacitated())
 		name = "photo[(n_name ? text("- '[n_name]'") : null)]"
 
@@ -193,8 +193,8 @@
 /obj/item/camera/proc/adjust_zoom(mob/user)
 	var/desired_x = input(user, "How high do you want the camera to shoot, between [picture_size_x_min] and [picture_size_x_max]?", "Zoom", picture_size_x) as num
 	var/desired_y = input(user, "How wide do you want the camera to shoot, between [picture_size_y_min] and [picture_size_y_max]?", "Zoom", picture_size_y) as num
-	picture_size_x = min(CLAMP(desired_x, picture_size_x_min, picture_size_x_max), CAMERA_PICTURE_SIZE_HARD_LIMIT)
-	picture_size_y = min(CLAMP(desired_y, picture_size_y_min, picture_size_y_max), CAMERA_PICTURE_SIZE_HARD_LIMIT)
+	picture_size_x = min(clamp(desired_x, picture_size_x_min, picture_size_x_max), CAMERA_PICTURE_SIZE_HARD_LIMIT)
+	picture_size_y = min(clamp(desired_y, picture_size_y_min, picture_size_y_max), CAMERA_PICTURE_SIZE_HARD_LIMIT)
 
 
 /obj/item/camera/AltClick(mob/user)
@@ -237,10 +237,10 @@
 			return FALSE
 		else if(user.client && !(get_turf(target) in get_hear(user.client.view, user)))
 			return FALSE
-		else if(!(get_turf(target) in get_hear(world.view, user)))
+		else if(!(get_turf(target) in get_hear(WORLD_VIEW, user)))
 			return FALSE
 	else					//user is an atom
-		if(!(get_turf(target) in view(world.view, user)))
+		if(!(get_turf(target) in view(WORLD_VIEW, user)))
 			return FALSE
 	return TRUE
 
@@ -277,14 +277,14 @@
 	if(!isturf(target_turf))
 		blending = FALSE
 		return FALSE
-	size_x = CLAMP(size_x, 0, CAMERA_PICTURE_SIZE_HARD_LIMIT)
-	size_y = CLAMP(size_y, 0, CAMERA_PICTURE_SIZE_HARD_LIMIT)
+	size_x = clamp(size_x, 0, CAMERA_PICTURE_SIZE_HARD_LIMIT)
+	size_y = clamp(size_y, 0, CAMERA_PICTURE_SIZE_HARD_LIMIT)
 	var/list/desc = list("This is a photo of an area of [size_x+1] meters by [size_y+1] meters.")
 	var/list/mobs_spotted = list()
 	var/list/dead_spotted = list()
 	var/ai_user = isAI(user)
 	var/list/seen
-	var/list/viewlist = (user && user.client)? getviewsize(user.client.view) : getviewsize(world.view)
+	var/list/viewlist = (user && user.client)? getviewsize(user.client.view) : getviewsize(WORLD_VIEW)
 	var/viewr = max(viewlist[1], viewlist[2]) + max(size_x, size_y)
 	var/viewc = user.client? user.client.eye : target
 	seen = get_hear(viewr, viewc)

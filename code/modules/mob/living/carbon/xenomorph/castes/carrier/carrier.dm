@@ -8,7 +8,6 @@
 	maxHealth = 200
 	plasma_stored = 50
 	drag_delay = 6 //pulling a big dead xeno is hard
-	speed = 0
 	mob_size = MOB_SIZE_BIG
 	var/list/huggers = list()
 	var/eggs_cur = 0
@@ -23,9 +22,8 @@
 // ***************************************
 // *********** Death
 // ***************************************
-/mob/living/carbon/xenomorph/carrier/death(gibbed)
-	. = ..()
-	if(. && !gibbed && length(huggers))
+/mob/living/carbon/xenomorph/carrier/on_death()
+	if(length(huggers))
 		var/chance = 75
 		visible_message("<span class='xenowarning'>The chittering mass of tiny aliens is trying to escape [src]!</span>")
 		for(var/i in 1 to 3)
@@ -40,6 +38,9 @@
 				qdel(F)
 			chance -= 30
 		QDEL_LIST(huggers)
+
+	return ..()
+
 
 // ***************************************
 // *********** Life overrides

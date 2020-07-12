@@ -11,7 +11,7 @@
 	density = FALSE
 	var/orient = "LEFT" // "RIGHT" changes the dir suffix to "-r"
 
-	use_power = 1
+	use_power = IDLE_POWER_USE
 	idle_power_usage = 40
 
 /obj/machinery/sleep_console/process()
@@ -22,17 +22,12 @@
 
 /obj/machinery/sleep_console/ex_act(severity)
 	switch(severity)
-		if(1.0)
-			//SN src = null
+		if(EXPLODE_DEVASTATE)
 			qdel(src)
-			return
-		if(2.0)
+		if(EXPLODE_HEAVY)
 			if (prob(50))
-				//SN src = null
 				qdel(src)
-				return
-		else
-	return
+
 
 /obj/machinery/sleep_console/Initialize()
 	. = ..()
@@ -75,7 +70,7 @@
 			dat += text("[]\t-Respiratory Damage %: []</FONT><BR>", (occupant.getOxyLoss() < 60 ? "<font color='#487553'>" : "<font color='#b54646'>"), occupant.getOxyLoss())
 			dat += text("[]\t-Toxin Content %: []</FONT><BR>", (occupant.getToxLoss() < 60 ? "<font color='#487553'>" : "<font color='#b54646'>"), occupant.getToxLoss())
 			dat += text("[]\t-Burn Severity %: []</FONT><BR>", (occupant.getFireLoss() < 60 ? "<font color='#487553'>" : "<font color='#b54646'>"), occupant.getFireLoss())
-			dat += text("<HR>Knocked Out Summary %: [] ([] seconds left!)<BR>", occupant.knocked_out, round(occupant.knocked_out / 4))
+			dat += text("<HR>Knocked Out Summary %: [] ([] seconds left!)<BR>", occupant.AmountUnconscious(), round(occupant.AmountUnconscious() * 0.1))
 			for(var/chemical in connected.available_chemicals)
 				dat += "<label style='width:180px; display: inline-block'>[connected.available_chemicals[chemical]] ([round(occupant.reagents.get_reagent_amount(chemical), 0.01)] units)</label> Inject:"
 				for(var/amount in connected.amounts)
@@ -164,7 +159,7 @@
 	var/stasis = FALSE
 	var/obj/machinery/sleep_console/connected
 
-	use_power = 1
+	use_power = IDLE_POWER_USE
 	idle_power_usage = 15
 	active_power_usage = 200 //builtin health analyzer, dialysis machine, injectors.
 
@@ -174,6 +169,13 @@
 	beaker = new /obj/item/reagent_containers/glass/beaker/large()
 	if(orient == "RIGHT")
 		icon_state = "sleeper_0-r"
+	RegisterSignal(src, COMSIG_MOVABLE_SHUTTLE_CRUSH, .proc/shuttle_crush)
+
+/obj/machinery/sleeper/proc/shuttle_crush()
+	if(occupant)
+		var/mob/living/carbon/human/H = occupant
+		go_out()
+		H.gib()
 
 /obj/machinery/sleeper/Destroy()
 	//clean up; end stasis; remove from processing
@@ -314,12 +316,12 @@
 	if(filtering)
 		toggle_filter()
 	switch(severity)
-		if(1)
+		if(EXPLODE_DEVASTATE)
 			qdel(src)
-		if(2)
+		if(EXPLODE_HEAVY)
 			if(prob(50))
 				qdel(src)
-		if(3)
+		if(EXPLODE_LIGHT)
 			if(prob(25))
 				qdel(src)
 
@@ -404,7 +406,7 @@
 		to_chat(user, text("[]\t -Toxin Content %: []</font>", (occupant.getToxLoss() < 60 ? "<font color='#487553'> " : "<font color='#b54646'> "), occupant.getToxLoss()))
 		to_chat(user, text("[]\t -Burn Severity %: []</font>", (occupant.getFireLoss() < 60 ? "<font color='#487553'> " : "<font color='#b54646'> "), occupant.getFireLoss()))
 		to_chat(user, "<span class='notice'>Expected time till occupant can safely awake: (note: If health is below 20% these times are inaccurate)</span>")
-		to_chat(user, "<span class='notice'>\t [occupant.knocked_out / 5] second\s (if around 1 or 2 the sleeper is keeping them asleep.)</span>")
+		to_chat(user, "<span class='notice'>\t [occupant.AmountUnconscious() * 0.1] second\s (if around 1 or 2 the sleeper is keeping them asleep.)</span>")
 		if(beaker)
 			to_chat(user, "<span class='notice'>\t Dialysis Output Beaker has [beaker.reagents.maximum_volume - beaker.reagents.total_volume] of free space remaining.</span>")
 		else
@@ -412,7 +414,6 @@
 	else
 		to_chat(user, "<span class='notice'>There is no one inside!</span>")
 	return
-
 
 /obj/machinery/sleeper/verb/eject()
 	set name = "Eject Sleeper"
@@ -471,7 +472,7 @@
 		qdel(O)
 
 /obj/machinery/sleeper/MouseDrop_T(mob/M, mob/user)
-	if(!isliving(M))
+	if(!isliving(M) || !ishuman(user))
 		return
 	move_inside_wrapper(M, user)
 

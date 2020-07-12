@@ -5,12 +5,12 @@
 
 /obj/structure/flora/ex_act(severity)
 	switch(severity)
-		if(1)
+		if(EXPLODE_DEVASTATE)
 			qdel(src)
-		if(2)
+		if(EXPLODE_HEAVY)
 			if(prob(70))
 				qdel(src)
-		if(3)
+		if(EXPLODE_LIGHT)
 			if(prob(50))
 				qdel(src)
 
@@ -32,13 +32,21 @@
 	layer = ABOVE_FLY_LAYER
 	var/log_amount = 10
 
+/obj/structure/flora/tree/Initialize()
+	. = ..()
+	AddTransparencyComponent()
+
+//Adds the transparency component, exists to be overridden for different args.
+/obj/structure/flora/tree/proc/AddTransparencyComponent()
+	AddComponent(/datum/component/largetransparency)
+
 /obj/structure/flora/tree/ex_act(severity)
 	switch(severity)
-		if(1)
+		if(EXPLODE_DEVASTATE)
 			take_damage(500)
-		if(2)
+		if(EXPLODE_HEAVY)
 			take_damage(rand(140, 300))
-		if(3)
+		if(EXPLODE_LIGHT)
 			take_damage(rand(50, 100))
 	START_PROCESSING(SSobj, src)
 
@@ -61,7 +69,7 @@
 
 	user.visible_message("<span class='notice'>[user] begins to cut down [src] with [I].</span>","<span class='notice'>You begin to cut down [src] with [I].</span>", "You hear the sound of sawing.")
 	var/cut_force = min(1, I.force)
-	var/cutting_time = CLAMP(10, 20, 100 / cut_force) SECONDS
+	var/cutting_time = clamp(10, 20, 100 / cut_force) SECONDS
 	if(!do_after(user, cutting_time , TRUE, src, BUSY_ICON_BUILD))
 		return
 
@@ -131,6 +139,9 @@
 	icon = 'icons/obj/flora/deadtrees.dmi'
 	icon_state = "tree"
 
+/obj/structure/flora/tree/dead/AddTransparencyComponent()
+	AddComponent(/datum/component/largetransparency, 0, 1, 0, 0)
+
 /obj/structure/flora/tree/dead/Initialize()
 	. = ..()
 	icon_state = "[icon_state][rand(1, 6)]"
@@ -154,10 +165,16 @@
 	pixel_x = -48
 	pixel_y = -20
 
+/obj/structure/flora/tree/jungle/AddTransparencyComponent()
+	AddComponent(/datum/component/largetransparency, -1, 1, 2, 2)
+
 /obj/structure/flora/tree/jungle/small
 	pixel_y = 0
 	pixel_x = -32
 	icon = 'icons/obj/flora/jungletreesmall.dmi'
+
+/obj/structure/flora/tree/jungle/small/AddTransparencyComponent()
+	AddComponent(/datum/component/largetransparency)
 
 /obj/structure/flora/tree/jungle/Initialize()
 	. = ..()
@@ -209,6 +226,12 @@
 
 /obj/structure/flora/pottedplant/ten
 	icon_state = "plant-10"
+
+/obj/structure/flora/pottedplant/twentyone
+	icon_state = "plant-21"
+
+/obj/structure/flora/pottedplant/twentytwo
+	icon_state = "plant-22"
 
 //newbushes
 

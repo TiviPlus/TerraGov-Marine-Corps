@@ -7,7 +7,6 @@
 	health = 100
 	maxHealth = 100
 	plasma_stored = 50
-	speed = -1.7
 	flags_pass = PASSTABLE
 	tier = XENO_TIER_ONE
 	upgrade = XENO_UPGRADE_ZERO
@@ -17,7 +16,9 @@
 		/mob/living/carbon/xenomorph/proc/vent_crawl,
 		)
 
-/mob/living/carbon/xenomorph/runner/update_stat()
+/mob/living/carbon/xenomorph/runner/set_stat()
 	. = ..()
-	if(stat != CONSCIOUS && layer != initial(layer))
+	if(isnull(.))
+		return
+	if(. == CONSCIOUS && layer != initial(layer))
 		layer = MOB_LAYER

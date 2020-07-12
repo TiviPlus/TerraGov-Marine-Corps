@@ -42,14 +42,13 @@
 #define ATMOS_PIPE_SUPPLY_LAYER 2.39
 #define ATMOS_PIPE_LAYER 2.4
 
+#define GAS_SCRUBBER_LAYER 2.41
+#define GAS_PIPE_VISIBLE_LAYER 2.42
+#define GAS_FILTER_LAYER 2.43
+#define GAS_PUMP_LAYER 2.44
 
-#define WIRE_LAYER 2.44
-#define WIRE_TERMINAL_LAYER 2.45
-
-#define GAS_SCRUBBER_LAYER 2.46
-#define GAS_PIPE_VISIBLE_LAYER 2.47
-#define GAS_FILTER_LAYER 2.48
-#define GAS_PUMP_LAYER 2.49
+#define WIRE_LAYER 2.45
+#define WIRE_TERMINAL_LAYER 2.46
 
 #define LOW_OBJ_LAYER 2.5
 #define UNDERFLOOR_OBJ_LAYER 2.5 //bluespace beacon, navigation beacon, etc
@@ -133,6 +132,8 @@
 
 #define POINT_LAYER 12
 
+#define CHAT_LAYER 12.1
+
 #define LIGHTING_PLANE 15
 
 #define ABOVE_LIGHTING_PLANE 16
@@ -154,6 +155,8 @@
 #define FULLSCREEN_BLIND_LAYER 18.15 //unconscious
 #define FULLSCREEN_PAIN_LAYER	18.2 //pain flashes
 #define FULLSCREEN_CRIT_LAYER 18.25 //in critical
+
+#define FULLSCREEN_PLANE 20
 
 #define HUD_PLANE 21
 #define HUD_LAYER 21

@@ -35,6 +35,7 @@
 /area/icy_caves/caves/crashed_ship)
 "aj" = (
 /obj/effect/decal/cleanable/blood/xeno,
+/obj/effect/landmark/nuke_spawn,
 /turf/open/floor/plating/dmg3,
 /area/icy_caves/caves/crashed_ship)
 "ak" = (
@@ -198,10 +199,7 @@
 /area/icy_caves/caves/crashed_ship)
 "aQ" = (
 /obj/machinery/power/apc/drained,
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2"
-	},
+/obj/structure/cable,
 /turf/open/floor/plating/mainship,
 /area/icy_caves/caves/crashed_ship)
 "aR" = (
@@ -249,41 +247,17 @@
 /turf/open/floor/plating/mainship,
 /area/icy_caves/caves/crashed_ship)
 "aY" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/effect/decal/cleanable/blood,
-/turf/open/floor/plating/mainship,
-/area/icy_caves/caves/crashed_ship)
-"aZ" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
+/obj/structure/cable,
 /obj/effect/decal/cleanable/blood,
 /turf/open/floor/plating/mainship,
 /area/icy_caves/caves/crashed_ship)
 "ba" = (
-/obj/machinery/power/terminal{
-	icon_state = "term";
-	dir = 4
-	},
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
+/obj/structure/cable,
 /turf/open/floor/plating/mainship,
 /area/icy_caves/caves/crashed_ship)
 "bb" = (
 /obj/machinery/power/smes,
+/obj/structure/cable,
 /turf/open/floor/plating/mainship,
 /area/icy_caves/caves/crashed_ship)
 "bc" = (
@@ -295,21 +269,16 @@
 /obj/effect/landmark/corpsespawner/engineer,
 /turf/open/floor/plating/mainship,
 /area/icy_caves/caves/crashed_ship)
-"be" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/effect/alien/weeds/node,
-/turf/open/floor/plating/mainship,
-/area/icy_caves/caves/crashed_ship)
 "bf" = (
 /obj/structure/closet/crate/science,
 /obj/item/stack/sheet/mineral/phoron/medium_stack,
 /obj/machinery/light/built{
 	dir = 4
 	},
+/obj/machinery/power/terminal{
+	dir = 1
+	},
+/obj/structure/cable,
 /turf/open/floor/plating/mainship,
 /area/icy_caves/caves/crashed_ship)
 "bg" = (
@@ -323,7 +292,7 @@
 	},
 /area/icy_caves/caves/northern)
 "bi" = (
-/obj/effect/landmark/start/xeno_spawn,
+/obj/effect/landmark/start/job/xenomorph,
 /turf/open/floor/plating/ground/ice,
 /area/icy_caves/caves/northern)
 "bj" = (
@@ -367,32 +336,18 @@
 /turf/open/floor/plating/icefloor,
 /area/lv624/lazarus/console)
 "bo" = (
-/obj/effect/landmark/nuke_spawn,
-/turf/open/floor/tile/dark2,
-/area/icy_caves/caves/west)
+/obj/machinery/door/poddoor/timed_late/containment/landing_zone/lz2{
+	dir = 2
+	},
+/turf/closed/wall/r_wall,
+/area/icy_caves/outpost/LZ2)
 "bp" = (
 /obj/structure/reagent_dispensers/fueltank,
 /turf/open/floor/plating/mainship,
 /area/icy_caves/caves/crashed_ship)
-"bq" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/machinery/light,
-/turf/open/floor/plating/mainship,
-/area/icy_caves/caves/crashed_ship)
-"br" = (
-/obj/structure/cable{
-	icon_state = "4-8";
-	d1 = 4;
-	d2 = 8
-	},
-/turf/open/floor/plating/mainship,
-/area/icy_caves/caves/crashed_ship)
 "bs" = (
 /obj/machinery/power/port_gen/pacman,
+/obj/structure/cable,
 /turf/open/floor/plating/mainship,
 /area/icy_caves/caves/crashed_ship)
 "bt" = (
@@ -491,11 +446,7 @@
 	},
 /area/icy_caves/caves/northern)
 "bP" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden,
 /turf/open/floor/plating/ground/snow,
 /area/icy_caves/outpost/outside)
@@ -968,7 +919,8 @@
 /turf/open/floor/plating/ground/ice,
 /area/icy_caves/caves/east)
 "dT" = (
-/obj/machinery/computer/nuke_disk_generator/blue,
+/obj/machinery/power/apc/drained,
+/obj/structure/cable,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/research)
 "dU" = (
@@ -985,10 +937,7 @@
 /area/icy_caves/caves/west)
 "dX" = (
 /obj/machinery/power/apc/drained,
-/obj/structure/cable/yellow{
-	d2 = 2;
-	icon_state = "0-2"
-	},
+/obj/structure/cable,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/caves/west)
 "dY" = (
@@ -1055,28 +1004,11 @@
 /area/icy_caves/caves/east)
 "en" = (
 /obj/machinery/power/port_gen/pacman,
-/obj/structure/cable/yellow{
-	d2 = 4;
-	icon_state = "0-4"
-	},
+/obj/structure/cable,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/caves/west)
 "eo" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
+/obj/structure/cable,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/caves/west)
 "ep" = (
@@ -1155,72 +1087,41 @@
 	},
 /turf/open/floor/tile/dark2,
 /area/icy_caves/caves/west)
-"eC" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/turf/open/floor/tile/dark2,
-/area/icy_caves/caves/west)
 "eD" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 5
 	},
-/obj/effect/landmark/start/surv_spawn,
+/obj/effect/landmark/start/job/survivor,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/caves/west)
 "eE" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 4
 	},
 /turf/open/floor/tile/dark2,
 /area/icy_caves/caves/west)
 "eF" = (
-/obj/machinery/door/airlock/mainship/secure{
+/obj/machinery/door/airlock/mainship/secure/locked/free_access{
 	dir = 4;
-	icon_state = "door_locked";
-	locked = 1;
-	name = "Mining Storage";
-	req_access_txt = "0"
+	name = "\improper Mining Storage"
 	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 4
 	},
 /turf/open/floor/tile/dark2,
 /area/icy_caves/caves/west)
 "eG" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 4
 	},
 /turf/open/floor/tile/dark2,
 /area/icy_caves/caves/south)
 "eH" = (
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
+/obj/structure/cable,
 /obj/effect/decal/cleanable/blood,
 /obj/machinery/light{
 	dir = 4
@@ -1231,11 +1132,7 @@
 /turf/open/floor/tile/dark2,
 /area/icy_caves/caves/south)
 "eI" = (
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
+/obj/structure/cable,
 /obj/machinery/light{
 	dir = 8
 	},
@@ -1245,22 +1142,14 @@
 /turf/open/floor/tile/dark2,
 /area/icy_caves/caves/south)
 "eJ" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 4
 	},
 /turf/open/floor/tile/dark2,
 /area/icy_caves/caves/east)
 "eK" = (
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
+/obj/structure/cable,
 /obj/effect/decal/cleanable/blood,
 /obj/machinery/light{
 	dir = 4
@@ -1314,47 +1203,29 @@
 /area/icy_caves/caves/west)
 "eT" = (
 /obj/structure/ore_box,
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/caves/south)
 "eU" = (
 /obj/machinery/power/apc/drained,
-/obj/structure/cable/yellow{
-	d2 = 2;
-	icon_state = "0-2"
-	},
+/obj/structure/cable,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/caves/south)
 "eV" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable,
 /obj/effect/decal/cleanable/blood,
 /obj/machinery/atmospherics/pipe/simple/green/hidden,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/caves/south)
 "eW" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
+/obj/structure/cable,
 /obj/item/tool/pickaxe/plasmacutter,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/caves/east)
 "eX" = (
 /obj/machinery/power/apc/drained,
-/obj/structure/cable/yellow{
-	d2 = 8;
-	icon_state = "0-8"
-	},
+/obj/structure/cable,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/caves/east)
 "eY" = (
@@ -1425,33 +1296,15 @@
 /turf/closed/ice_rock/single,
 /area/icy_caves/caves/south)
 "fj" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 5
 	},
-/obj/effect/landmark/start/surv_spawn,
+/obj/effect/landmark/start/job/survivor,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/caves/south)
 "fk" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
+/obj/structure/cable,
 /obj/effect/decal/cleanable/blood,
 /obj/machinery/atmospherics/pipe/manifold/green/hidden{
 	dir = 1
@@ -1459,11 +1312,7 @@
 /turf/open/floor/tile/dark2,
 /area/icy_caves/caves/south)
 "fl" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
+/obj/structure/cable,
 /obj/effect/landmark/corpsespawner/engineer,
 /obj/effect/decal/cleanable/blood,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
@@ -1539,19 +1388,8 @@
 	dir = 1
 	},
 /area/icy_caves/caves/south)
-"fA" = (
-/obj/machinery/light{
-	icon_state = "tube1";
-	dir = 1
-	},
-/turf/open/floor/plating/ground/ice,
-/area/icy_caves/caves/south)
 "fB" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/caves/south)
@@ -1921,11 +1759,7 @@
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/garage)
 "hh" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/garage)
@@ -1955,7 +1789,6 @@
 /area/icy_caves/outpost/garage)
 "hm" = (
 /obj/machinery/light{
-	icon_state = "tube1";
 	dir = 1
 	},
 /turf/open/floor/tile/dark2,
@@ -1974,10 +1807,7 @@
 	},
 /area/icy_caves/caves/east)
 "hq" = (
-/obj/structure/cable/yellow{
-	d2 = 2;
-	icon_state = "0-2"
-	},
+/obj/structure/cable,
 /obj/machinery/power/apc/drained,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/garage)
@@ -2028,7 +1858,6 @@
 /obj/effect/spawner/random/tool,
 /obj/item/storage/belt/utility/full,
 /obj/machinery/light{
-	icon_state = "tube1";
 	dir = 1
 	},
 /turf/open/floor/tile/dark2,
@@ -2080,10 +1909,7 @@
 /obj/structure/table,
 /obj/item/cell/high/empty,
 /obj/machinery/cell_charger,
-/obj/structure/cable/yellow{
-	d2 = 4;
-	icon_state = "0-4"
-	},
+/obj/structure/cable,
 /obj/machinery/firealarm{
 	dir = 4
 	},
@@ -2139,11 +1965,7 @@
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/refinery)
 "hO" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/garage)
 "hP" = (
@@ -2249,27 +2071,14 @@
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/garage)
 "ii" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 6
 	},
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/garage)
 "ij" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable,
 /obj/structure/closet/crate/weapon,
 /obj/item/weapon/gun/rifle/type71,
 /obj/item/ammo_magazine/rifle/type71,
@@ -2282,22 +2091,14 @@
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/garage)
 "ik" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 4
 	},
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/garage)
 "il" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/manifold/green/hidden{
 	dir = 1
 	},
@@ -2317,34 +2118,22 @@
 	},
 /area/icy_caves/caves/west)
 "ip" = (
-/obj/machinery/door/airlock/mainship/engineering,
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/machinery/door/airlock/mainship/engineering/free_access,
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 4
 	},
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/garage)
 "iq" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 4
 	},
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/engineering)
 "ir" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable,
 /obj/effect/decal/cleanable/blood,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 4
@@ -2352,45 +2141,29 @@
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/engineering)
 "is" = (
-/obj/machinery/door/airlock/mainship/engineering,
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/machinery/door/airlock/mainship/engineering/free_access,
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 4
 	},
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/engineering)
 "it" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/manifold/green/hidden{
 	dir = 1
 	},
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/engineering)
 "iu" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 9
 	},
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/engineering)
 "iv" = (
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
+/obj/structure/cable,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/engineering)
 "iw" = (
@@ -2405,27 +2178,14 @@
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/garage)
 "iy" = (
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/manifold/green/hidden{
 	dir = 8
 	},
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/garage)
 "iz" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable,
 /obj/effect/decal/cleanable/blood/gibs/xeno/up,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 4
@@ -2433,11 +2193,7 @@
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/garage)
 "iA" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable,
 /obj/effect/decal/cleanable/blood,
 /obj/effect/decal/cleanable/blood/gibs/xeno/body,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
@@ -2451,11 +2207,7 @@
 	},
 /area/icy_caves/caves/south)
 "iC" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 9
 	},
@@ -2472,8 +2224,8 @@
 /obj/item/explosive/plastique,
 /obj/item/explosive/plastique,
 /obj/item/explosive/plastique,
-/obj/item/cell/lasgun/M43/highcap,
-/obj/item/cell/lasgun/M43/highcap,
+/obj/item/cell/lasgun/lasrifle/highcap,
+/obj/item/cell/lasgun/lasrifle/highcap,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/garage)
 "iF" = (
@@ -2516,28 +2268,8 @@
 /obj/machinery/portable_atmospherics/canister/oxygen,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/engineering)
-"iN" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/turf/open/floor/tile/dark2,
-/area/icy_caves/outpost/engineering)
-"iO" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/open/floor/tile/dark2,
-/area/icy_caves/outpost/engineering)
 "iP" = (
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
+/obj/structure/cable,
 /obj/structure/dispenser,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/engineering)
@@ -2584,7 +2316,7 @@
 /area/icy_caves/outpost/garage)
 "iY" = (
 /obj/item/ammo_casing,
-/obj/effect/landmark/start/surv_spawn,
+/obj/effect/landmark/start/job/survivor,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/garage)
 "iZ" = (
@@ -2596,11 +2328,7 @@
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/garage)
 "ja" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable,
 /obj/effect/decal/cleanable/blood/xeno,
 /obj/machinery/atmospherics/pipe/manifold/green/hidden{
 	dir = 4
@@ -2630,11 +2358,7 @@
 	},
 /area/icy_caves/caves/west)
 "jg" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 4
 	},
@@ -2648,19 +2372,14 @@
 /turf/closed/wall,
 /area/icy_caves/outpost/engineering)
 "jj" = (
-/obj/machinery/door/airlock/mainship/engineering{
+/obj/machinery/door/airlock/mainship/engineering/free_access{
 	dir = 1;
-	name = "\improper Colony Power Substation";
-	req_access_txt = "100"
+	name = "\improper Colony Power Substation"
 	},
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/engineering)
 "jk" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable,
 /turf/closed/wall,
 /area/icy_caves/outpost/engineering)
 "jl" = (
@@ -2749,11 +2468,7 @@
 	},
 /area/icy_caves/caves/east)
 "jC" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/outside)
@@ -2762,11 +2477,7 @@
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/garage)
 "jE" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable,
 /obj/effect/decal/cleanable/blood/xeno,
 /obj/machinery/atmospherics/pipe/simple/green/hidden,
 /turf/open/floor/tile/dark2,
@@ -2793,87 +2504,31 @@
 /area/icy_caves/outpost/garage)
 "jI" = (
 /obj/machinery/power/geothermal,
-/obj/structure/cable{
-	icon_state = "0-4";
-	d2 = 4
-	},
+/obj/structure/cable,
 /obj/machinery/light/small{
 	dir = 8
 	},
 /turf/open/floor/plating,
 /area/icy_caves/outpost/engineering)
 "jJ" = (
-/obj/structure/cable{
-	icon_state = "4-8";
-	d1 = 4;
-	d2 = 8
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
+/obj/structure/cable,
 /turf/open/floor/animated/bcircuit,
 /area/icy_caves/outpost/engineering)
-"jK" = (
-/obj/structure/cable{
-	icon_state = "4-8";
-	d1 = 4;
-	d2 = 8
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/turf/open/floor/tile/dark2,
-/area/icy_caves/outpost/engineering)
 "jL" = (
-/obj/structure/cable{
-	icon_state = "4-8";
-	d1 = 4;
-	d2 = 8
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/cable{
-	icon_state = "0-4";
-	d2 = 4
-	},
+/obj/structure/cable,
 /obj/machinery/power/apc/drained,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/engineering)
 "jM" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/cable{
-	icon_state = "4-8";
-	d1 = 4;
-	d2 = 8
-	},
-/obj/effect/landmark/start/surv_spawn,
+/obj/structure/cable,
+/obj/effect/landmark/start/job/survivor,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/engineering)
 "jN" = (
 /obj/machinery/power/terminal{
-	icon_state = "term";
 	dir = 4
 	},
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
+/obj/structure/cable,
 /obj/machinery/light/small{
 	dir = 1
 	},
@@ -2884,13 +2539,8 @@
 /turf/open/floor/plating/ground/ice,
 /area/icy_caves/caves/south)
 "jP" = (
-/obj/structure/cable/yellow,
+/obj/structure/cable,
 /obj/machinery/power/smes/buildable/empty/dist,
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /turf/open/floor/plating,
 /area/icy_caves/outpost/engineering)
 "jQ" = (
@@ -2922,10 +2572,7 @@
 /area/icy_caves/outpost/refinery)
 "jW" = (
 /obj/machinery/power/apc/drained,
-/obj/structure/cable/yellow{
-	d2 = 2;
-	icon_state = "0-2"
-	},
+/obj/structure/cable,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/refinery)
 "jX" = (
@@ -2939,7 +2586,7 @@
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/medbay)
 "jZ" = (
-/obj/machinery/door/airlock/mainship/medical,
+/obj/machinery/door/airlock/mainship/medical/free_access,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 4
 	},
@@ -3020,11 +2667,7 @@
 /turf/closed/ice_rock/singleT,
 /area/icy_caves/caves/east)
 "kn" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 6
 	},
@@ -3055,38 +2698,8 @@
 /obj/item/weapon/gun/shotgun/pump/bolt,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/garage)
-"kr" = (
-/obj/machinery/power/geothermal,
-/obj/structure/cable{
-	icon_state = "0-4";
-	d2 = 4
-	},
-/turf/open/floor/plating,
-/area/icy_caves/outpost/engineering)
-"ks" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/open/floor/animated/bcircuit,
-/area/icy_caves/outpost/engineering)
-"kt" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/open/floor/animated/bcircuit,
-/area/icy_caves/outpost/engineering)
 "ku" = (
 /obj/machinery/power/terminal{
-	icon_state = "term";
 	dir = 4
 	},
 /obj/structure/cable,
@@ -3097,7 +2710,7 @@
 /area/icy_caves/caves/west)
 "kw" = (
 /obj/machinery/power/smes/buildable/empty/dist,
-/obj/structure/cable/yellow,
+/obj/structure/cable,
 /turf/open/floor/plating,
 /area/icy_caves/outpost/engineering)
 "kx" = (
@@ -3131,11 +2744,7 @@
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/refinery)
 "kC" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/refinery)
@@ -3198,11 +2807,7 @@
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/garage)
 "kO" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable,
 /obj/item/ammo_casing,
 /obj/machinery/atmospherics/pipe/simple/green/hidden,
 /turf/open/floor/tile/dark2,
@@ -3211,14 +2816,6 @@
 /obj/structure/ore_box,
 /turf/open/floor/plating/ground/ice,
 /area/icy_caves/caves/west)
-"kQ" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/turf/open/floor/animated/bcircuit,
-/area/icy_caves/outpost/engineering)
 "kR" = (
 /obj/effect/decal/cleanable/blood/xeno,
 /turf/open/floor/plating/ground/ice,
@@ -3319,8 +2916,11 @@
 /turf/open/floor/plating/ground/ice,
 /area/icy_caves/caves/east)
 "lk" = (
-/turf/closed/ice_rock/singlePart,
-/area/icy_caves/caves/east)
+/obj/machinery/door/poddoor/timed_late/containment/landing_zone/lz2{
+	dir = 2
+	},
+/turf/open/floor/plating/ground/ice,
+/area/icy_caves/outpost/LZ2)
 "ll" = (
 /turf/open/floor/plating/ground/snow/layer0,
 /area/icy_caves/outpost/LZ1)
@@ -3500,8 +3100,7 @@
 "lS" = (
 /obj/machinery/door/airlock/multi_tile/mainship/medidoor{
 	dir = 1;
-	name = "\improper Medical Clinic";
-	req_one_access_txt = "0"
+	name = "\improper Medical Clinic"
 	},
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/medbay)
@@ -3529,11 +3128,7 @@
 /area/icy_caves/outpost/refinery)
 "lX" = (
 /obj/structure/ore_box,
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/manifold/green/hidden{
 	dir = 8
 	},
@@ -3614,18 +3209,11 @@
 /obj/machinery/power/apc/drained{
 	dir = 4
 	},
-/obj/structure/cable/yellow{
-	d2 = 4;
-	icon_state = "0-4"
-	},
+/obj/structure/cable,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/medbay)
 "mo" = (
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/medbay)
@@ -3668,11 +3256,7 @@
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/medbay)
 "mx" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/manifold/green/hidden{
 	dir = 8
 	},
@@ -3690,15 +3274,6 @@
 /area/icy_caves/outpost/medbay)
 "mA" = (
 /obj/effect/decal/cleanable/blood/splatter,
-/turf/open/floor/tile/dark2,
-/area/icy_caves/outpost/medbay)
-"mB" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/machinery/atmospherics/pipe/simple/green/hidden,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/medbay)
 "mC" = (
@@ -3733,61 +3308,27 @@
 /obj/structure/closet/secure_closet/medical2,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/medbay)
-"mK" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/open/floor/tile/dark2,
-/area/icy_caves/outpost/research)
 "mL" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 4
 	},
 /turf/open/floor/plating/ground/snow,
 /area/icy_caves/outpost/outside)
 "mM" = (
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/manifold/green/hidden{
 	dir = 1
 	},
 /turf/open/floor/plating/ground/snow,
 /area/icy_caves/outpost/outside)
 "mN" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/manifold/green/hidden,
 /turf/open/floor/plating/ground/snow,
 /area/icy_caves/outpost/outside)
 "mO" = (
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 10
 	},
@@ -3802,27 +3343,14 @@
 /turf/open/floor/plating/ground/snow,
 /area/icy_caves/outpost/outside)
 "mR" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 5
 	},
 /turf/open/floor/plating/ground/snow,
 /area/icy_caves/outpost/outside)
 "mS" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/manifold/green/hidden{
 	dir = 4
 	},
@@ -3833,17 +3361,12 @@
 /area/icy_caves/outpost/dorms)
 "mU" = (
 /obj/machinery/door/airlock/multi_tile/mainship/generic{
-	name = "\improper Colony Dormitories Canteen";
-	req_access_txt = "100"
+	name = "\improper Colony Dormitories Canteen"
 	},
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/dorms)
 "mV" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/dorms)
@@ -3864,11 +3387,7 @@
 /turf/open/floor/wood,
 /area/icy_caves/outpost/dorms)
 "na" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 4
 	},
@@ -3928,30 +3447,18 @@
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/dorms)
 "nk" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
+/obj/structure/cable,
 /obj/item/ammo_casing,
 /obj/item/weapon/gun/pistol/b92fs,
 /obj/machinery/atmospherics/pipe/simple/green/hidden,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/dorms)
 "nl" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/dorms)
 "nm" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable,
 /obj/machinery/light{
 	dir = 1
 	},
@@ -3959,10 +3466,7 @@
 /area/icy_caves/outpost/dorms)
 "nn" = (
 /obj/machinery/power/apc/drained,
-/obj/structure/cable/yellow{
-	d2 = 8;
-	icon_state = "0-8"
-	},
+/obj/structure/cable,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/dorms)
 "no" = (
@@ -4203,7 +3707,6 @@
 /area/icy_caves/outpost/dorms)
 "ol" = (
 /obj/effect/decal/cleanable/blood/writing{
-	icon_state = "tracks";
 	dir = 10
 	},
 /turf/open/floor/tile/dark2,
@@ -4271,33 +3774,21 @@
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/refinery)
 "oy" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 5
 	},
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/refinery)
 "oz" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 4
 	},
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/refinery)
 "oA" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable,
 /obj/effect/decal/cleanable/blood/drip,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 4
@@ -4314,7 +3805,6 @@
 /area/icy_caves/outpost/refinery)
 "oC" = (
 /obj/effect/decal/cleanable/blood/writing{
-	icon_state = "tracks";
 	dir = 4
 	},
 /turf/open/floor/tile/dark2,
@@ -4365,12 +3855,8 @@
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/dorms)
 "oL" = (
-/obj/machinery/door/airlock/mainship/security,
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/machinery/door/airlock/mainship/security/free_access,
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 4
 	},
@@ -4397,8 +3883,7 @@
 "oO" = (
 /obj/machinery/door/airlock/multi_tile/mainship/generic{
 	dir = 1;
-	name = "\improper Colony Dormitories";
-	req_access_txt = "100"
+	name = "\improper Colony Dormitories"
 	},
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/dorms)
@@ -4431,11 +3916,7 @@
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/dorms)
 "oT" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 9
 	},
@@ -4483,11 +3964,7 @@
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/refinery)
 "oY" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 4
 	},
@@ -4517,11 +3994,7 @@
 /turf/open/floor/wood,
 /area/icy_caves/outpost/dorms)
 "pd" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable,
 /obj/effect/decal/cleanable/blood,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 4
@@ -4606,9 +4079,11 @@
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/refinery)
 "ps" = (
-/obj/docking_port/stationary/crashmode,
-/turf/open/floor/plating/icefloor,
-/area/icy_caves/outpost/LZ1)
+/obj/machinery/door/poddoor/timed_late/containment/landing_zone/lz2{
+	dir = 8
+	},
+/turf/open/floor/plating/ground/ice,
+/area/icy_caves/outpost/LZ2)
 "pt" = (
 /obj/docking_port/stationary/marine_dropship/lz1,
 /turf/open/floor/plating,
@@ -4628,31 +4103,19 @@
 	},
 /area/icy_caves/outpost/LZ1)
 "px" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/manifold/green/hidden,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/security)
 "py" = (
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 10
 	},
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/security)
 "pz" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/security)
@@ -4673,11 +4136,7 @@
 /area/icy_caves/outpost/security)
 "pE" = (
 /obj/machinery/door/airlock/multi_tile/mainship/secdoor,
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/security)
@@ -4713,38 +4172,22 @@
 /obj/structure/bed/chair{
 	dir = 1
 	},
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
+/obj/structure/cable,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/security)
 "pL" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/security)
 "pM" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 6
 	},
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/security)
 "pN" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 9
 	},
@@ -4766,11 +4209,7 @@
 /turf/open/floor/plating/ground/snow/layer1,
 /area/icy_caves/outpost/outside)
 "pR" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable,
 /obj/item/ammo_casing,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/security)
@@ -4791,11 +4230,7 @@
 	},
 /area/icy_caves/caves/OOB)
 "pV" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable,
 /obj/effect/decal/cleanable/blood,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/security)
@@ -4825,14 +4260,6 @@
 /obj/item/ammo_magazine/pistol/b92fs,
 /obj/item/ammo_magazine/pistol/b92fs,
 /obj/item/ammo_magazine/pistol/b92fs,
-/turf/open/floor/tile/dark2,
-/area/icy_caves/outpost/security)
-"pZ" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/security)
 "qa" = (
@@ -4873,11 +4300,7 @@
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/security)
 "qi" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable,
 /obj/effect/decal/cleanable/blood/xeno,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/security)
@@ -4900,16 +4323,11 @@
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/security)
 "ql" = (
-/obj/machinery/door/airlock/mainship/security/glass{
+/obj/machinery/door/airlock/mainship/security/glass/free_access{
 	dir = 1;
-	name = "\improper Underground Security Armory";
-	req_access_txt = "100"
+	name = "\improper Underground Security Armory"
 	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/security)
 "qm" = (
@@ -4927,20 +4345,9 @@
 	},
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/security)
-"qn" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/turf/open/floor/tile/dark2,
-/area/icy_caves/outpost/security)
 "qo" = (
 /obj/machinery/power/apc/lowcharge,
-/obj/structure/cable/yellow{
-	d2 = 8;
-	icon_state = "0-8"
-	},
+/obj/structure/cable,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/security)
 "qp" = (
@@ -5086,7 +4493,6 @@
 /area/icy_caves/outpost/research)
 "qI" = (
 /obj/machinery/door/airlock/colony/research{
-	icon_state = "door_closed";
 	dir = 1
 	},
 /turf/open/floor/tile/dark2,
@@ -5096,28 +4502,8 @@
 /obj/structure/barricade/wooden,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/research)
-"qK" = (
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/turf/open/floor/tile/dark2,
-/area/icy_caves/outpost/research)
-"qL" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/open/floor/tile/dark2,
-/area/icy_caves/outpost/research)
 "qM" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 6
 	},
@@ -5132,44 +4518,27 @@
 /area/icy_caves/outpost/research)
 "qO" = (
 /obj/effect/alien/weeds/node,
+/obj/structure/cable,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/research)
 "qP" = (
 /obj/machinery/door/airlock/colony/research{
-	icon_state = "door_closed";
 	dir = 1
 	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/research)
 "qQ" = (
-/obj/effect/landmark/start/surv_spawn,
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
+/obj/effect/landmark/start/job/survivor,
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden{
 	dir = 4
 	},
 /turf/open/floor/plating/ground/snow,
 /area/icy_caves/outpost/outside)
 "qR" = (
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/manifold/green/hidden{
 	dir = 8
 	},
@@ -5189,11 +4558,7 @@
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/security)
 "qV" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden,
 /obj/structure/barricade/wooden,
 /turf/open/floor/tile/dark2,
@@ -5203,16 +4568,8 @@
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/research)
 "qX" = (
-/obj/structure/cable/yellow{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/obj/machinery/power/apc/drained{
-	dir = 4
-	},
-/obj/structure/table,
-/turf/open/floor/tile/dark2,
-/area/icy_caves/outpost/research)
+/turf/open/floor/plating/ground/ice,
+/area/icy_caves/outpost/LZ2)
 "qY" = (
 /obj/effect/decal/cleanable/blood/splatter,
 /turf/open/floor/tile/dark2,
@@ -5250,9 +4607,9 @@
 /turf/open/floor/tile/dark2,
 /area/icy_caves/outpost/research)
 "rg" = (
-/obj/structure/sign/science,
-/turf/closed/wall/r_wall,
-/area/icy_caves/outpost/research)
+/obj/machinery/floodlight/outpost,
+/turf/open/floor/plating/ground/ice,
+/area/icy_caves/outpost/LZ2)
 "rh" = (
 /obj/effect/landmark/corpsespawner/pmc,
 /turf/open/floor/tile/dark2,
@@ -5276,6 +4633,442 @@
 /obj/effect/landmark/corpsespawner/pmc,
 /turf/open/floor/plating/ground/ice,
 /area/icy_caves/caves/west)
+"rm" = (
+/obj/machinery/door/poddoor/timed_late/containment/landing_zone/lz2{
+	dir = 2
+	},
+/obj/structure/fence,
+/turf/open/floor/plating/ground/ice,
+/area/icy_caves/outpost/LZ2)
+"rn" = (
+/obj/structure/fence,
+/turf/open/floor/plating/ground/ice,
+/area/icy_caves/outpost/LZ2)
+"ro" = (
+/obj/machinery/door/poddoor/timed_late/containment/landing_zone/lz2{
+	dir = 2
+	},
+/turf/open/floor/plating/ground/ice,
+/area/icy_caves/caves/east)
+"rp" = (
+/obj/machinery/floodlight/outpost,
+/turf/open/floor/plating/ground/ice,
+/area/icy_caves/caves/east)
+"rq" = (
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"rr" = (
+/turf/closed/wall,
+/area/icy_caves/outpost/LZ2)
+"rs" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 1
+	},
+/obj/structure/table,
+/obj/item/radio,
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"rt" = (
+/obj/docking_port/stationary/crashmode,
+/turf/open/floor/plating/ground/ice,
+/area/icy_caves/caves/west)
+"rw" = (
+/obj/machinery/door/poddoor/timed_late/containment/landing_zone/lz2{
+	dir = 2
+	},
+/turf/open/floor/plating/ground/snow/layer2,
+/area/icy_caves/outpost/LZ2)
+"rx" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 8
+	},
+/obj/effect/decal/warning_stripes/thin{
+	dir = 1
+	},
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"ry" = (
+/obj/machinery/door/poddoor/timed_late/containment/landing_zone/lz2{
+	dir = 8
+	},
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"rz" = (
+/turf/closed/ice/thin/corner{
+	dir = 4
+	},
+/area/icy_caves/outpost/LZ2)
+"rA" = (
+/obj/machinery/door/poddoor/timed_late/containment/landing_zone/lz2{
+	dir = 8
+	},
+/turf/open/floor/plating/ground/snow/layer2,
+/area/icy_caves/outpost/LZ2)
+"rB" = (
+/turf/closed/ice/thin/end{
+	dir = 1
+	},
+/area/icy_caves/outpost/LZ2)
+"rC" = (
+/obj/machinery/door/poddoor/timed_late/containment/landing_zone/lz2{
+	dir = 1
+	},
+/turf/open/floor/plating/ground/ice,
+/area/icy_caves/outpost/LZ2)
+"rE" = (
+/turf/closed/ice/thin/junction,
+/area/icy_caves/outpost/LZ2)
+"rF" = (
+/turf/closed/ice/thin/junction{
+	dir = 8
+	},
+/area/icy_caves/outpost/LZ2)
+"rG" = (
+/turf/closed/ice/thin/end{
+	dir = 8
+	},
+/area/icy_caves/outpost/LZ2)
+"rH" = (
+/turf/closed/ice/thin/intersection,
+/area/icy_caves/outpost/LZ2)
+"rI" = (
+/obj/machinery/door/poddoor/timed_late/containment/landing_zone/lz2{
+	dir = 2
+	},
+/turf/closed/ice/thin/end{
+	dir = 8
+	},
+/area/icy_caves/outpost/LZ2)
+"rJ" = (
+/obj/machinery/door/poddoor/timed_late/containment/landing_zone/lz2{
+	dir = 2
+	},
+/turf/open/floor/plating/ground/snow/layer1,
+/area/icy_caves/outpost/LZ2)
+"rK" = (
+/obj/machinery/door/poddoor/timed_late/containment/landing_zone/lz2{
+	dir = 2
+	},
+/turf/closed/ice/thin/junction{
+	dir = 8
+	},
+/area/icy_caves/outpost/LZ2)
+"rL" = (
+/obj/machinery/door/poddoor/timed_late/containment/landing_zone/lz2{
+	dir = 2
+	},
+/turf/closed/ice/thin/end,
+/area/icy_caves/outpost/LZ2)
+"rM" = (
+/obj/machinery/button/door/open_only/landing_zone/lz2{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/open/floor/plating/ground/ice,
+/area/icy_caves/outpost/LZ2)
+"rN" = (
+/obj/machinery/door/poddoor/timed_late/containment/landing_zone/lz2,
+/turf/open/floor/plating/ground/ice,
+/area/icy_caves/outpost/LZ2)
+"rO" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 1
+	},
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"rS" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 8
+	},
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"rT" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 4
+	},
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"rU" = (
+/obj/structure/fence,
+/turf/open/floor/plating/ground/snow/layer1,
+/area/icy_caves/outpost/LZ2)
+"rV" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 8
+	},
+/obj/effect/decal/warning_stripes/thin,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"rW" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 4
+	},
+/obj/effect/decal/warning_stripes/thin,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"sa" = (
+/obj/structure/fence,
+/turf/open/floor/plating/ground/ice,
+/area/icy_caves/caves/east)
+"sb" = (
+/obj/machinery/door/poddoor/timed_late/containment/landing_zone/lz2{
+	dir = 8
+	},
+/obj/structure/fence,
+/turf/open/floor/plating/ground/ice,
+/area/icy_caves/outpost/LZ2)
+"sc" = (
+/obj/effect/decal/warning_stripes/thin,
+/obj/machinery/light/small,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"sd" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 8
+	},
+/obj/effect/decal/warning_stripes/thin{
+	dir = 1
+	},
+/obj/structure/largecrate/cow,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"se" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 4
+	},
+/obj/effect/decal/warning_stripes/thin{
+	dir = 1
+	},
+/obj/structure/table,
+/obj/item/storage/fancy/cigarettes/dromedaryco,
+/obj/item/storage/fancy/cigar,
+/obj/item/tool/lighter,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"sf" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 8
+	},
+/obj/effect/decal/warning_stripes/thin{
+	dir = 1
+	},
+/obj/item/binoculars,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"sg" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 8
+	},
+/obj/effect/decal/warning_stripes/thin{
+	dir = 1
+	},
+/obj/structure/largecrate/supply/supplies/water,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"sh" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 4
+	},
+/obj/effect/decal/warning_stripes/thin{
+	dir = 1
+	},
+/obj/structure/largecrate/supply/supplies/tables_racks,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"si" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 4
+	},
+/obj/effect/decal/warning_stripes/thin{
+	dir = 1
+	},
+/obj/item/big_ammo_box,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"sj" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 4
+	},
+/obj/structure/largecrate/supply/supplies/metal,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"sk" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 8
+	},
+/obj/structure/largecrate/supply/ammo/standard_smg,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"sl" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 4
+	},
+/obj/effect/decal/warning_stripes/thin,
+/obj/structure/largecrate/supply/floodlights,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"sm" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 8
+	},
+/obj/effect/decal/warning_stripes/thin,
+/obj/structure/largecrate/supply/ammo/shotgun,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"sn" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 4
+	},
+/obj/effect/decal/warning_stripes/thin,
+/obj/structure/largecrate/random/barrel/blue,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"so" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 4
+	},
+/obj/effect/decal/warning_stripes/thin{
+	dir = 1
+	},
+/obj/structure/largecrate/random/barrel/yellow,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"sp" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 4
+	},
+/obj/effect/decal/warning_stripes/thin{
+	dir = 1
+	},
+/obj/structure/largecrate/goat,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"sq" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 8
+	},
+/obj/effect/decal/warning_stripes/thin{
+	dir = 1
+	},
+/obj/structure/largecrate/random/barrel/green,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"sr" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 4
+	},
+/obj/structure/largecrate/random/barrel/white,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"ss" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 8
+	},
+/obj/effect/decal/warning_stripes/thin{
+	dir = 1
+	},
+/obj/item/tank/air,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"st" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 4
+	},
+/obj/effect/decal/warning_stripes/thin{
+	dir = 1
+	},
+/obj/item/storage/backpack,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"su" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 8
+	},
+/obj/item/shotgunbox/buckshot,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"sv" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 4
+	},
+/obj/effect/decal/warning_stripes/thin,
+/obj/structure/largecrate/random/barrel/white,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"sw" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 4
+	},
+/obj/structure/table,
+/obj/item/pizzabox/margherita,
+/obj/item/storage/donut_box,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"sx" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 8
+	},
+/obj/structure/table,
+/obj/item/reagent_scanner/adv,
+/obj/item/storage/firstaid/o2,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"sy" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 8
+	},
+/obj/effect/decal/warning_stripes/thin,
+/obj/structure/table,
+/obj/item/restraints/handcuffs,
+/obj/item/flashlight,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"sz" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 8
+	},
+/obj/effect/decal/warning_stripes/thin,
+/obj/structure/reagent_dispensers/watertank,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"sA" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 4
+	},
+/obj/effect/decal/warning_stripes/thin,
+/obj/structure/table,
+/obj/item/storage/fancy/candle_box,
+/obj/item/storage/fancy/crayons,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"sB" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 8
+	},
+/obj/effect/decal/warning_stripes/thin,
+/obj/structure/table,
+/obj/item/roller,
+/obj/item/storage/firstaid,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/LZ2)
+"tm" = (
+/obj/machinery/light/small{
+	dir = 8
+	},
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/research)
 "uT" = (
 /obj/structure/closet/secure_closet/medical3,
 /turf/open/floor/tile/dark2,
@@ -5288,17 +5081,40 @@
 	dir = 8
 	},
 /area/icy_caves/outpost/outside)
+"vC" = (
+/obj/machinery/miner/damaged,
+/turf/open/floor/plating/ground/ice,
+/area/icy_caves/outpost/LZ2)
+"wM" = (
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/research)
+"yl" = (
+/obj/docking_port/stationary/crashmode,
+/turf/closed/wall/r_wall,
+/area/icy_caves/outpost/dorms)
 "zl" = (
-/obj/effect/landmark/start/surv_spawn,
+/obj/effect/landmark/start/job/survivor,
 /turf/open/floor/plating/ground/ice,
 /area/icy_caves/caves/west)
+"Bs" = (
+/obj/structure/cable,
+/obj/machinery/atmospherics/pipe/simple/green/hidden,
+/obj/docking_port/stationary/crashmode,
+/turf/open/floor/plating/ground/snow,
+/area/icy_caves/outpost/outside)
+"Gk" = (
+/obj/machinery/door/poddoor/timed_late/containment/landing_zone/lz2{
+	dir = 2
+	},
+/turf/closed/wall/r_wall,
+/area/icy_caves/caves/east)
 "GZ" = (
 /obj/structure/bed,
-/obj/effect/landmark/start/surv_spawn,
+/obj/effect/landmark/start/job/survivor,
 /turf/open/floor/wood,
 /area/icy_caves/outpost/dorms)
 "HM" = (
-/obj/effect/landmark/start/surv_spawn,
+/obj/effect/landmark/start/job/survivor,
 /turf/open/floor/plating/ground/ice,
 /area/icy_caves/caves/east)
 "Io" = (
@@ -5309,6 +5125,20 @@
 	dir = 9
 	},
 /area/icy_caves/outpost/outside)
+"IA" = (
+/obj/machinery/computer/general_air_control/supermatter_core,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/research)
+"Jf" = (
+/obj/structure/cable,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/research)
+"JT" = (
+/obj/structure/sign/science{
+	dir = 1
+	},
+/turf/open/floor/plating/ground/snow/layer2,
+/area/icy_caves/outpost/outside)
 "Ka" = (
 /obj/machinery/door/poddoor/timed_late/containment/landing_zone{
 	dir = 2
@@ -5317,12 +5147,45 @@
 	dir = 1
 	},
 /area/icy_caves/outpost/outside)
+"KE" = (
+/obj/structure/dispenser,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/research)
+"LI" = (
+/obj/docking_port/stationary/crashmode,
+/turf/closed/ice_rock/single,
+/area/icy_caves/caves/west)
 "MQ" = (
 /turf/closed/wall/r_wall,
 /area/icy_caves/caves/northern)
+"MV" = (
+/obj/machinery/miner/damaged/platinum,
+/turf/open/floor/plating/ground/ice,
+/area/icy_caves/caves/northern)
+"Nf" = (
+/obj/docking_port/stationary/crashmode,
+/turf/open/floor/plating/ground/ice,
+/area/icy_caves/caves/east)
+"NE" = (
+/turf/open/floor/plating/ground/ice,
+/area/icy_caves/caves/OOB)
+"NN" = (
+/obj/machinery/computer/rdconsole,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/research)
 "NU" = (
 /turf/closed/ice_rock/fourway,
 /area/icy_caves/outpost/outside)
+"OK" = (
+/obj/machinery/door/poddoor/timed_late/containment/landing_zone,
+/turf/closed/ice_rock/corners{
+	dir = 10
+	},
+/area/icy_caves/caves/OOB)
+"PB" = (
+/obj/machinery/door/airlock/colony/research,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/research)
 "PD" = (
 /obj/machinery/door/poddoor/timed_late/containment/landing_zone{
 	dir = 2
@@ -5332,6 +5195,13 @@
 "Ql" = (
 /turf/closed/wall/r_wall/unmeltable,
 /area)
+"QK" = (
+/obj/machinery/door/poddoor/timed_late/containment/landing_zone{
+	dir = 2
+	},
+/obj/docking_port/stationary/crashmode,
+/turf/closed/wall/r_wall,
+/area/icy_caves/outpost/refinery)
 "Rh" = (
 /obj/machinery/door/poddoor/timed_late/containment/landing_zone{
 	dir = 2
@@ -5344,9 +5214,18 @@
 /turf/closed/wall/r_wall,
 /area/icy_caves/caves/OOB)
 "RN" = (
-/obj/effect/landmark/start/surv_spawn,
+/obj/effect/landmark/start/job/survivor,
 /turf/open/floor/tile/dark2,
 /area/icy_caves/caves/east)
+"RU" = (
+/obj/effect/decal/cleanable/blood/splatter,
+/obj/structure/cable,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/research)
+"ST" = (
+/obj/docking_port/stationary/crashmode,
+/turf/closed/ice/thin/intersection,
+/area/icy_caves/caves/south)
 "Tb" = (
 /turf/closed/ice_rock/singlePart{
 	dir = 6
@@ -5360,6 +5239,27 @@
 	dir = 4
 	},
 /area/icy_caves/outpost/outside)
+"Ud" = (
+/obj/effect/decal/cleanable/blood,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/research)
+"Uk" = (
+/obj/docking_port/stationary/crashmode,
+/turf/closed/ice/thin/junction{
+	dir = 1
+	},
+/area/icy_caves/caves/south)
+"UE" = (
+/obj/machinery/miner/damaged/platinum,
+/turf/open/floor/plating/ground/ice,
+/area/icy_caves/caves/west)
+"UM" = (
+/turf/closed/wall,
+/area/icy_caves/outpost/research)
+"UN" = (
+/obj/machinery/computer/rdservercontrol,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/research)
 "Vj" = (
 /obj/machinery/door/poddoor/timed_late/containment/landing_zone{
 	dir = 2
@@ -5373,11 +5273,29 @@
 	dir = 8
 	},
 /area/icy_caves/outpost/outside)
+"XH" = (
+/obj/structure/table,
+/obj/structure/cable,
+/obj/machinery/computer/nuke_disk_generator/blue,
+/turf/open/floor/tile/dark2,
+/area/icy_caves/outpost/research)
+"XJ" = (
+/obj/machinery/miner/damaged/platinum,
+/turf/open/floor/plating/ground/snow,
+/area/icy_caves/outpost/outside)
 "YA" = (
 /turf/closed/ice_rock/singlePart{
 	dir = 4
 	},
 /area/icy_caves/outpost/outside)
+"Zk" = (
+/obj/machinery/miner/damaged,
+/turf/open/floor/plating/ground/ice,
+/area/icy_caves/caves/east)
+"Zp" = (
+/obj/machinery/miner/damaged,
+/turf/open/floor/plating/ground/ice,
+/area/icy_caves/caves/west)
 
 (1,1,1) = {"
 aa
@@ -8406,15 +8324,15 @@ mj
 mj
 mj
 mj
-mj
-mj
-mj
-mj
-mj
-mj
-mj
-mj
-mj
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
+nB
 mj
 mj
 mj
@@ -8618,7 +8536,7 @@ az
 dy
 dX
 eo
-eC
+eo
 eq
 eZ
 dy
@@ -8656,7 +8574,6 @@ mj
 mj
 mj
 mj
-mj
 nB
 nB
 nB
@@ -8664,18 +8581,19 @@ nB
 nB
 nB
 nB
-mj
-mj
-mj
-mj
-mj
-mj
-mj
-mj
-mj
-mj
-mj
-mj
+nB
+lQ
+lm
+lQ
+lm
+lQ
+lm
+lQ
+nB
+nB
+nB
+nB
+nB
 mj
 mj
 mj
@@ -8915,23 +8833,23 @@ nB
 nB
 bK
 lm
-nC
-ls
-nD
-nL
+NE
+NE
+NE
+pO
 nL
 lQ
-nv
-mj
-mj
-mj
-mj
-mj
-mj
-mj
-mj
-nB
-nB
+ec
+ln
+ma
+ln
+ma
+ln
+ma
+ls
+ls
+ls
+ma
 nB
 nB
 nB
@@ -8958,7 +8876,7 @@ la
 la
 la
 la
-ps
+fE
 la
 la
 la
@@ -9171,7 +9089,7 @@ cZ
 de
 cZ
 ls
-mh
+NE
 dc
 dc
 dc
@@ -9179,16 +9097,16 @@ dc
 nD
 ma
 fP
-nu
-mj
-mj
-mj
-mj
-mj
-mj
-az
-lm
-nx
+qH
+qH
+qH
+qH
+qH
+qH
+qH
+gw
+gw
+gw
 nL
 nD
 nL
@@ -9387,7 +9305,7 @@ mj
 mj
 az
 dy
-bo
+eq
 ri
 eE
 eq
@@ -9430,22 +9348,22 @@ db
 dc
 dc
 dc
-dF
 dc
 dc
 dc
-dh
-fP
-nu
-mj
-mj
-mj
-mj
-mj
-mj
-az
-mh
-mh
+dc
+dc
+dc
+qI
+wM
+Ud
+wM
+wM
+wM
+qI
+gw
+gw
+gw
 nz
 lm
 nL
@@ -9690,19 +9608,19 @@ dc
 gA
 dC
 dc
-dh
-dh
+dc
+dc
 fP
-nu
-mj
-mj
-mj
-mj
-mj
-mj
-az
-ls
-nD
+qH
+KE
+wM
+Jf
+wM
+re
+qH
+gw
+gw
+gw
 ma
 nA
 nz
@@ -9950,16 +9868,16 @@ dc
 dc
 de
 cZ
-nu
-mj
-mj
-mj
-mj
-mj
-nB
-bK
-lQ
-ls
+qH
+UM
+UM
+PB
+UM
+UM
+qH
+gw
+gw
+gw
 nz
 mh
 ny
@@ -10207,16 +10125,16 @@ dc
 dc
 da
 db
-nu
-mj
-mj
-mj
-mj
-bK
-ls
-ln
-qB
-nD
+qH
+qZ
+Jf
+Jf
+tm
+NN
+qH
+gw
+gw
+gw
 ma
 nD
 ma
@@ -10464,16 +10382,16 @@ dc
 dc
 dz
 fP
-nu
-mj
-mj
-mj
-az
-ls
-nz
-ls
-mh
-ls
+qH
+XH
+Jf
+wM
+ra
+IA
+qH
+gw
+gw
+gw
 gv
 gv
 gv
@@ -10722,15 +10640,15 @@ dc
 gz
 cZ
 qH
+rd
+Jf
+Ud
+wM
+UN
 qH
-qH
-qH
-qH
-qH
-qH
-ls
-mh
-gv
+gw
+gw
+gw
 gv
 gv
 gv
@@ -10972,22 +10890,22 @@ dc
 dc
 dc
 fe
-ft
-ft
-ee
+cV
+dc
+dc
 dc
 dc
 dz
 qH
 ea
-qX
-qZ
-rd
+Jf
+wM
+wM
 ea
 qH
-mh
-gv
-gv
+gw
+gw
+gw
 gv
 gv
 gv
@@ -11229,23 +11147,23 @@ dc
 dc
 dc
 kZ
-cX
-fu
-gB
+dc
+dc
+cV
 cV
 dc
-dA
+dc
 qH
 qT
-mK
+Jf
 ra
 qY
 rf
 qH
-aU
-aU
-gv
-gv
+gw
+gw
+gw
+gw
 gv
 gv
 gw
@@ -11487,15 +11405,15 @@ dc
 ed
 kZ
 cX
-ft
-ft
+dc
+dc
 cY
 dc
 dc
 qI
 qJ
-qK
-qL
+Jf
+Jf
 qM
 qV
 qP
@@ -11745,10 +11663,10 @@ dc
 kZ
 fu
 fu
-cY
+dc
 dc
 ed
-hs
+dc
 qH
 qW
 qO
@@ -12004,16 +11922,16 @@ ee
 ef
 ef
 dc
-hs
+dc
 jf
 qH
 dT
-qY
+RU
 rc
 re
 ea
-rg
-gv
+qH
+JT
 gw
 gw
 gw
@@ -12209,7 +12127,7 @@ bC
 aJ
 aJ
 aK
-aJ
+by
 cr
 aJ
 cR
@@ -12294,7 +12212,7 @@ aU
 aU
 aU
 gw
-go
+QK
 jV
 jU
 jU
@@ -12723,7 +12641,7 @@ cK
 bt
 bA
 aJ
-by
+aJ
 aJ
 aJ
 cR
@@ -12773,7 +12691,7 @@ dc
 dc
 gz
 db
-db
+dc
 dc
 fd
 cY
@@ -13018,7 +12936,7 @@ eb
 hs
 dc
 dc
-dc
+rt
 dc
 dc
 dc
@@ -13057,9 +12975,9 @@ lz
 kE
 mo
 mx
-mB
-mB
-mB
+mo
+mo
+mo
 bP
 bP
 bP
@@ -13547,7 +13465,7 @@ fs
 eb
 dc
 dF
-kv
+Zp
 dc
 de
 cZ
@@ -15140,7 +15058,7 @@ gI
 gI
 gI
 gI
-nv
+OK
 mj
 mj
 Ql
@@ -15327,7 +15245,7 @@ dc
 dc
 dc
 dc
-dc
+UE
 kR
 dc
 dc
@@ -15876,7 +15794,7 @@ gv
 mO
 bP
 bP
-bP
+Bs
 bP
 bP
 bP
@@ -18430,7 +18348,7 @@ eg
 dD
 dD
 ef
-ef
+LI
 ef
 gv
 gw
@@ -20186,7 +20104,7 @@ et
 eG
 dn
 eh
-fA
+ei
 dm
 dm
 dm
@@ -20493,7 +20411,7 @@ gi
 aU
 aU
 aU
-aU
+XJ
 aU
 aU
 aU
@@ -21214,7 +21132,7 @@ ex
 eG
 dn
 eh
-fA
+ei
 dm
 dm
 dm
@@ -21287,7 +21205,7 @@ aU
 mL
 aU
 gw
-mT
+yl
 mY
 nb
 nd
@@ -24874,8 +24792,8 @@ iq
 iI
 ji
 jI
-kr
-kr
+kX
+kX
 hi
 gw
 aU
@@ -25131,8 +25049,8 @@ iq
 hS
 hP
 jJ
-ks
-kQ
+jJ
+jJ
 hi
 gw
 aU
@@ -25150,10 +25068,10 @@ aH
 pK
 pR
 pV
-pZ
+pL
 qi
 ql
-qn
+pL
 nS
 nS
 qw
@@ -25387,8 +25305,8 @@ hS
 it
 iJ
 hP
-jK
-kt
+hS
+jJ
 kX
 hi
 gw
@@ -25620,7 +25538,7 @@ dm
 dm
 fz
 iK
-iK
+ST
 dl
 dM
 dM
@@ -25645,7 +25563,7 @@ iu
 iM
 ji
 jL
-kt
+jJ
 kX
 hi
 gw
@@ -25899,10 +25817,10 @@ hH
 hS
 hS
 iv
-iN
+iv
 jj
 jM
-kt
+jJ
 kY
 hi
 gw
@@ -26091,7 +26009,7 @@ bE
 ci
 ca
 ch
-aJ
+MV
 dm
 dm
 eG
@@ -26156,7 +26074,7 @@ hI
 hS
 hS
 hS
-iO
+iv
 ji
 jN
 ku
@@ -28412,7 +28330,7 @@ dm
 dm
 ej
 fz
-gL
+Uk
 ha
 gJ
 dL
@@ -28687,7 +28605,7 @@ dm
 dm
 fC
 iK
-iK
+ST
 dj
 gZ
 hV
@@ -32332,7 +32250,7 @@ dt
 ds
 dx
 gQ
-ds
+Zk
 ds
 ds
 ds
@@ -32820,7 +32738,7 @@ ds
 ds
 ds
 ds
-fK
+fM
 ge
 gh
 hA
@@ -33059,25 +32977,25 @@ ig
 ds
 hp
 fL
-ge
 hB
 ds
-hx
+ds
+ds
+ds
+ds
 ds
 ds
 ds
 gd
-hc
-hc
 gV
 el
 gc
 ds
 ds
 ds
-fM
-ge
-gk
+ds
+ds
+ds
 ds
 hp
 ds
@@ -33838,10 +33756,10 @@ jp
 ds
 ds
 ds
-ds
-ds
-ds
-ds
+sa
+dt
+dt
+sa
 ds
 ds
 ds
@@ -33850,7 +33768,7 @@ ds
 ds
 ds
 jp
-ds
+Nf
 ds
 ds
 ds
@@ -34089,23 +34007,23 @@ hn
 ge
 hB
 ds
-ds
+rp
 gd
 el
 gc
 ds
+rp
+sa
+dt
+dt
+sa
 ds
-hx
-ds
-ds
-du
 ds
 ds
 ds
 gd
-hL
-hL
-hL
+hc
+hc
 el
 hL
 hL
@@ -34118,8 +34036,8 @@ iL
 gQ
 ds
 ds
-jT
-jT
+ds
+ds
 ds
 ds
 el
@@ -34344,25 +34262,25 @@ gY
 km
 ho
 hn
-hn
 hB
-ds
-ds
-fr
-ds
-ds
-ds
-ds
-ds
-in
-dU
-em
-ds
-ds
-ds
-fr
-fp
-gV
+Gk
+sb
+sb
+sb
+sb
+sb
+ps
+sb
+ry
+ry
+sb
+ps
+sb
+sb
+sb
+sb
+sb
+bo
 gV
 gV
 gV
@@ -34601,25 +34519,25 @@ dv
 km
 ho
 ho
-ho
-hn
 hB
-ds
-ds
-ds
-ds
-ds
-in
-iL
-gs
-gY
-du
-ds
-ds
-ds
-ds
-fq
-hv
+ro
+rn
+sd
+rS
+rV
+rn
+rn
+rn
+rq
+rq
+rn
+rn
+rn
+rx
+su
+sy
+rn
+rC
 hx
 hx
 hx
@@ -34792,9 +34710,9 @@ af
 am
 aC
 af
-aZ
-be
-bq
+aY
+am
+bl
 ac
 ac
 nt
@@ -34858,25 +34776,25 @@ fm
 fL
 ho
 ho
-ho
-jB
 hB
-ds
-ds
-ds
-du
-gT
-in
-dU
-em
-fH
-gY
-du
-ds
-ds
-ds
-fp
-fN
+ro
+rr
+rs
+rq
+rq
+rq
+rq
+rq
+rq
+rq
+rq
+rq
+rq
+rq
+rq
+sc
+rr
+rC
 hx
 hx
 hx
@@ -35051,7 +34969,7 @@ ac
 af
 ba
 af
-br
+af
 ac
 bw
 nu
@@ -35115,25 +35033,25 @@ ds
 fn
 fL
 ho
-ho
 gh
-ds
-ds
-ds
-fI
-dU
-iL
-iL
-gq
-iL
-gs
-dU
-dU
-em
-ds
-ds
-ds
-fr
+ro
+rn
+se
+rT
+rW
+rn
+rn
+rn
+rq
+rq
+rn
+rn
+rn
+so
+sr
+sv
+rn
+rC
 hx
 hx
 fq
@@ -35143,7 +35061,7 @@ gV
 gc
 ds
 ds
-jT
+ds
 ds
 nz
 ls
@@ -35372,25 +35290,25 @@ gd
 fO
 hv
 fL
-jB
 gk
-ds
-ds
-ds
-dx
-gY
-fH
-gY
-in
-dU
-em
-fm
-dv
-du
-gT
-ds
-ds
-ds
+ro
+rn
+rn
+rn
+rn
+rn
+qX
+rn
+rq
+rq
+rn
+qX
+rn
+rn
+rn
+rn
+rn
+rC
 fM
 gh
 fp
@@ -35630,24 +35548,24 @@ fp
 fO
 hv
 fn
-ds
-ds
-ds
-fI
-dU
-gY
-in
-dU
-gs
-dU
-gs
-gs
-dU
-dU
-gQ
-ds
-ds
-ds
+ro
+qX
+qX
+qX
+qX
+qX
+rg
+rn
+rq
+rq
+rn
+rg
+qX
+qX
+qX
+qX
+qX
+rC
 fM
 ho
 hB
@@ -35656,7 +35574,7 @@ ds
 ds
 ds
 ds
-jT
+ds
 ds
 nz
 nM
@@ -35885,26 +35803,26 @@ ds
 ds
 ds
 fp
-fO
+gV
 dr
-ds
-ds
-gT
-dv
-dx
-dU
-em
-dv
-in
-dU
-em
-du
-dv
-dv
-fH
-gQ
-ds
-ds
+ro
+rn
+rn
+rn
+rn
+rn
+qX
+rn
+rq
+rq
+rn
+qX
+rn
+rn
+rn
+rn
+rn
+rC
 ds
 km
 hB
@@ -36142,26 +36060,26 @@ ds
 ds
 ds
 ds
-fr
 ds
 ds
-ds
-fI
-dU
-ga
-dx
-em
-dv
-du
-dv
-fI
-dU
-gq
-dU
-em
-dv
-ds
-ds
+ro
+rn
+sg
+rS
+rV
+rn
+rn
+rn
+rq
+rq
+rn
+rn
+rn
+ss
+rS
+sz
+rn
+rC
 ds
 hp
 ds
@@ -36401,26 +36319,26 @@ ds
 ds
 ds
 ds
-ds
-ds
-dv
-fH
-gQ
-fH
-gQ
-fH
-ga
-fm
-fm
-fH
-iL
-em
-fI
-gq
-gQ
-ds
-ds
-ds
+ro
+rr
+rO
+rq
+rq
+rq
+rq
+rq
+rq
+rq
+rq
+rq
+rq
+rq
+rq
+sc
+rr
+bo
+ps
+bo
 ds
 ds
 ds
@@ -36658,26 +36576,26 @@ ds
 ds
 ds
 ds
-in
-gs
-gY
-in
-dU
-em
-dx
-iL
-em
-gT
-in
-gs
-gY
-in
-dU
-em
-fm
-ds
-ds
-ds
+ro
+rn
+sh
+sj
+sl
+rn
+rn
+rn
+rq
+rq
+rn
+rn
+rn
+sp
+sw
+sA
+rn
+qX
+qX
+lk
 ds
 ds
 ds
@@ -36915,27 +36833,27 @@ hv
 ds
 ds
 ds
+ro
+rn
+rn
+rn
+rn
+rn
+qX
+rn
+rq
+rq
+rn
+qX
+rn
+rn
+rn
+rn
+rn
+qX
+qX
+lk
 ds
-in
-dU
-iL
-gY
-fI
-gY
-fH
-em
-ds
-ds
-in
-gq
-gQ
-fH
-gQ
-ds
-ds
-jo
-ds
-jo
 ds
 ds
 fq
@@ -37172,28 +37090,28 @@ fO
 hv
 ds
 ds
-ds
-ds
-fm
-fH
-dU
-dU
-ga
-ds
-ds
-ds
-ds
-ds
-ds
-fm
-ds
-fm
-ds
+ro
+qX
+qX
+qX
+qX
+qX
+rg
+rn
+rq
+rq
+rn
+rg
+qX
+qX
+qX
+qX
+qX
+qX
+qX
 lk
-gk
 ds
-fL
-hB
+ds
 ds
 fp
 fO
@@ -37429,26 +37347,26 @@ gV
 fO
 hv
 ds
-ds
-ds
-ds
-ds
-fH
-ga
-ds
-ds
-ds
-ds
-ds
-im
-ds
-ds
-ds
-ds
-ds
-ds
-ds
-ds
+ro
+rn
+rn
+rn
+rn
+rn
+qX
+rn
+rq
+rq
+rn
+qX
+rn
+rn
+rn
+rn
+rn
+qX
+qX
+lk
 ds
 ds
 ds
@@ -37685,27 +37603,27 @@ bL
 gd
 fO
 fO
-hL
 gc
-ds
-ds
-ds
-ds
-ds
-ds
-ds
-ds
-fn
-ds
-ds
-ds
-ds
-ds
-ds
-ds
-ds
-ds
-ds
+ro
+rn
+sf
+sk
+sm
+rn
+rn
+rn
+rq
+rq
+rn
+rn
+rn
+sq
+sx
+sB
+rn
+qX
+qX
+lk
 ds
 ds
 ds
@@ -37942,27 +37860,27 @@ az
 gd
 fO
 fO
-gV
 gc
-ds
-ds
-ds
-ds
-ds
-ds
-gd
-hc
-fO
-gc
-ds
-ds
-ds
-gd
-hv
-ds
-ds
-fn
-fn
+ro
+rr
+rO
+rq
+rq
+rq
+rq
+rq
+rq
+rq
+rq
+rq
+rq
+rq
+rq
+sc
+rr
+qX
+rG
+rI
 ds
 ds
 ds
@@ -38196,31 +38114,31 @@ mj
 mj
 mj
 bK
-nz
+bK
 fp
 dr
 ds
-ds
-ds
-ds
-fI
-gQ
-ds
-ds
-ds
-ds
-fr
-ds
-ds
-ds
-fq
-hc
-fN
-gd
-hv
-fp
-gV
-gc
+ro
+rn
+si
+rT
+sn
+rn
+rn
+rn
+rq
+rq
+rn
+rn
+rn
+st
+rT
+rW
+rn
+rz
+rH
+rK
+em
 ds
 ds
 gd
@@ -38453,30 +38371,30 @@ mj
 mj
 az
 nD
-lZ
-lQ
-ds
-ds
-du
-ds
-in
-dU
-dU
-gs
-gQ
-ds
-ds
-ds
-ds
-fq
-hc
-dr
-gd
-fJ
-gc
-fJ
-hL
-gc
+bo
+ps
+ps
+ps
+bo
+rn
+rn
+rn
+rn
+rn
+qX
+rn
+rq
+rq
+rn
+qX
+rn
+rn
+rn
+rn
+rn
+rE
+rH
+rL
 ds
 ds
 ds
@@ -38709,31 +38627,31 @@ mj
 mj
 mj
 az
-lm
-lZ
-ma
-ds
-fI
-gY
-ds
-ds
-fH
-gs
-gs
-ga
-ds
+nz
+lk
+qX
+qX
+qX
+qX
+rg
+qX
+qX
+qX
+qX
+rg
+rn
 bN
 bN
-ds
-fJ
-hc
-hc
-hc
-hc
-hc
-gV
-gV
-gc
+rn
+rg
+qX
+qX
+qX
+qX
+rB
+rF
+rF
+rL
 ds
 ds
 gd
@@ -38967,32 +38885,32 @@ mj
 mj
 az
 nM
-nM
-ds
-ds
-dx
-dU
-gQ
-ds
+rm
+rn
+rn
+rn
+rn
+rn
+rn
+rU
+rU
+rU
+rU
+rU
 bN
 bN
-bN
-bN
-bN
-bN
-bN
-bN
-bN
-bN
-bN
-bN
-bN
-bN
-bN
-ds
-ds
-ds
-ds
+rU
+rU
+rU
+rU
+rU
+rU
+rU
+rU
+rn
+bo
+rN
+bo
 fq
 fO
 dr
@@ -39224,12 +39142,12 @@ mj
 mj
 bK
 nM
-mh
-ds
-ds
-fH
-gq
-ga
+lk
+qX
+qX
+qX
+qX
+qX
 bN
 bN
 bN
@@ -39247,10 +39165,10 @@ bN
 bN
 bN
 bN
-ds
-ds
-gd
-gV
+rM
+qX
+lk
+fp
 dr
 nt
 mj
@@ -39480,10 +39398,10 @@ mj
 mj
 az
 lm
-lZ
-nC
-ds
-ds
+qB
+lk
+qX
+vC
 bN
 bN
 bN
@@ -39506,7 +39424,7 @@ bN
 bN
 bN
 bN
-bN
+rJ
 ls
 nt
 mj
@@ -39738,8 +39656,8 @@ mj
 az
 nM
 nM
-ds
-ds
+lk
+qX
 bN
 bN
 bN
@@ -39763,7 +39681,7 @@ an
 an
 bN
 bN
-bN
+rJ
 ny
 lQ
 mj
@@ -39995,7 +39913,7 @@ mj
 az
 nM
 nM
-ds
+lk
 bN
 bN
 an
@@ -40020,7 +39938,7 @@ an
 an
 an
 bN
-bN
+rJ
 ny
 ma
 nB
@@ -40252,7 +40170,7 @@ mj
 az
 nM
 nM
-ds
+rw
 bN
 an
 an
@@ -40277,7 +40195,7 @@ an
 an
 an
 an
-bN
+rJ
 ny
 nx
 nC
@@ -40509,7 +40427,7 @@ mj
 az
 mh
 ny
-nC
+rw
 bN
 an
 bN
@@ -40534,7 +40452,7 @@ bN
 bN
 bN
 bN
-an
+rw
 mh
 ny
 lQ
@@ -40766,7 +40684,7 @@ mj
 az
 nz
 mh
-an
+rw
 bN
 bN
 gp
@@ -40791,7 +40709,7 @@ gp
 gp
 gp
 bN
-an
+rw
 an
 ny
 ma
@@ -41023,7 +40941,7 @@ mj
 az
 ny
 lQ
-an
+rw
 an
 bN
 gp
@@ -41048,7 +40966,7 @@ gp
 gp
 gp
 bN
-an
+rw
 an
 ln
 lQ
@@ -41280,7 +41198,7 @@ mj
 az
 ny
 ma
-an
+rw
 an
 bN
 gp
@@ -41305,7 +41223,7 @@ gp
 gp
 gp
 bN
-an
+rw
 an
 lm
 ma
@@ -41537,7 +41455,7 @@ mj
 az
 ln
 lQ
-an
+rw
 an
 bN
 gp
@@ -41562,7 +41480,7 @@ gp
 gp
 gp
 bN
-an
+rw
 an
 ny
 nC
@@ -41794,7 +41712,7 @@ mj
 az
 lm
 ma
-an
+rw
 an
 bN
 gp
@@ -41819,7 +41737,7 @@ gp
 gp
 gp
 bN
-an
+rw
 an
 ny
 nC
@@ -42051,7 +41969,7 @@ mj
 az
 ny
 nC
-an
+rw
 an
 bN
 gp
@@ -42076,7 +41994,7 @@ gp
 gp
 gp
 bN
-an
+rw
 an
 ny
 nC
@@ -42308,7 +42226,7 @@ mj
 az
 ny
 nC
-an
+rw
 an
 bN
 gp
@@ -42333,7 +42251,7 @@ gp
 gp
 gp
 bN
-an
+rw
 an
 mh
 nz
@@ -42565,7 +42483,7 @@ mj
 az
 ny
 nC
-an
+rw
 an
 bN
 gp
@@ -42590,7 +42508,7 @@ gp
 gp
 gp
 bN
-an
+rw
 an
 nz
 nA
@@ -42822,7 +42740,7 @@ mj
 az
 mh
 nz
-an
+rw
 an
 bN
 gp
@@ -42847,7 +42765,7 @@ gp
 gp
 gp
 bN
-an
+rw
 an
 nA
 nA
@@ -43079,7 +42997,7 @@ mj
 az
 nz
 nA
-an
+rw
 an
 bN
 gp
@@ -43104,7 +43022,7 @@ gp
 gp
 gp
 bN
-an
+rw
 an
 ny
 lZ
@@ -43336,7 +43254,7 @@ mj
 az
 nA
 nA
-an
+rw
 an
 bN
 gp
@@ -43361,7 +43279,7 @@ gp
 gp
 gp
 bN
-an
+rw
 an
 mh
 mh
@@ -43593,7 +43511,7 @@ mj
 az
 ny
 lZ
-nC
+rw
 an
 bN
 bN
@@ -43618,7 +43536,7 @@ bN
 bN
 bN
 bN
-an
+rw
 lm
 lQ
 ls
@@ -43850,7 +43768,7 @@ mj
 az
 mh
 mh
-ls
+rw
 an
 an
 an
@@ -43875,7 +43793,7 @@ an
 an
 an
 an
-an
+rw
 ln
 lZ
 lQ
@@ -44107,32 +44025,32 @@ mj
 mj
 bL
 ls
-ls
-ls
-ls
-an
-an
-an
-an
-an
-an
-an
-an
-an
-an
-an
-an
-an
-an
-an
-an
-an
-an
-an
-an
-an
-ls
-ls
+bo
+rA
+rA
+rA
+rA
+rA
+rA
+rA
+rA
+rA
+rA
+rA
+rA
+rA
+rA
+rA
+rA
+rA
+rA
+rA
+rA
+rA
+rA
+rA
+rA
+bo
 ls
 ln
 ma

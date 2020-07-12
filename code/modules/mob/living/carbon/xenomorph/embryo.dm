@@ -3,6 +3,8 @@
 	desc = "All slimy and yucky."
 	icon = 'icons/Xeno/1x1_Xenos.dmi'
 	icon_state = "Larva Dead"
+	var/grinder_datum = /datum/reagent/consumable/larvajelly //good ol cookin
+	var/grinder_amount = 5
 	var/mob/living/affected_mob
 	var/stage = 0 //The stage of the bursts, with worsening effects.
 	var/counter = 0 //How developed the embryo is, if it ages up highly enough it has a chance to burst.
@@ -13,16 +15,15 @@
 
 /obj/item/alien_embryo/Initialize()
 	. = ..()
-	if(isliving(loc))
-		affected_mob = loc
-		affected_mob.status_flags |= XENO_HOST
-		log_combat(affected_mob, null, "been infected with an embryo")
-		START_PROCESSING(SSobj, src)
-		if(iscarbon(affected_mob))
-			var/mob/living/carbon/C = affected_mob
-			C.med_hud_set_status()
-	else
-		qdel(src)
+	if(!isliving(loc))
+		return
+	affected_mob = loc
+	affected_mob.status_flags |= XENO_HOST
+	log_combat(affected_mob, null, "been infected with an embryo")
+	START_PROCESSING(SSobj, src)
+	if(iscarbon(affected_mob))
+		var/mob/living/carbon/C = affected_mob
+		C.med_hud_set_status()
 
 
 /obj/item/alien_embryo/Destroy()
@@ -105,10 +106,10 @@
 				affected_mob.emote("[pick("sneeze", "cough")]")
 		if(4)
 			if(prob(1))
-				if(affected_mob.knocked_out < 1)
+				if(!affected_mob.IsUnconscious())
 					affected_mob.visible_message("<span class='danger'>\The [affected_mob] starts shaking uncontrollably!</span>", \
 												"<span class='danger'>You start shaking uncontrollably!</span>")
-					affected_mob.knock_out(10)
+					affected_mob.Unconscious(20 SECONDS)
 					affected_mob.jitter(105)
 					affected_mob.take_limb_damage(1)
 			if(prob(2))
@@ -164,7 +165,7 @@
 	victim.chestburst = 1
 	to_chat(src, "<span class='danger'>We start bursting out of [victim]'s chest!</span>")
 
-	victim.knock_out(20)
+	victim.Unconscious(40 SECONDS)
 	victim.visible_message("<span class='danger'>\The [victim] starts shaking uncontrollably!</span>", \
 								"<span class='danger'>You feel something ripping up your insides!</span>")
 	victim.jitter(300)
@@ -191,6 +192,7 @@
 		forceMove(get_turf(victim)) //moved to the turf directly so we don't get stuck inside a cryopod or another mob container.
 	playsound(src, pick('sound/voice/alien_chestburst.ogg','sound/voice/alien_chestburst2.ogg'), 25)
 	GLOB.round_statistics.total_larva_burst++
+	SSblackbox.record_feedback("tally", "round_statistics", 1, "total_larva_burst")
 	var/obj/item/alien_embryo/AE = locate() in victim
 
 	if(AE)
@@ -204,7 +206,6 @@
 			H.internal_organs_by_name -= i
 			H.internal_organs -= O
 
-	victim.death() // Certain species were still surviving bursting, DEFINITELY kill them this time.
 	victim.chestburst = 2
 	victim.update_burst()
 	log_combat(src, null, "chestbursted as a larva.")
@@ -212,6 +213,9 @@
 
 	if((locate(/obj/structure/bed/nest) in loc) && hive.living_xeno_queen?.z == loc.z)
 		burrow()
+
+	victim.death()
+
 
 /mob/living/proc/emote_burstscream()
 	return

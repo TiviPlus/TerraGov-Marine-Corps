@@ -1,54 +1,3 @@
-// ***************************************
-// *********** Neuroclaws
-// ***************************************
-/datum/action/xeno_action/neuroclaws
-	name = "Toggle Neuroinjectors"
-	action_icon_state = "neuroclaws_off"
-	mechanics_text = "Toggle on to add neurotoxin to your melee slashes."
-	cooldown_timer = 1 SECONDS
-	keybind_signal = COMSIG_XENOABILITY_NEUROCLAWS
-	var/active = FALSE
-
-/datum/action/xeno_action/neuroclaws/action_activate()
-	var/mob/living/carbon/xenomorph/Defiler/X = owner
-
-	add_cooldown()
-	active = !active
-	to_chat(X, "<span class='notice'>You [active ? "extend" : "retract"] your claws' neuro spines.</span>")
-
-	if(active)
-		playsound(X, 'sound/weapons/slash.ogg', 15, 1)
-		RegisterSignal(X, list(
-			COMSIG_XENOMORPH_DISARM_HUMAN,
-			COMSIG_XENOMORPH_ATTACK_HUMAN),
-			.proc/slash)
-	else
-		playsound(X, 'sound/weapons/slashmiss.ogg', 15, 1)
-		UnregisterSignal(X, list(
-			COMSIG_XENOMORPH_DISARM_HUMAN,
-			COMSIG_XENOMORPH_ATTACK_HUMAN))
-
-	update_button_icon()
-
-/datum/action/xeno_action/neuroclaws/update_button_icon()
-	button.overlays.Cut()
-	if(active)
-		button.overlays += image('icons/mob/actions.dmi', button, "neuroclaws_on")
-	else
-		button.overlays += image('icons/mob/actions.dmi', button, "neuroclaws_off")
-	return ..()
-
-/datum/action/xeno_action/neuroclaws/proc/slash(datum/source, mob/living/carbon/human/H, damage, list/damage_mod)
-	if(!active)
-		CRASH("neuroclaws slash callback invoked without neuroclaws active")
-	if(!H)
-		CRASH("neuroclaws slash callback invoked with a null human reference")
-	var/mob/living/carbon/xenomorph/Defiler/X = owner
-	if(!X.check_plasma(50))
-		return
-	X.use_plasma(50)
-	H.reagents.add_reagent(/datum/reagent/toxin/xeno_neurotoxin, X.xeno_caste.neuro_claws_amount)
-	to_chat(X, "<span class='xenowarning'>Your claw spines inject your victim with neurotoxin!</span>")
 
 // ***************************************
 // *********** Sting
@@ -82,6 +31,7 @@
 	var/obj/item/alien_embryo/embryo = new(C)
 	embryo.hivenumber = X.hivenumber
 	GLOB.round_statistics.now_pregnant++
+	SSblackbox.record_feedback("tally", "round_statistics", 1, "now_pregnant")
 	to_chat(X, "<span class='xenodanger'>Our stinger successfully implants a larva into the host.</span>")
 	to_chat(C, "<span class='danger'>You feel horrible pain as something large is forcefully implanted in your thorax.</span>")
 	C.apply_damage(100, STAMINA)
@@ -89,6 +39,7 @@
 	UPDATEHEALTH(C)
 	C.emote("scream")
 	GLOB.round_statistics.defiler_defiler_stings++
+	SSblackbox.record_feedback("tally", "round_statistics", 1, "defiler_defiler_stings")
 	succeed_activate()
 	return ..()
 
@@ -123,10 +74,7 @@
 
 	if(!do_after(X, DEFILER_GAS_CHANNEL_TIME, TRUE, null, BUSY_ICON_HOSTILE))
 		if(!QDELETED(src))
-			var/datum/effect_system/smoke_spread/xeno/neuro/NS = new(X)
-			NS.set_up(1, get_turf(src))
-			NS.start()
-			to_chat(X, "<span class='xenodanger'>We abort emitting neurogas, our expended plasma resulting in only a feeble wisp.</span>")
+			to_chat(X, "<span class='xenodanger'>We abort emitting neurogas, our expended plasma resulting in nothing.</span>")
 			X.emitting_gas = FALSE
 			X.icon_state = "Defiler Running"
 			return fail_activate()
@@ -140,6 +88,7 @@
 		return fail_activate()
 
 	GLOB.round_statistics.defiler_neurogas_uses++
+	SSblackbox.record_feedback("tally", "round_statistics", 1, "defiler_neurogas_uses")
 
 	X.visible_message("<span class='xenodanger'>[X] emits a noxious gas!</span>", \
 	"<span class='xenodanger'>We emit neurogas!</span>")
@@ -152,7 +101,7 @@
 		if(X.stagger) //If we got staggered, return
 			to_chat(X, "<span class='xenowarning'>We try to emit neurogas but are staggered!</span>")
 			return
-		if(X.stunned || X.knocked_down)
+		if(X.IsStun() || X.IsParalyzed())
 			to_chat(X, "<span class='xenowarning'>We try to emit neurogas but are disabled!</span>")
 			return
 		var/turf/T = get_turf(X)
@@ -166,3 +115,49 @@
 		T.visible_message("<span class='danger'>Noxious smoke billows from the hulking xenomorph!</span>")
 		count = max(0,count - 1)
 		sleep(DEFILER_GAS_DELAY)
+
+
+// ***************************************
+// *********** Inject Egg Neurogas
+// ***************************************
+/datum/action/xeno_action/activable/inject_egg_neurogas
+	name = "Inject Neurogas"
+	action_icon_state = "inject_egg"
+	mechanics_text = "Inject an egg with neurogas, killing the egg, but filling it full with neurogas ready to explode."
+	ability_name = "inject neurogas"
+	plasma_cost = 100
+	cooldown_timer = 5 SECONDS
+	keybind_flags = XACT_KEYBIND_USE_ABILITY
+	keybind_signal = COMSIG_XENOABILITY_INJECT_EGG_NEUROGAS
+
+/datum/action/xeno_action/activable/inject_egg_neurogas/on_cooldown_finish()
+	playsound(owner.loc, 'sound/effects/xeno_newlarva.ogg', 50, 0)
+	to_chat(owner, "<span class='xenodanger'>We feel our dorsal vents bristle with neurotoxic gas. We can use Emit Neurogas again.</span>")
+	return ..()
+
+/datum/action/xeno_action/activable/inject_egg_neurogas/use_ability(atom/A)
+	var/mob/living/carbon/xenomorph/Defiler/X = owner
+
+	if(!istype(A, /obj/effect/alien/egg))
+		return fail_activate()
+
+	var/obj/effect/alien/egg/alien_egg = A
+	if(alien_egg.status != EGG_GROWN)
+		to_chat(X, "<span class='warning'>That egg isn't strong enough to hold our gases.</span>")
+		return fail_activate()
+
+	X.visible_message("<span class='danger'>[X] starts injecting the egg with neurogas, killing the little one inside!</span>", \
+		"<span class='xenodanger'>We extend our stinger into the egg, filling it with gas, killing the little one inside!</span>")
+	if(!do_after(X, 2 SECONDS, TRUE, alien_egg, BUSY_ICON_HOSTILE))
+		X.visible_message("<span class='danger'>The stinger retracts from [X], leaving the egg and little one alive.</span>", \
+			"<span class='xenodanger'>Our stinger retracts, leaving the egg and little one alive.</span>")
+		return fail_activate()
+
+	succeed_activate()
+	add_cooldown()
+	
+	new /obj/effect/alien/egg/gas(A.loc)
+	qdel(alien_egg)
+
+	GLOB.round_statistics.defiler_inject_egg_neurogas++
+	SSblackbox.record_feedback("tally", "round_statistics", 1, "defiler_inject_egg_neurogas")

@@ -3,7 +3,7 @@
 	desc = "Does not support Pinball."
 	icon = 'icons/obj/machines/computer.dmi'
 	icon_state = "arcade"
-	circuit = "/obj/item/circuitboard/computer/arcade"
+	circuit = /obj/item/circuitboard/computer/arcade
 	var/enemy_name = "Space Villain"
 	var/temp = "Sponsored by Nanotrasen and the TerraGov Marine Corps" //Temporary message, for attack messages, etc
 	var/player_hp = 30 //Player health/attack points
@@ -38,7 +38,7 @@
 	name_part1 = pick("the Automatic ", "Farmer ", "Lord ", "Professor ", "the Cuban ", "the Evil ", "the Dread King ", "the Space ", "Lord ", "the Great ", "Duke ", "General ")
 	name_part2 = pick("Melonoid", "Murdertron", "Sorcerer", "Ruin", "Jeff", "Ectoplasm", "Crushulon", "Uhangoid", "Vhakoid", "Peteoid", "slime", "Griefer", "ERPer", "Lizard Man", "Unicorn")
 
-	enemy_name = oldreplacetext((name_part1 + name_part2), "the ", "")
+	enemy_name = replacetext((name_part1 + name_part2), "the ", "")
 	name = (name_action + name_part1 + name_part2)
 
 

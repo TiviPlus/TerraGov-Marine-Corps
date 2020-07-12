@@ -22,7 +22,7 @@
 	name = "weapon supplies"
 	supply = list(/obj/structure/largecrate/supply/weapons/standard_carbine = 2,
 				/obj/structure/largecrate/supply/weapons/shotgun = 2,
-				/obj/structure/largecrate/supply/weapons/m39 = 2,
+				/obj/structure/largecrate/supply/weapons/standard_smg = 2,
 				/obj/structure/largecrate/supply/weapons/pistols = 2,
 				/obj/structure/largecrate/supply/weapons/flamers = 2,
 				/obj/structure/largecrate/supply/weapons/hpr = 2,
@@ -36,7 +36,7 @@
 	supply = list(/obj/structure/largecrate/supply/ammo/m41a = 4,
 				/obj/structure/largecrate/supply/ammo/m41a_box = 4,
 				/obj/structure/largecrate/supply/ammo/shotgun = 4,
-				/obj/structure/largecrate/supply/ammo/m39 = 4,
+				/obj/structure/largecrate/supply/ammo/standard_smg = 4,
 				/obj/structure/largecrate/supply/ammo/pistol = 4
 				)
 
@@ -54,9 +54,9 @@
 /obj/effect/landmark/supplyspawner/turrets
 	name = "defensive gun emplacement supplies"
 	supply = list(/obj/structure/largecrate/supply/weapons/sentries = 2,
-				/obj/structure/largecrate/supply/weapons/m56d = 2,
+				/obj/structure/largecrate/supply/weapons/standard_hmg = 2,
 				/obj/structure/largecrate/supply/ammo/sentry = 1,
-				/obj/structure/largecrate/supply/ammo/m56d = 1
+				/obj/structure/largecrate/supply/ammo/standard_hmg = 1
 				)
 
 /obj/effect/landmark/supplyspawner/food
@@ -102,19 +102,19 @@
 	supplies = list(/obj/item/weapon/gun/rifle/standard_carbine = 10)
 
 /obj/structure/largecrate/supply/weapons/shotgun
-	name = "\improper M37A2 pump action shotgun weapons chest (x10)"
-	desc = "A weapons chest containing ten M37A2 pump shotguns."
-	supplies = list(/obj/item/weapon/gun/shotgun/pump = 10)
+	name = "\improper T-35 pump action shotgun weapons chest (x10)"
+	desc = "A weapons chest containing ten T-35 pump shotguns."
+	supplies = list(/obj/item/weapon/gun/shotgun/pump/t35 = 10)
 
-/obj/structure/largecrate/supply/weapons/m39
-	name = "\improper M39 sub machinegun weapons chest (x8)"
-	desc = "A weapons chest containing eight M39 submachine guns."
+/obj/structure/largecrate/supply/weapons/standard_smg
+	name = "\improper T-90 sub machinegun weapons chest (x8)"
+	desc = "A weapons chest containing eight T-90 submachine guns."
 	supplies = list(/obj/item/weapon/gun/smg/standard_smg = 8)
 
 /obj/structure/largecrate/supply/weapons/pistols
 	name = "sidearm weapons chest (x20)"
-	desc = "A weapons chest containing eight M44 revolvers, and twelve M4A3 service pistols."
-	supplies = list(/obj/item/weapon/gun/revolver/m44 = 6, /obj/item/weapon/gun/pistol/m4a3 = 12)
+	desc = "A weapons chest containing eight TP-44 revolvers, and twelve TP-14 service pistols."
+	supplies = list(/obj/item/weapon/gun/revolver/standard_revolver = 6, /obj/item/weapon/gun/pistol/standard_pistol = 12)
 
 /obj/structure/largecrate/supply/weapons/flamers
 	name = "\improper M240A1 incinerator weapons chest (x4)"
@@ -131,10 +131,10 @@
 	desc = "A supply crate containing two boxed UA 571-C sentries."
 	supplies = list(/obj/item/storage/box/sentry = 2)
 
-/obj/structure/largecrate/supply/weapons/m56d
-	name = "\improper M56D mounted smartgun chest (x2)"
-	desc = "A supply crate containing two boxed M56D mounted smartguns."
-	supplies = list(/obj/item/storage/box/m56d_hmg = 2)
+/obj/structure/largecrate/supply/weapons/standard_hmg
+	name = "\improper TL-102 mounted heavy smartgun chest (x2)"
+	desc = "A supply crate containing two boxed TL-102 mounted heavy smartguns."
+	supplies = list(/obj/item/storage/box/standard_hmg = 2)
 
 
 
@@ -157,25 +157,25 @@
 	desc = "An ammunition case containing eight boxes of slugs, eight boxes of buckshot, and eight boxes of flechette rounds."
 	supplies = list(/obj/item/ammo_magazine/shotgun = 8, /obj/item/ammo_magazine/shotgun/buckshot = 8, /obj/item/ammo_magazine/shotgun/flechette = 8)
 
-/obj/structure/largecrate/supply/ammo/m39
-	name = "\improper M39 magazine case (x16)"
-	desc = "An ammunition case containing sixteen M39 magazines."
+/obj/structure/largecrate/supply/ammo/standard_smg
+	name = "\improper T-90 magazine case (x16)"
+	desc = "An ammunition case containing sixteen T-90 magazines."
 	supplies = list(/obj/item/ammo_magazine/smg/standard_smg = 16)
 
 /obj/structure/largecrate/supply/ammo/pistol
 	name = "sidearm ammunition case (x40)"
-	desc = "An ammunition case containing sixteen M44 speedloaders, and twenty-four M4A3 magazines."
-	supplies = list(/obj/item/ammo_magazine/revolver = 16, /obj/item/ammo_magazine/pistol = 24)
+	desc = "An ammunition case containing sixteen TP-44 speedloaders, and twenty-four TP-14 magazines."
+	supplies = list(/obj/item/ammo_magazine/revolver/standard_revolver = 16, /obj/item/ammo_magazine/pistol/standard_pistol = 24)
 
 /obj/structure/largecrate/supply/ammo/sentry
 	name = "\improper UA 571-C ammunition drum case (x6)"
 	desc = "An ammunition case containing six UA 571-C sentry ammunition drums."
 	supplies = list(/obj/item/ammo_magazine/sentry = 6)
 
-/obj/structure/largecrate/supply/ammo/m56d
+/obj/structure/largecrate/supply/ammo/standard_hmg
 	name = "\improper M56D ammunition drum case (x6)"
 	desc = "An ammunition case containing six M56D ammunition drums."
-	supplies = list(/obj/item/ammo_magazine/m56d = 6)
+	supplies = list(/obj/item/ammo_magazine/standard_hmg = 6)
 
 
 
@@ -262,7 +262,7 @@
 /obj/structure/largecrate/supply/generator
 	name = "\improper P.A.C.M.A.N. crate"
 	desc = "A crate containing a P.A.C.M.A.N. generator, some fuel, and some cable coil to get your power up and going."
-	supplies = list(/obj/machinery/power/port_gen/pacman = 1, /obj/item/stack/sheet/mineral/phoron/medium_stack = 1, /obj/item/stack/cable_coil/yellow = 3)
+	supplies = list(/obj/machinery/power/port_gen/pacman = 1, /obj/item/stack/sheet/mineral/phoron/medium_stack = 1, /obj/item/stack/cable_coil = 3)
 
 /obj/structure/largecrate/supply/medicine
 	name = "medical crate"

@@ -136,7 +136,7 @@
 	desc = "A lighting fixture."
 	anchored = TRUE
 	layer = FLY_LAYER
-	use_power = 2
+	use_power = ACTIVE_POWER_USE
 	idle_power_usage = 2
 	active_power_usage = 20
 	power_channel = LIGHT //Lights are calc'd via area so they dont need to be in the machine list
@@ -367,7 +367,7 @@
 			s.set_up(3, 1, src)
 			s.start()
 			if(prob(75))
-				electrocute_mob(user, get_area(src), src, rand(0.7, 1))
+				electrocute_mob(user, get_area(src), src, rand(7, 10) * 0.1)
 
 
 // returns whether this light has power
@@ -493,13 +493,13 @@
 
 /obj/machinery/light/ex_act(severity)
 	switch(severity)
-		if(1.0)
+		if(EXPLODE_DEVASTATE)
 			qdel(src)
 			return
-		if(2.0)
+		if(EXPLODE_HEAVY)
 			if (prob(75))
 				broken()
-		if(3.0)
+		if(EXPLODE_LIGHT)
 			if (prob(50))
 				broken()
 	return
@@ -528,13 +528,12 @@
 // explode the light
 
 /obj/machinery/light/proc/explode()
-	var/turf/T = get_turf(src.loc)
-	spawn(0)
-		broken()	// break it first to give a warning
-		sleep(2)
-		explosion(T, 0, 0, 2, 2)
-		sleep(1)
-		qdel(src)
+	broken()	// break it first to give a warning
+	addtimer(CALLBACK(src, .proc/delayed_explosion), 0.5 SECONDS)
+
+/obj/machinery/light/proc/delayed_explosion()
+	explosion(loc, 0, 1, 3, 2)
+	qdel(src)
 
 // the light item
 // can be tube or bulb subtypes
@@ -658,7 +657,7 @@
 	anchored = TRUE
 	density = FALSE
 	layer = BELOW_TABLE_LAYER
-	use_power = 2
+	use_power = ACTIVE_POWER_USE
 	idle_power_usage = 2
 	active_power_usage = 20
 	power_channel = LIGHT //Lights are calc'd via area so they dont need to be in the machine list

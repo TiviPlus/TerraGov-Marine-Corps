@@ -43,29 +43,30 @@
 	layer = ABOVE_OBJ_LAYER
 	mouse_opacity = 0
 	flags_pass = PASSTABLE|PASSMOB|PASSGRILLE
-	var/slow_amt = 8
+	var/slow_amt = 0.8
 	var/duration = 10 SECONDS
 
 /obj/effect/xenomorph/spray/Initialize(mapload, duration = 10 SECONDS) //Self-deletes
 	. = ..()
-	START_PROCESSING(SSobj, src)
+	START_PROCESSING(SSprocessing, src)
 	QDEL_IN(src, duration + rand(0, 2 SECONDS))
 
 /obj/effect/xenomorph/spray/Destroy()
-	STOP_PROCESSING(SSobj, src)
+	STOP_PROCESSING(SSprocessing, src)
 	return ..()
 
-/obj/effect/xenomorph/spray/Crossed(AM as mob|obj)
-	..()
+/obj/effect/xenomorph/spray/Crossed(atom/movable/AM)
+	. = ..()
 	if(ishuman(AM))
 		var/mob/living/carbon/human/H = AM
 		var/armor_block
-		if(H.cooldowns[COOLDOWN_ACID])
+		if(COOLDOWN_CHECK(H, COOLDOWN_ACID))
 			return
-		H.cooldowns[COOLDOWN_ACID] = addtimer(VARSET_LIST_CALLBACK(H.cooldowns, COOLDOWN_ACID, null), 1 SECONDS)
-		if(!H.lying)
+		COOLDOWN_START(H, COOLDOWN_ACID, 1 SECONDS)
+		if(!H.lying_angle)
 			to_chat(H, "<span class='danger'>Your feet scald and burn! Argh!</span>")
-			H.emote("pain")
+			if(!(H.species.species_flags & NO_PAIN))
+				H.emote("pain")
 			H.next_move_slowdown += slow_amt
 			var/datum/limb/affecting = H.get_limb("l_foot")
 			armor_block = H.run_armor_check(affecting, "acid")

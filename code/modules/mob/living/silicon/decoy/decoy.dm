@@ -25,24 +25,35 @@
 		SSmobs.stop_processing(src)
 		return FALSE
 	if(health <= get_death_threshold() && stat != DEAD)
-		death(FALSE, "<b>\The [name]</b> sparks up and falls silent...")
+		death()
 
 /mob/living/silicon/decoy/updatehealth()
 	if(status_flags & GODMODE)
 		health = 100
-		stat = CONSCIOUS
+		set_stat(CONSCIOUS)
 	else
 		health = 100 - getOxyLoss() - getToxLoss() - getFireLoss() - getBruteLoss()
 
 	update_stat()
 
-/mob/living/silicon/decoy/death(gibbed, deathmessage)
-	set waitfor = 0
-	. = ..()
+
+/mob/living/silicon/decoy/death(gibbing, deathmessage = "sparks up and falls silent...", silent)
+	if(stat == DEAD)
+		return ..()
+	return ..()
+
+
+/mob/living/silicon/decoy/on_death()
 	density = TRUE
 	icon_state = "hydra-off"
-	sleep(20)
-	explosion(loc, -1, 0, 8, 12)
+	addtimer(CALLBACK(src, .proc/post_mortem_explosion), 2 SECONDS)
+	return ..()
+
+
+/mob/living/silicon/decoy/proc/post_mortem_explosion()
+	if(isnull(loc))
+		return
+	explosion(get_turf(src), 0, 1, 9, 12)
 
 
 /mob/living/silicon/decoy/say(message, new_sound, datum/language/language) //General communication across the ship.
@@ -51,16 +62,16 @@
 
 	ai_sound = new_sound ? new_sound : 'sound/misc/interference.ogg' //Remember the sound we need to play.
 
-	message = trim(copytext(sanitize(message), 1, MAX_MESSAGE_LEN))
+	message = trim(copytext_char(sanitize(message), 1, MAX_MESSAGE_LEN))
 
 	var/datum/language/message_language = get_message_language(message)
 	if(message_language)
 		if(can_speak_in_language(message_language))
 			language = message_language
-		message = copytext(message, 3)
+		message = copytext_char(message, 3)
 
 		if(findtext(message, " ", 1, 2))
-			message = copytext(message, 2)
+			message = copytext_char(message, 2)
 
 	if(!language)
 		language = get_default_language()
@@ -69,7 +80,7 @@
 
 	switch(message_mode)
 		if(MODE_HEADSET)
-			message = copytext(message, 2)
+			message = copytext_char(message, 2)
 		if("broadcast")
 			message_mode = MODE_HEADSET
 

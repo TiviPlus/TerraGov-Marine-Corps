@@ -6,16 +6,27 @@
 	resistance_flags = RESIST_ALL
 	appearance_flags = APPEARANCE_UI
 	var/obj/master //A reference to the object in the slot. Grabs or items, generally.
-	var/datum/hud/hud // A reference to the owner HUD, if any.
+	var/datum/hud/hud // A reference to the owner HUD, if any./obj/screen
+
+	//Map popups
+	/**
+	 * Map name assigned to this object.
+	 * Automatically set by /client/proc/add_obj_to_map.
+	 */
+	var/assigned_map
+	/**
+	 * Mark this object as garbage-collectible after you clean the map
+	 * it was registered on.
+	 *
+	 * This could probably be changed to be a proc, for conditional removal.
+	 * But for now, this works.
+	 */
+	var/del_on_map_removal = TRUE
 
 /obj/screen/Destroy()
 	master = null
 	hud = null
 	return ..()
-
-
-/obj/screen/examine(mob/user)
-	return
 
 
 /obj/screen/proc/component_click(obj/screen/component_button/component, params)

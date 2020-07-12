@@ -71,7 +71,7 @@
 
 		var/mob/living/carbon/C = G.grabbed_thing
 
-		if(user.grab_level <= GRAB_PASSIVE)
+		if(user.grab_state <= GRAB_PASSIVE)
 			to_chat(user, "<span class='notice'>You need a tighter grip.</span>")
 			return
 
@@ -135,7 +135,7 @@
 			return
 
 		var/mob/living/GM = G.grabbed_thing
-		if(user.grab_level <= GRAB_PASSIVE)
+		if(user.grab_state <= GRAB_PASSIVE)
 			to_chat(user, "<span class='notice'>You need a tighter grip.</span>")
 			return
 
@@ -241,7 +241,7 @@
 				ismist = 0
 
 /obj/machinery/shower/Crossed(atom/movable/O)
-	..()
+	. = ..()
 	wash(O)
 	if(ismob(O))
 		mobpresent += 1
@@ -393,10 +393,11 @@
 		if(WEST)
 			pixel_x = -12
 		if(NORTH)
-			pixel_y = -10
+			pixel_y = -25
 		if(EAST)
 			pixel_x = 12
-
+		if(SOUTH)
+			pixel_y = 25
 /obj/structure/sink/attack_hand(mob/living/user)
 	. = ..()
 	if(.)
@@ -452,9 +453,9 @@
 		var/mob/living/L = user
 
 		flick("baton_active", src)
-		L.stun(10)
+		L.Stun(20 SECONDS)
 		L.stuttering = 10
-		L.knock_down(10)
+		L.Paralyze(20 SECONDS)
 		L.visible_message("<span class='danger'>[L] was stunned by [L.p_their()] wet [I]!</span>")
 
 	if(I.flags_item & ITEM_ABSTRACT)

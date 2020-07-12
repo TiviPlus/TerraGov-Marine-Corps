@@ -1,8 +1,8 @@
 //shuttle mode defines
 #define SHUTTLE_IDLE		"idle"
 #define SHUTTLE_IGNITING	"igniting"
-#define SHUTTLE_RECALL		"recall"
-#define SHUTTLE_CALL		"call"
+#define SHUTTLE_RECALL		"recalled"
+#define SHUTTLE_CALL		"called"
 #define SHUTTLE_DOCKED		"docked"
 #define SHUTTLE_STRANDED	"stranded"
 #define SHUTTLE_ESCAPE		"escape"
@@ -30,6 +30,9 @@
 #define ENDGAME_LAUNCHED 1
 #define EARLY_LAUNCHED 2
 #define ENDGAME_TRANSIT 3
+
+/// shuttle is immune to gamemode timer restrictions
+#define GAMEMODE_IMMUNE (1<<0)
 
 // Ripples, effects that signal a shuttle's arrival
 #define SHUTTLE_RIPPLE_TIME 100

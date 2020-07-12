@@ -88,7 +88,7 @@
 	flags_equip_slot = ITEM_SLOT_BELT|ITEM_SLOT_BACK
 	force = 40.0
 	damtype = "fire"
-	digspeed = 20 //Can slice though normal walls, all girders, or be used in reinforced wall deconstruction/ light thermite on fire
+	digspeed = 20 //Can slice though normal walls, all girders, or be used in reinforced wall deconstruction
 	desc = "A tool that cuts with deadly hot plasma. You could use it to cut limbs off of xenos! Or, you know, cut apart walls or mine through stone. Eye protection strongly recommended."
 	drill_verb = "cutting"
 	heat = 3800
@@ -100,7 +100,7 @@
 
 /obj/item/tool/pickaxe/plasmacutter/Initialize()
 	. = ..()
-	cell = new /obj/item/cell/high(src)
+	cell = new /obj/item/cell/high()
 
 
 /obj/item/tool/pickaxe/plasmacutter/examine(mob/user)
@@ -203,16 +203,14 @@
 	update_plasmacutter()
 
 /obj/item/tool/pickaxe/plasmacutter/proc/calc_delay(mob/user)
-	var/final_delay = PLASMACUTTER_CUT_DELAY
-	if (!istype(user) || !user.mind || !user.mind.cm_skills)
-		return
-	if(user.mind.cm_skills.engineer < SKILL_ENGINEER_ENGI) //We don't have proper skills; time to fumble and bumble.
+	. = PLASMACUTTER_CUT_DELAY
+	var/skill = user.skills.getRating("engineer")
+	if(skill < SKILL_ENGINEER_ENGI) //We don't have proper skills; time to fumble and bumble.
 		user.visible_message("<span class='notice'>[user] fumbles around figuring out how to use [src].</span>",
 		"<span class='notice'>You fumble around figuring out how to use [src].</span>")
-		final_delay *= max(1, 4 + (user.mind.cm_skills.engineer * -1)) //Takes twice to four times as long depending on your skill.
-	else
-		final_delay -= min(PLASMACUTTER_CUT_DELAY,(user.mind.cm_skills.engineer - 3)*5) //We have proper skills; delay lowered by 0.5 per skill point in excess of a field engineer's.
-	return final_delay
+		return . *= max(1, 4 - skill) //Takes twice to four times as long depending on your skill.
+	. -= min(PLASMACUTTER_CUT_DELAY, (skill - 3) * 5) //We have proper skills; delay lowered by 0.5 per skill point in excess of a field engineer's.
+
 
 /obj/item/tool/pickaxe/plasmacutter/emp_act(severity)
 	cell.use(round(cell.maxcharge / severity))

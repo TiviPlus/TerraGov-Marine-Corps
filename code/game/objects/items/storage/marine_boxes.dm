@@ -1,22 +1,21 @@
 
 
-/obj/item/storage/box/m56_system
-	name = "\improper M56 smartgun system"
-	desc = "A large case containing the full M56 Smartgun System. Drag this sprite into you to open it up!\nNOTE: You cannot put items back inside this case."
+/obj/item/storage/box/t26_system
+	name = "\improper T26 smart machinegun system"
+	desc = "A large case containing the full T-26 Machinegun System. Drag this sprite into you to open it up!\nNOTE: You cannot put items back inside this case."
 	icon = 'icons/Marine/marine-weapons.dmi'
 	icon_state = "smartgun_case"
 	w_class = WEIGHT_CLASS_HUGE
-	storage_slots = 4
+	storage_slots = 3
 	slowdown = 1
 	can_hold = list() //Nada. Once you take the stuff out it doesn't fit back in.
 	foldable = null
 
-/obj/item/storage/box/m56_system/Initialize(mapload, ...)
+/obj/item/storage/box/t26_system/Initialize(mapload, ...)
 	. = ..()
 	new /obj/item/clothing/glasses/night/m56_goggles(src)
-	new /obj/item/weapon/gun/smartgun(src)
-	new /obj/item/smartgun_powerpack(src)
-	new /obj/item/clothing/suit/storage/marine/smartgunner(src)
+	new /obj/item/weapon/gun/rifle/standard_smartmachinegun(src)
+	new /obj/item/ammo_magazine/standard_smartmachinegun(src)
 
 /obj/item/smartgun_powerpack
 	name = "\improper M56 powerpack"
@@ -77,8 +76,8 @@
 		reload(user, mygun, TRUE)
 		A.update_hud(user)
 		return TRUE
-	if(user.mind?.cm_skills && user.mind.cm_skills.smartgun > 0)
-		reload_duration = max(reload_duration - 1 SECONDS * user.mind.cm_skills.smartgun, 3 SECONDS)
+	if(user.skills.getRating("smartgun") > 0)
+		reload_duration = max(reload_duration - 1 SECONDS * user.skills.getRating("smartgun"), 3 SECONDS)
 	if(!do_after(user, reload_duration, TRUE, src, BUSY_ICON_GENERIC) || !pcell)
 		to_chat(user, "Your reloading was interrupted!")
 		playsound(src,'sound/machines/buzz-two.ogg', 25, TRUE)
@@ -486,7 +485,7 @@
 	new /obj/item/clothing/head/helmet/marine/pyro(src)
 	new /obj/item/clothing/shoes/marine/pyro(src)
 	new /obj/item/storage/backpack/marine/engineerpack/flamethrower(src)
-	new /obj/item/weapon/gun/flamer/M240T(src)
+	new /obj/item/weapon/gun/flamer/marinestandard(src)
 	new /obj/item/ammo_magazine/flamer_tank/large(src)
 	new /obj/item/ammo_magazine/flamer_tank/large(src)
 	new /obj/item/ammo_magazine/flamer_tank/large/B(src)

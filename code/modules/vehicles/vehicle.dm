@@ -5,7 +5,7 @@
 	density = TRUE
 	anchored = TRUE
 	animate_movement = FORWARD_STEPS
-	can_buckle = TRUE
+	buckle_flags = CAN_BUCKLE|BUCKLE_PREVENTS_PULL
 	resistance_flags = XENO_DAMAGEABLE
 
 	var/on = FALSE
@@ -18,6 +18,9 @@
 	var/powered = FALSE		//set if vehicle is powered and should use fuel when moving
 	var/move_delay = 1	//set this to limit the speed of the vehicle
 	var/buckling_y = 0
+	var/move_sounds
+	var/change_dir_sounds
+	var/vehicle_flags = NONE
 
 	var/obj/item/cell/cell
 	var/charge_use = 5	//set this to adjust the amount of power the vehicle uses per move
@@ -25,24 +28,45 @@
 //-------------------------------------------
 // Standard procs
 //-------------------------------------------
-/obj/vehicle/New()
-	..()
-	//spawn the cell you want in each vehicle
+/obj/vehicle/Initialize()
+	. = ..()
+	return INITIALIZE_HINT_NORMAL
+
+
+/obj/vehicle/LateInitialize(mapload)
+	. = ..()
+	reset_glide_size()
+
 
 /obj/vehicle/relaymove(mob/user, direction)
 	if(user.incapacitated())
-		return
+		return FALSE
 
 	if(direction in GLOB.diagonals)
+		return FALSE
+
+	if(world.time < last_move_time + move_delay)
 		return
 
-	if(world.time > last_move_time + move_delay)
-		if(on && powered && cell && cell.charge < charge_use)
-			turn_off()
-		else if(!on && powered)
+	if(powered)
+		if(!on)
 			to_chat(user, "<span class='warning'>Turn on the engine first.</span>")
-		else
-			. = step(src, direction)
+			return FALSE
+		if(cell && cell.charge < charge_use)
+			turn_off()
+			return FALSE
+
+	if(vehicle_flags & VEHICLE_MUST_TURN && dir != direction)
+		last_move_time = world.time
+		setDir(direction)
+		if(LAZYLEN(change_dir_sounds))
+			playsound(src, pick(change_dir_sounds), 25, TRUE)
+		return TRUE
+
+	. = Move(get_step(src, direction))
+	if(. && LAZYLEN(move_sounds))
+		playsound(src, pick(move_sounds), 25, TRUE)
+
 
 /obj/vehicle/attackby(obj/item/I, mob/user, params)
 	. = ..()
@@ -80,11 +104,11 @@
 
 /obj/vehicle/ex_act(severity)
 	switch(severity)
-		if(1)
+		if(EXPLODE_DEVASTATE)
 			deconstruct(FALSE)
-		if(2)
+		if(EXPLODE_HEAVY)
 			take_damage(rand(5, 10) * fire_dam_coeff)
-		if(3)
+		if(EXPLODE_LIGHT)
 			if(prob(50))
 				take_damage(rand(1, 5) * fire_dam_coeff)
 				take_damage(rand(1, 5) * brute_dam_coeff)
@@ -129,11 +153,12 @@
 	if(cell)
 		cell.forceMove(loc)
 		cell.update_icon()
-		cell = null
+		set_cell(null)
 
-	if(buckled_mob)
-		buckled_mob.apply_effects(5, 5)
-		unbuckle()
+	for(var/m in buckled_mobs)
+		var/mob/living/passenger = m
+		passenger.apply_effects(5, 5)
+		unbuckle_mob(m)
 
 	new /obj/effect/spawner/gibspawner/robot(loc)
 	new /obj/effect/decal/cleanable/blood/oil(loc)
@@ -156,6 +181,21 @@
 		turn_on()
 		return
 
+
+///Wrapper to guarantee powercells are properly nulled and avoid hard deletes.
+/obj/vehicle/proc/set_cell(obj/item/cell/new_cell)
+	if(cell)
+		UnregisterSignal(cell, COMSIG_PARENT_QDELETING)
+	cell = new_cell
+	if(cell)
+		RegisterSignal(cell, COMSIG_PARENT_QDELETING, .proc/on_cell_deletion)
+
+
+///Called by the deletion of the referenced powercell.
+/obj/vehicle/proc/on_cell_deletion(obj/item/cell/source, force)
+	set_cell(null)
+
+
 /obj/vehicle/proc/insert_cell(obj/item/cell/C, mob/living/carbon/human/H)
 	if(cell)
 		return
@@ -163,7 +203,7 @@
 		return
 
 	H.transferItemToLoc(C, src)
-	cell = C
+	set_cell(C)
 	powercheck()
 	to_chat(usr, "<span class='notice'>You install [C] in [src].</span>")
 
@@ -174,22 +214,23 @@
 	to_chat(usr, "<span class='notice'>You remove [cell] from [src].</span>")
 	cell.forceMove(get_turf(H))
 	H.put_in_hands(cell)
-	cell = null
+	set_cell(null)
 	powercheck()
 
 /obj/vehicle/proc/RunOver(mob/living/carbon/human/H)
 	return		//write specifics for different vehicles
 
 
-/obj/vehicle/afterbuckle(mob/M)
+/obj/vehicle/post_buckle_mob(mob/buckling_mob)
 	. = ..()
-	if(. && buckled_mob == M)
-		M.pixel_y = buckling_y
-		M.old_y = buckling_y
-	else
-		M.pixel_x = initial(buckled_mob.pixel_x)
-		M.pixel_y = initial(buckled_mob.pixel_y)
-		M.old_y = initial(buckled_mob.pixel_y)
+	buckling_mob.pixel_y = buckling_y
+	buckling_mob.old_y = buckling_y
+
+/obj/vehicle/post_unbuckle_mob(mob/buckled_mob)
+	. = ..()
+	buckled_mob.pixel_x = initial(buckled_mob.pixel_x)
+	buckled_mob.pixel_y = initial(buckled_mob.pixel_y)
+	buckled_mob.old_y = initial(buckled_mob.pixel_y)
 
 //-------------------------------------------------------
 // Stat update procs

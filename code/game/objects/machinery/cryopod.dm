@@ -16,10 +16,6 @@
 	cryotypes = list(CRYO_MED)
 	category = CRYO_MED
 
-/obj/machinery/computer/cryopod/brig
-	cryotypes = list(CRYO_SEC)
-	category = CRYO_SEC
-
 /obj/machinery/computer/cryopod/eng
 	cryotypes = list(CRYO_ENGI)
 	category = CRYO_ENGI
@@ -190,6 +186,13 @@
 	. = ..()
 	radio = new(src)
 	update_icon()
+	RegisterSignal(src, COMSIG_MOVABLE_SHUTTLE_CRUSH, .proc/shuttle_crush)
+
+/obj/machinery/cryopod/proc/shuttle_crush()
+	if(occupant)
+		var/mob/living/L = occupant
+		go_out()
+		L.gib()
 
 /obj/machinery/cryopod/Destroy()
 	QDEL_NULL(radio)
@@ -204,17 +207,11 @@
 /mob/living/proc/despawn(obj/machinery/cryopod/pod, dept_console = CRYO_REQ)
 
 	//Handle job slot/tater cleanup.
-	if(job in GLOB.jobs_regular_all)
-		var/datum/job/J = SSjob.name_occupations[job]
-		J.current_positions--
-		if((J.title in GLOB.jobs_regular_all) && isdistress(SSticker?.mode))
-			var/datum/game_mode/distress/D = SSticker.mode
-			D.latejoin_tally-- //Cryoing someone removes a player from the round, blocking further larva spawns until accounted for
-		if(J.title in GLOB.jobs_police)
-			dept_console = CRYO_SEC
-		else if(J.title in GLOB.jobs_medical)
+	if(job in SSjob.active_joinable_occupations)
+		job.free_job_positions(1)
+		if(ismedicaljob(job))
 			dept_console = CRYO_MED
-		else if(J.title in GLOB.jobs_engineering)
+		else if(isengineeringjob(job))
 			dept_console = CRYO_ENGI
 
 	var/list/stored_items = list()
@@ -243,7 +240,7 @@
 	//Make an announcement and log the person entering storage.
 	var/data = num2text(length(GLOB.cryoed_mob_list))
 	GLOB.cryoed_mob_list += data
-	GLOB.cryoed_mob_list[data] = list(real_name, job ? job : "Unassigned", gameTimestamp())
+	GLOB.cryoed_mob_list[data] = list(real_name, job ? job.title : "Unassigned", gameTimestamp())
 
 	if(pod)
 		pod.visible_message("<span class='notice'>[pod] hums and hisses as it moves [real_name] into hypersleep storage.</span>")
@@ -252,6 +249,7 @@
 		pod.radio.talk_into(pod, "[real_name] has entered long-term hypersleep storage. Belongings moved to hypersleep inventory.", FREQ_COMMON)
 
 	qdel(src)
+
 
 /mob/living/carbon/human/despawn(obj/machinery/cryopod/pod, dept_console = CRYO_REQ)
 	if(assigned_squad)
@@ -264,24 +262,11 @@
 				dept_console = CRYO_CHARLIE
 			if(DELTA_SQUAD)
 				dept_console = CRYO_DELTA
-		if(job)
-			var/datum/job/J = SSjob.name_occupations[job]
-			if(istype(J, /datum/job/marine/specialist) && specset && !GLOB.available_specialist_sets.Find(specset))
-				GLOB.available_specialist_sets += specset //we make the set this specialist took if any available again
-			if(istype(J, /datum/job/marine/engineer))
-				assigned_squad.num_engineers--
-			if(istype(J, /datum/job/marine/corpsman))
-				assigned_squad.num_medics--
-			if(istype(J, /datum/job/marine/specialist))
-				assigned_squad.num_specialists--
-			if(istype(J, /datum/job/marine/smartgunner))
-				assigned_squad.num_smartgun--
-			if(istype(J, /datum/job/marine/leader))
-				assigned_squad.num_leaders--
-		assigned_squad.count--
+		if(istype(job, /datum/job/terragov/squad/specialist) && specset && !GLOB.available_specialist_sets.Find(specset))
+			GLOB.available_specialist_sets += specset //we make the set this specialist took if any available again
 		assigned_squad.remove_from_squad(src)
-
 	return ..()
+
 
 /obj/item/proc/store_in_cryo(list/items, nullspace_it = TRUE)
 
@@ -321,13 +306,6 @@
 		var/obj/item/TIE = hastie
 		remove_accessory()
 		items = TIE.store_in_cryo(items)
-	return ..()
-
-/obj/item/clothing/shoes/marine/store_in_cryo(list/items, nullspace_it = TRUE)
-	if(knife)
-		items = knife.store_in_cryo(items)
-		knife = null
-		update_icon()
 	return ..()
 
 /obj/item/clothing/tie/storage/store_in_cryo(list/items, nullspace_it = TRUE)
@@ -405,7 +383,7 @@
 	climb_in(M, user)
 
 /obj/machinery/cryopod/MouseDrop_T(mob/M, mob/user)
-	if(!isliving(M))
+	if(!isliving(M) || !ishuman(user))
 		return
 	move_inside_wrapper(M, user)
 

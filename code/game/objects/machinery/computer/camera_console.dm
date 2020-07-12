@@ -68,12 +68,10 @@
 	if(!network)
 		user.unset_interaction()
 		CRASH("No camera network")
-		return
 
 	if(!(islist(network)))
 		user.unset_interaction()
 		CRASH("Camera network is not a list")
-		return
 
 	var/list/camera_list = get_available_cameras()
 	if(!(user in watchers))
@@ -86,7 +84,7 @@
 		if(!(user in watchers))
 			user.unset_interaction() // no usable camera on the network, we disconnect the user from the computer.
 			return
-	playsound(src, 'sound/machines/terminal_prompt.ogg', 25, 0)
+	playsound(src, 'sound/machines/terminal_on.ogg', 25, 0)
 	user.set_interaction(src)
 	use_camera_console(user)
 
@@ -128,7 +126,7 @@
 			user.overlay_fullscreen("flash", /obj/screen/fullscreen/flash/noise)
 			user.clear_fullscreen("flash", 5)
 		watchers[user] = C
-		use_power(50)
+		use_power(active_power_usage)
 		addtimer(CALLBACK(src, .proc/use_camera_console, user), 5)
 	else
 		user.unset_interaction()
@@ -154,7 +152,8 @@
 			continue
 		var/list/tempnetwork = C.network & network
 		if(length(tempnetwork))
-			valid_cams["[C.c_tag][(C.status ? null : " (Deactivated)")]"] = C
+			valid_cams["[C.c_tag]"] = C
+			// valid_cams["[C.c_tag][(C.status ? null : " (Deactivated)")]"] = C
 	return valid_cams
 
 

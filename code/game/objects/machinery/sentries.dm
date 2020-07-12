@@ -234,8 +234,9 @@
 	var/max_burst = 6
 	var/min_burst = 2
 	var/atom/target = null
-	obj_integrity = 200
-	max_integrity = 200
+	obj_integrity = 300
+	max_integrity = 300
+	soft_armor = list("melee" = 50, "bullet" = 50, "laser" = 50, "energy" = 50, "bomb" = 50, "bio" = 100, "rad" = 0, "fire" = 80, "acid" = 50)
 	machine_stat = 0 //Used just like mob.stat
 	var/datum/effect_system/spark_spread/spark_system //The spark system, used for generating... sparks?
 	var/obj/item/cell/cell = null
@@ -246,11 +247,11 @@
 	var/muzzle_flash_lum = 3 //muzzle flash brightness
 	var/obj/item/turret_laptop/laptop = null
 	var/datum/ammo/bullet/turret/ammo = /datum/ammo/bullet/turret
-	var/obj/item/projectile/in_chamber = null
+	var/obj/projectile/in_chamber = null
 	var/last_alert = 0
 	var/last_damage_alert = 0
 	var/list/obj/alert_list = list()
-	var/knockdown_threshold = 100
+	var/knockdown_threshold = 150
 	var/work_time = 40 //Defines how long it takes to do most maintenance actions
 	var/magazine_type = /obj/item/ammo_magazine/sentry
 	var/obj/item/radio/radio
@@ -299,17 +300,18 @@
 	//START_PROCESSING(SSobj, src)
 	ammo = GLOB.ammo_list[ammo]
 	update_icon()
+	GLOB.marine_turrets += src
 
 
 /obj/machinery/marine_turret/Destroy() //Clear these for safety's sake.
 	QDEL_NULL(radio)
 	operator?.unset_interaction()
-	operator = null
 	QDEL_NULL(camera)
 	QDEL_NULL(cell)
 	target = null
 	alert_list = list()
 	stop_processing()
+	GLOB.marine_turrets -= src
 	. = ..()
 
 /obj/machinery/marine_turret/attack_hand(mob/living/user)
@@ -352,12 +354,11 @@
 	ui = SStgui.try_update_ui(user, src, ui_key, ui, force_open)
 
 	if(!ui)
-		ui = new(user, src, ui_key, "sentry", name, ui_x, ui_y, master_ui, state)
+		ui = new(user, src, ui_key, "Sentry", "Sentry Gun", ui_x, ui_y, master_ui, state)
 		ui.open()
 
 /obj/machinery/marine_turret/ui_data(mob/user)
-	var/list/data = list(
-		"self_ref" = "\ref[src]",
+	. = list(
 		"name" = copytext(src.name, 2),
 		"is_on" = CHECK_BITFIELD(turret_flags, TURRET_ON),
 		"rounds" = rounds,
@@ -376,7 +377,6 @@
 		"burst_size" = burst_size,
 		"mini" = istype(src, /obj/machinery/marine_turret/mini)
 	)
-	return data
 
 /obj/machinery/marine_turret/ui_act(action, params)
 	if(..())
@@ -408,7 +408,7 @@
 			if(!cell || cell.charge <= 0 || !anchored || CHECK_BITFIELD(turret_flags, TURRET_IMMOBILE) || !CHECK_BITFIELD(turret_flags, TURRET_ON) || machine_stat)
 				return
 
-			burst_size = CLAMP(burst_size + 1, min_burst, max_burst)
+			burst_size = clamp(burst_size + 1, min_burst, max_burst)
 			user.visible_message("<span class='notice'>[user] increments the [src]'s burst count.</span>",
 			"<span class='notice'>You increment [src]'s burst fire count.</span>")
 			. = TRUE
@@ -417,7 +417,7 @@
 			if(!cell || cell.charge <= 0 || !anchored || CHECK_BITFIELD(turret_flags, TURRET_IMMOBILE) || !CHECK_BITFIELD(turret_flags, TURRET_ON) || machine_stat)
 				return
 
-			burst_size = CLAMP(burst_size - 1, min_burst, max_burst)
+			burst_size = clamp(burst_size - 1, min_burst, max_burst)
 			user.visible_message("<span class='notice'>[user] decrements the [src]'s burst count.</span>",
 			"<span class='notice'>You decrement [src]'s burst fire count.</span>")
 			. = TRUE
@@ -512,7 +512,7 @@
 		DISABLE_BITFIELD(turret_flags, TURRET_MANUAL)
 
 /obj/machinery/marine_turret/check_eye(mob/user)
-	if(user.incapacitated() || get_dist(user, src) > 1 || is_blind(user) || user.lying || !user.client)
+	if(user.incapacitated() || get_dist(user, src) > 1 || is_blind(user) || user.lying_angle || !user.client)
 		user.unset_interaction()
 
 /obj/machinery/marine_turret/attackby(obj/item/I, mob/user, params)
@@ -664,7 +664,7 @@
 
 	else if(istype(I, magazine_type))
 		var/obj/item/ammo_magazine/M = I
-		if(user.mind?.cm_skills && user.mind.cm_skills.heavy_weapons < SKILL_HEAVY_WEAPONS_TRAINED)
+		if(user.skills.getRating("heavy_weapons") < SKILL_HEAVY_WEAPONS_TRAINED)
 			user.visible_message("<span class='notice'>[user] begins fumbling about, swapping a new [I] into [src].</span>",
 			"<span class='notice'>You begin fumbling about, swapping a new [I] into [src].</span>")
 			if(user.action_busy)
@@ -737,7 +737,7 @@
 
 /obj/machinery/marine_turret/deconstruct(disassembled = TRUE)
 	if(!disassembled)
-		explosion(loc, -1, -1, 2, 0)
+		explosion(loc, light_impact_range = 3)
 	return ..()
 
 
@@ -794,11 +794,11 @@
 
 /obj/machinery/marine_turret/ex_act(severity)
 	switch(severity)
-		if(1)
+		if(EXPLODE_DEVASTATE)
 			take_damage(rand(90, 150))
-		if(2)
+		if(EXPLODE_HEAVY)
 			take_damage(rand(50, 150))
-		if(3)
+		if(EXPLODE_LIGHT)
 			take_damage(rand(30, 100))
 
 
@@ -853,7 +853,7 @@
 
 
 /obj/machinery/marine_turret/proc/create_bullet()
-	in_chamber = new /obj/item/projectile(src) //New bullet!
+	in_chamber = new /obj/projectile(src) //New bullet!
 	in_chamber.generate_bullet(ammo)
 
 
@@ -911,46 +911,49 @@
 		setDir(target_dir)
 
 
-	if(load_into_chamber())
-		if(istype(in_chamber,/obj/item/projectile))
+	if(!load_into_chamber())
+		return
 
-			if (CHECK_BITFIELD(turret_flags, TURRET_BURSTFIRE))
-				//Apply scatter
-				var/scatter_chance = in_chamber.ammo.scatter
-				var/burst_value = CLAMP(burst_size - 1, 1, 5)
-				scatter_chance += (burst_value * burst_value * 2)
-				in_chamber.accuracy = round(in_chamber.accuracy - (burst_value * burst_value * 1.2), 0.01) //Accuracy penalty scales with burst count.
+	var/obj/projectile/proj_to_fire = in_chamber
+	in_chamber = null //Projectiles live and die fast. It's better to null the reference early so the GC can handle it immediately.
 
-				if (prob(scatter_chance))
-					var/scatter_x = rand(-1, 1)
-					var/scatter_y = rand(-1, 1)
-					var/turf/new_target = locate(targloc.x + round(scatter_x),targloc.y + round(scatter_y),targloc.z) //Locate an adjacent turf.
-					if(new_target) //Looks like we found a turf.
-						target = new_target
+	if (CHECK_BITFIELD(turret_flags, TURRET_BURSTFIRE))
+		//Apply scatter
+		var/scatter_chance = proj_to_fire.ammo.scatter
+		var/burst_value = clamp(burst_size - 1, 1, 5)
+		scatter_chance += (burst_value * burst_value * 2)
+		proj_to_fire.accuracy = round(proj_to_fire.accuracy - (burst_value * burst_value * 1.2), 0.01) //Accuracy penalty scales with burst count.
 
-			else //gains +50% accuracy, damage, and penetration on singlefire, and no spread.
-				in_chamber.accuracy = round(in_chamber.accuracy * 1.5, 0.01)
-				in_chamber.damage = round(in_chamber.damage * 1.5, 0.01)
-				in_chamber.ammo.penetration = round(in_chamber.ammo.penetration * 1.5, 0.01)
+		if (prob(scatter_chance))
+			var/scatter_x = rand(-1, 1)
+			var/scatter_y = rand(-1, 1)
+			var/turf/new_target = locate(targloc.x + round(scatter_x), targloc.y + round(scatter_y), targloc.z) //Locate an adjacent turf.
+			if(new_target) //Looks like we found a turf.
+				target = new_target
 
-			//Setup projectile
-			in_chamber.original_target = target
-			in_chamber.setDir(dir)
-			in_chamber.def_zone = pick("chest", "chest", "chest", "head")
+	else //gains +50% accuracy, damage, and penetration on singlefire, and no spread.
+		proj_to_fire.accuracy = round(proj_to_fire.accuracy * 1.5, 0.01)
+		proj_to_fire.damage = round(proj_to_fire.damage * 1.5, 0.01)
+		proj_to_fire.ammo.penetration = round(proj_to_fire.ammo.penetration * 1.5, 0.01)
 
-			//Shoot at the thing
-			playsound(loc, 'sound/weapons/guns/fire/rifle.ogg', 75, 1)
-			in_chamber.fire_at(target, src, null, ammo.max_range, ammo.shell_speed)
-			if(target)
-				var/angle = round(Get_Angle(src,target))
-				muzzle_flash(angle)
-			in_chamber = null
-			rounds--
-			if(rounds == 0)
-				visible_message("<span class='warning'>The [name] beeps steadily and its ammo light blinks red.</span>")
-				playsound(loc, 'sound/weapons/guns/misc/smg_empty_alarm.ogg', 50, FALSE)
-				if(CHECK_BITFIELD(turret_flags, TURRET_ALERTS))
-					sentry_alert(SENTRY_ALERT_AMMO)
+	//Setup projectile
+	proj_to_fire.original_target = target
+	proj_to_fire.setDir(dir)
+	proj_to_fire.def_zone = pick("chest", "chest", "chest", "head")
+
+	//Shoot at the thing
+	playsound(loc, 'sound/weapons/guns/fire/rifle.ogg', 75, TRUE)
+
+	proj_to_fire.fire_at(target, src, null, ammo.max_range, ammo.shell_speed)
+	if(target)
+		var/angle = round(Get_Angle(src, target))
+		muzzle_flash(angle)
+	rounds--
+	if(rounds == 0)
+		visible_message("<span class='warning'>The [name] beeps steadily and its ammo light blinks red.</span>")
+		playsound(loc, 'sound/weapons/guns/misc/smg_empty_alarm.ogg', 50, FALSE)
+		if(CHECK_BITFIELD(turret_flags, TURRET_ALERTS))
+			sentry_alert(SENTRY_ALERT_AMMO)
 
 	return TRUE
 
@@ -980,7 +983,7 @@
 	var/mob/living/M
 
 	for(M in oview(range, src))
-		if(M.stat == DEAD) //No dead or robots.
+		if(M.stat == DEAD || (M.status_flags & INCORPOREAL)) //No dead, robots, or incorporeal.
 			continue
 		if(CHECK_BITFIELD(turret_flags, TURRET_SAFETY) && !isxeno(M)) //When safeties are on, Xenos only.
 			continue
@@ -1179,11 +1182,11 @@
 	burst_size = 3
 	min_burst = 2
 	max_burst = 5
-	obj_integrity = 155
-	max_integrity = 155
+	obj_integrity = 200
+	max_integrity = 200
 	rounds = 500
 	rounds_max = 500
-	knockdown_threshold = 70 //lighter, not as well secured.
+	knockdown_threshold = 100 //lighter, not as well secured.
 	work_time = 10 //significantly faster than the big sentry
 	ammo = /datum/ammo/bullet/turret/mini //Similar to M39 AP rounds.
 	magazine_type = /obj/item/ammo_magazine/minisentry
@@ -1261,7 +1264,7 @@
 	icon_state = "minisentry_packed"
 	item_state = "minisentry_packed"
 	w_class = WEIGHT_CLASS_BULKY
-	max_integrity = 155 //We keep track of this when folding up the sentry.
+	max_integrity = 200 //We keep track of this when folding up the sentry.
 	flags_equip_slot = ITEM_SLOT_BACK
 
 /obj/item/marine_turret/mini/attack_self(mob/user) //click the sentry to deploy it.

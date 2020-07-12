@@ -14,10 +14,10 @@
 		return
 	if(!check_plasma(50))
 		return
-	if(cooldowns[COOLDOWN_ORDER])
+	if(COOLDOWN_CHECK(src, COOLDOWN_ORDER))
 		return
 	plasma_stored -= 50
-	var/txt = copytext(sanitize(input("Set the hive's orders to what? Leave blank to clear it.", "Hive Orders","")), 1, MAX_MESSAGE_LEN)
+	var/txt = stripped_input(src, "Set the hive's orders to what? Leave blank to clear it.", "Hive Orders")
 
 	if(txt)
 		xeno_message("<B>The Queen has given a new order. Check Status panel for details.</B>",3,hivenumber)
@@ -25,7 +25,7 @@
 	else
 		hive.hive_orders = ""
 
-	cooldowns[COOLDOWN_ORDER] = addtimer(VARSET_LIST_CALLBACK(cooldowns, COOLDOWN_ORDER, null), 15 SECONDS)
+	COOLDOWN_START(src, COOLDOWN_ORDER, 15 SECONDS)
 
 // ***************************************
 // *********** Hive message
@@ -142,18 +142,104 @@
 	playsound(X.loc, 'sound/voice/alien_queen_screech.ogg', 75, 0)
 	X.visible_message("<span class='xenohighdanger'>\The [X] emits an ear-splitting guttural roar!</span>")
 	GLOB.round_statistics.queen_screech++
+	SSblackbox.record_feedback("tally", "round_statistics", 1, "queen_screech")
 	X.create_shriekwave() //Adds the visual effect. Wom wom wom
 	//stop_momentum(charge_dir) //Screech kills a charge
 
 	var/list/nearby_living = list()
-	for(var/mob/living/L in hearers(world.view, X))
+	for(var/mob/living/L in hearers(WORLD_VIEW, X))
 		nearby_living.Add(L)
 
 	for(var/i in GLOB.mob_living_list)
 		var/mob/living/L = i
-		if(get_dist(L, X) > world.view)
+		if(get_dist(L, X) > WORLD_VIEW_NUM)
 			continue
-		L.screech_act(X, world.view, L in nearby_living)
+		L.screech_act(X, WORLD_VIEW_NUM, L in nearby_living)
+
+/datum/action/xeno_action/activable/screech/ai_should_start_consider()
+	return TRUE
+
+/datum/action/xeno_action/activable/screech/ai_should_use(target)
+	if(!iscarbon(target))
+		return ..()
+	if(get_dist(target, owner) > 4)
+		return ..()
+	if(!can_use_ability(target, override_flags = XACT_IGNORE_SELECTED_ABILITY))
+		return ..()
+	return TRUE
+
+
+// ***************************************
+// *********** Tail sweep
+// ***************************************
+/datum/action/xeno_action/activable/tail_sweep
+	name = "Tail Sweep"
+	action_icon_state = "tail_sweep"
+	mechanics_text = "Hit all adjacent units around you, knocking them away and down."
+	ability_name = "tail sweep"
+	plasma_cost = 35
+	cooldown_timer = 12 SECONDS
+	keybind_flags = XACT_KEYBIND_USE_ABILITY
+	keybind_signal = COMSIG_XENOABILITY_TAIL_SWEEP
+
+/datum/action/xeno_action/activable/tail_sweep/can_use_ability(atom/A, silent = FALSE, override_flags)
+	. = ..()
+	if(!.)
+		return FALSE
+	var/mob/living/carbon/xenomorph/X = owner
+	if(X.crest_defense && X.plasma_stored < (plasma_cost * 2))
+		if(!silent)
+			to_chat(X, "<span class='xenowarning'>We don't have enough plasma, we need [(plasma_cost * 2) - X.plasma_stored] more plasma!</span>")
+		return FALSE
+
+/datum/action/xeno_action/activable/tail_sweep/on_cooldown_finish()
+	var/mob/living/carbon/xenomorph/X = owner
+	to_chat(X, "<span class='notice'>We gather enough strength to tail sweep again.</span>")
+	return ..()
+
+/datum/action/xeno_action/activable/tail_sweep/use_ability()
+	var/mob/living/carbon/xenomorph/X = owner
+
+	GLOB.round_statistics.defender_tail_sweeps++
+	SSblackbox.record_feedback("tally", "round_statistics", 1, "defender_tail_sweeps")
+	X.visible_message("<span class='xenowarning'>\The [X] sweeps its tail in a wide circle!</span>", \
+	"<span class='xenowarning'>We sweep our tail in a wide circle!</span>")
+
+	X.spin(4, 1)
+
+	var/sweep_range = 1
+	var/list/L = orange(sweep_range, X)		// Not actually the fruit
+
+	for (var/mob/living/carbon/human/H in L)
+		step_away(H, src, sweep_range, 2)
+		if(H.stat != DEAD && !isnestedhost(H) ) //No bully
+			var/damage = X.xeno_caste.melee_damage
+			var/affecting = H.get_limb(ran_zone(null, 0))
+			if(!affecting) //Still nothing??
+				affecting = H.get_limb("chest") //Gotta have a torso?!
+			var/armor_block = H.run_armor_check(affecting, "melee")
+			H.apply_damage(damage, BRUTE, affecting, armor_block) //Crap base damage after armour...
+			H.apply_damage(damage, STAMINA) //...But some sweet armour ignoring Stamina
+			UPDATEHEALTH(H)
+			H.Paralyze(20)
+		GLOB.round_statistics.defender_tail_sweep_hits++
+		SSblackbox.record_feedback("tally", "round_statistics", 1, "tail_sweep_hits")
+		shake_camera(H, 2, 1)
+
+		to_chat(H, "<span class='xenowarning'>We are struck by \the [X]'s tail sweep!</span>")
+		playsound(H,'sound/weapons/alien_claw_block.ogg', 50, 1)
+
+	succeed_activate()
+	add_cooldown()
+
+/datum/action/xeno_action/activable/tail_sweep/ai_should_use(target)
+	if(!iscarbon(target))
+		return ..()
+	if(get_dist(target, owner) > 1)
+		return ..()
+	if(!can_use_ability(target, override_flags = XACT_IGNORE_SELECTED_ABILITY))
+		return ..()
+	return TRUE
 
 // ***************************************
 // *********** Gut
@@ -169,7 +255,7 @@
 	if(!.)
 		return FALSE
 	var/mob/living/carbon/xenomorph/queen/X = owner
-	if(X.cooldowns[COOLDOWN_GUT])
+	if(COOLDOWN_CHECK(X, COOLDOWN_GUT))
 		return FALSE
 	if(!iscarbon(A))
 		return FALSE
@@ -202,7 +288,7 @@
 
 	succeed_activate()
 
-	X.cooldowns[COOLDOWN_GUT] = addtimer(VARSET_LIST_CALLBACK(X.cooldowns, COOLDOWN_GUT, null), 5 SECONDS)
+	COOLDOWN_START(X, COOLDOWN_GUT, 5 SECONDS)
 
 	X.visible_message("<span class='xenowarning'>\The [X] begins slowly lifting \the [victim] into the air.</span>", \
 	"<span class='xenowarning'>We begin focusing our anger as we slowly lift \the [victim] into the air.</span>")
@@ -304,7 +390,7 @@
 	if(overwatch_active)
 		stop_overwatch()
 
-/datum/action/xeno_action/watch_xeno/proc/on_owner_death(datum/source, gibbed)
+/datum/action/xeno_action/watch_xeno/proc/on_owner_death(mob/source, gibbing)
 	if(overwatch_active)
 		stop_overwatch()
 
@@ -488,6 +574,7 @@
 	add_cooldown()
 	patient.adjustBruteLoss(-100)
 	patient.adjustFireLoss(-100)
+	patient.adjust_sunder(-10)
 	succeed_activate()
 	to_chat(owner, "<span class='xenonotice'>We channel our plasma to heal [target]'s wounds.</span>")
 	to_chat(patient, "<span class='xenonotice'>We feel our wounds heal. Bless the Queen!</span>")
@@ -683,5 +770,6 @@
 	message_admins("[ADMIN_TPMONTY(X)] has deevolved [ADMIN_TPMONTY(T)]. Reason: [reason]")
 
 	GLOB.round_statistics.total_xenos_created-- //so an evolved xeno doesn't count as two.
+	SSblackbox.record_feedback("tally", "round_statistics", -1, "total_xenos_created")
 	qdel(T)
 	X.use_plasma(600)

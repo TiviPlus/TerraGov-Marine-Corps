@@ -3,14 +3,14 @@
 	if(.)
 		return
 
-	if((user != src) && check_shields(0, user.name))
-		visible_message("<span class='danger'>[user] attempted to touch [src]!</span>", null, null, 5)
-		return 0
-
 	if(!ishuman(user))
 		return
 
 	var/mob/living/carbon/human/H = user
+
+	if(user != src && !check_shields(COMBAT_TOUCH_ATTACK, H.melee_damage, "melee"))
+		visible_message("<span class='danger'>[user] attempted to touch [src]!</span>", null, null, 5)
+		return 0
 
 	H.changeNext_move(7)
 	switch(H.a_intent)
@@ -30,31 +30,45 @@
 			if(health >= get_crit_threshold())
 				help_shake_act(H)
 				return 1
-//			if(H.health < -75)	return 0
+
+			if((head && (head.flags_inventory & COVERMOUTH)) || (wear_mask && (wear_mask.flags_inventory & COVERMOUTH)))
+				to_chat(H, "<span class='boldnotice'>Remove his mask!</span>")
+				return FALSE
+
+			if(stat == DEAD && !check_tod(src))
+				to_chat(H, "<span class='boldnotice'>Can't help this one. Body has gone cold.</span>")
+				return FALSE
 
 			if((H.head && (H.head.flags_inventory & COVERMOUTH)) || (H.wear_mask && (H.wear_mask.flags_inventory & COVERMOUTH)))
 				to_chat(H, "<span class='boldnotice'>Remove your mask!</span>")
-				return 0
-			if((head && (head.flags_inventory & COVERMOUTH)) || (wear_mask && (wear_mask.flags_inventory & COVERMOUTH)))
-				to_chat(H, "<span class='boldnotice'>Remove his mask!</span>")
-				return 0
+				return FALSE
 
 			//CPR
 			if(H.action_busy)
-				return 1
+				return TRUE
+
 			H.visible_message("<span class='danger'>[H] is trying perform CPR on [src]!</span>", null, null, 4)
 
-			if(do_mob(H, src, HUMAN_STRIP_DELAY, BUSY_ICON_FRIENDLY, BUSY_ICON_MEDICAL))
-				if(health > get_death_threshold() && health < get_crit_threshold())
-					var/suff = min(getOxyLoss(), 5) //Pre-merge level, less healing, more prevention of dieing.
-					adjustOxyLoss(-suff)
-					updatehealth()
-					visible_message("<span class='warning'> [H] performs CPR on [src]!</span>", null, null, 3)
-					to_chat(src, "<span class='boldnotice'>You feel a breath of fresh air enter your lungs. It feels good.</span>")
-					to_chat(H, "<span class='warning'>Repeat at least every 7 seconds.</span>")
+			if(!do_mob(H, src, HUMAN_STRIP_DELAY, BUSY_ICON_FRIENDLY, BUSY_ICON_MEDICAL) || undefibbable)
+				return TRUE
 
+			if(health > get_death_threshold() && health < get_crit_threshold())
+				var/suff = min(getOxyLoss(), 5) //Pre-merge level, less healing, more prevention of dieing.
+				adjustOxyLoss(-suff)
+				updatehealth()
+				visible_message("<span class='warning'> [H] performs CPR on [src]!</span>",
+					"<span class='boldnotice'>You feel a breath of fresh air enter your lungs. It feels good.</span>",
+					vision_distance = 3)
+				to_chat(H, "<span class='warning'>Repeat at least every 7 seconds.</span>")
+			else if(stat == DEAD && check_tod(src) && !COOLDOWN_CHECK(src, COOLDOWN_CPR))
+				COOLDOWN_START(src, COOLDOWN_CPR, 7 SECONDS)
+				revive_grace_time += 5 SECONDS
+				visible_message("<span class='warning'> [H] performs CPR on [src]!</span>", vision_distance = 3)
+				to_chat(H, "<span class='warning'>The patient gains a little more time. Repeat every 7 seconds.</span>")
+			else
+				to_chat(H, "<span class='warning'>You fail to aid [src].</span>")
 
-			return 1
+			return TRUE
 
 		if(INTENT_GRAB)
 			if(H == src || anchored)
@@ -72,18 +86,19 @@
 			if(!attack.is_usable(H))
 				return FALSE
 
-			log_combat(H, src, "[pick(attack.attack_verb)]ed")
-
 			if(!H.melee_damage || !prob(H.melee_accuracy))
 				H.do_attack_animation(src)
 				playsound(loc, attack.miss_sound, 25, TRUE)
 				visible_message("<span class='danger'>[H] tried to [pick(attack.attack_verb)] [src]!</span>", null, null, 5)
+				log_combat(H, src, "[pick(attack.attack_verb)]ed", "(missed)")
+				if(!H.mind?.bypass_ff && !mind?.bypass_ff && H.faction == faction)
+					var/turf/T = get_turf(src)
+					log_ffattack("[key_name(H)] missed a punch against [key_name(src)] in [AREACOORD(T)].")
+					msg_admin_ff("[ADMIN_TPMONTY(H)] missed a punch against [ADMIN_TPMONTY(src)] in [ADMIN_VERBOSEJMP(T)].")
 				return FALSE
 
 			H.do_attack_animation(src, ATTACK_EFFECT_YELLOWPUNCH)
-			var/max_dmg = H.melee_damage
-			if(H.mind.cm_skills)
-				max_dmg += H.mind.cm_skills.cqc
+			var/max_dmg = H.melee_damage + H.skills.getRating("cqc")
 			var/damage = rand(1, max_dmg)
 
 			var/datum/limb/affecting = get_limb(ran_zone(H.zone_selected))
@@ -92,24 +107,35 @@
 			playsound(loc, attack.attack_sound, 25, TRUE)
 
 			visible_message("<span class='danger'>[H] [pick(attack.attack_verb)]ed [src]!</span>", null, null, 5)
+			var/list/hit_report = list()
 			if(damage >= 5 && prob(50))
 				visible_message("<span class='danger'>[H] has weakened [src]!</span>", null, null, 5)
 				apply_effect(3, WEAKEN, armor_block)
+				hit_report += "(KO)"
 
 			damage += attack.damage
 			apply_damage(damage, BRUTE, affecting, armor_block, attack.sharp, attack.edge)
+
+			hit_report += "(RAW DMG: [damage])"
+
+			log_combat(H, src, "[pick(attack.attack_verb)]ed", "[hit_report.Join(" ")]")
+			if(!H.mind?.bypass_ff && !mind?.bypass_ff && H.faction == faction)
+				var/turf/T = get_turf(src)
+				H.ff_check(damage, src)
+				log_ffattack("[key_name(H)] punched [key_name(src)] in [AREACOORD(T)] [hit_report.Join(" ")].")
+				msg_admin_ff("[ADMIN_TPMONTY(H)] punched [ADMIN_TPMONTY(src)] in [ADMIN_VERBOSEJMP(T)] [hit_report.Join(" ")].")
+
 			UPDATEHEALTH(src)
 
 
 		if(INTENT_DISARM)
-			log_combat(user, src, "disarmed")
 
 			H.do_attack_animation(src, ATTACK_EFFECT_DISARM)
 
 			var/datum/limb/affecting = get_limb(ran_zone(H.zone_selected))
 
 			//Accidental gun discharge
-			if(!H.mind?.cm_skills || H.mind.cm_skills.cqc < SKILL_CQC_MP)
+			if(user.skills.getRating("cqc") < SKILL_CQC_MP)
 				if (istype(r_hand,/obj/item/weapon/gun) || istype(l_hand,/obj/item/weapon/gun))
 					var/obj/item/weapon/gun/W = null
 					var/chance = 0
@@ -123,26 +149,21 @@
 						chance = !hand ? 40 : 20
 
 					if(prob(chance))
-						log_combat(H, src, "disarmed, making their [W] go off")
 						visible_message("<span class='danger'>[src]'s [W] goes off during struggle!", null, null, 5)
+						log_combat(H, src, "disarmed", "making their [W] go off")
 						var/list/turfs = list()
 						for(var/turf/T in view())
 							turfs += T
 						var/turf/target = pick(turfs)
 						return W.afterattack(target,src)
 
-			var/randn = rand(1, 100)
-			if(H.mind && H.mind.cm_skills)
-				randn -= 5 * H.mind.cm_skills.cqc //attacker's martial arts training
-
-			if(mind && mind.cm_skills)
-				randn += 5 * mind.cm_skills.cqc //defender's martial arts training
-
+			var/randn = rand(1, 100) + skills.getRating("cqc") * 5 - H.skills.getRating("cqc") * 5
 
 			if (randn <= 25)
 				apply_effect(3, WEAKEN, run_armor_check(affecting, "melee"))
 				playsound(loc, 'sound/weapons/thudswoosh.ogg', 25, 1, 7)
 				visible_message("<span class='danger'>[H] has pushed [src]!</span>", null, null, 5)
+				log_combat(user, src, "pushed")
 				return
 
 			if(randn <= 60)
@@ -154,11 +175,13 @@
 					drop_held_item()
 					visible_message("<span class='danger'>[H] has disarmed [src]!</span>", null, null, 5)
 				playsound(loc, 'sound/weapons/thudswoosh.ogg', 25, 1, 7)
+				log_combat(user, src, "disarmed")
 				return
 
 
 			playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, 7)
 			visible_message("<span class='danger'>[H] attempted to disarm [src]!</span>", null, null, 5)
+			log_combat(user, src, "missed a disarm")
 	return
 
 /mob/living/carbon/human/proc/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, inrange, params)

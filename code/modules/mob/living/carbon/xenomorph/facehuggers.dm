@@ -1,5 +1,5 @@
 #define FACEHUGGER_LIFECYCLE 12 SECONDS
-#define FACEHUGGER_KNOCKOUT 10
+#define FACEHUGGER_KNOCKOUT 6 SECONDS
 
 #define MIN_IMPREGNATION_TIME 10 SECONDS //Time it takes to impregnate someone
 #define MAX_IMPREGNATION_TIME 15 SECONDS
@@ -16,7 +16,7 @@
 	w_class = WEIGHT_CLASS_TINY //Note: can be picked up by aliens unlike most other items of w_class below 4
 	flags_inventory = COVEREYES|ALLOWINTERNALS|COVERMOUTH|ALLOWREBREATH
 	flags_armor_protection = FACE|EYES
-	flags_atom = NONE
+	flags_atom = CRITICAL_ATOM
 	flags_item = NOBLUDGEON
 	throw_range = 1
 	layer = FACEHUGGER_LAYER
@@ -108,7 +108,7 @@
 	user.visible_message("<span class='warning'>\ [user] attempts to plant [src] on [M]'s face!</span>", \
 	"<span class='warning'>We attempt to plant [src] on [M]'s face!</span>")
 	if(M.client && !M.stat) //Delay for conscious cliented mobs, who should be resisting.
-		if(!do_after(user, 10, TRUE, M, BUSY_ICON_DANGER))
+		if(!do_after(user, 1 SECONDS, TRUE, M, BUSY_ICON_DANGER))
 			return
 	if(!Attach(M))
 		GoIdle()
@@ -136,7 +136,7 @@
 		return
 	Die()
 
-/obj/item/clothing/mask/facehugger/bullet_act(obj/item/projectile/P)
+/obj/item/clothing/mask/facehugger/bullet_act(obj/projectile/P)
 	..()
 	if(P.ammo.flags_ammo_behavior & AMMO_XENO)
 		return FALSE //Xeno spits ignore huggers.
@@ -203,6 +203,7 @@
 	return TRUE
 
 /obj/item/clothing/mask/facehugger/Crossed(atom/target)
+	. = ..()
 	if(stat == CONSCIOUS)
 		HasProximity(target)
 
@@ -331,7 +332,7 @@
 
 /obj/item/clothing/mask/facehugger/proc/Attach(mob/living/carbon/M)
 
-	throwing = FALSE
+	set_throwing(FALSE)
 	leaping = FALSE
 	update_icon()
 
@@ -430,8 +431,10 @@
 	if(!sterile && !issynth(user) && !isIPC(user))
 		if(user.disable_lights(sparks = TRUE, silent = TRUE)) //Knock out the lights so the victim can't be cam tracked/spotted as easily
 			user.visible_message("<span class='danger'>[user]'s lights flicker and short out in a struggle!</span>", "<span class='danger'>Your equipment's lights flicker and short out in a struggle!</span>")
-		user.knock_out(FACEHUGGER_KNOCKOUT) //THIS MIGHT NEED TWEAKS
-	flags_item |= NODROP
+		var/stamina_dmg = user.maxHealth * 2 + user.max_stamina_buffer
+		user.apply_damage(stamina_dmg, STAMINA) // complete winds the target
+		user.Unconscious(6 SECONDS) //THIS MIGHT NEED TWEAKS // still might! // tweaked it
+	addtimer(VARSET_CALLBACK(src, flags_item, flags_item|NODROP), MIN_IMPREGNATION_TIME) // becomes stuck after min-impreg time
 	attached = TRUE
 	GoIdle(FALSE, TRUE)
 	addtimer(CALLBACK(src, .proc/Impregnate, user), rand(MIN_IMPREGNATION_TIME, MAX_IMPREGNATION_TIME))
@@ -443,6 +446,7 @@
 			var/obj/item/alien_embryo/embryo = new(target)
 			embryo.hivenumber = hivenumber
 			GLOB.round_statistics.now_pregnant++
+			SSblackbox.record_feedback("tally", "round_statistics", 1, "now_pregnant")
 			sterile = TRUE
 		Die()
 	else

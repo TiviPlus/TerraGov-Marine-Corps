@@ -484,8 +484,8 @@ ColorTone(rgb, tone)
 		hue++
 		if(hue >= 1536)
 			hue = 0
-	sat = CLAMP(sat, 0, 255)
-	val = CLAMP(val, 0, 255)
+	sat = clamp(sat, 0, 255)
+	val = clamp(val, 0, 255)
 	. = "#"
 	. += TO_HEX_DIGIT(hue >> 8)
 	. += TO_HEX_DIGIT(hue >> 4)
@@ -495,7 +495,7 @@ ColorTone(rgb, tone)
 	. += TO_HEX_DIGIT(val >> 4)
 	. += TO_HEX_DIGIT(val)
 	if(!isnull(alpha))
-		alpha = CLAMP(alpha, 0, 255)
+		alpha = clamp(alpha, 0, 255)
 		. += TO_HEX_DIGIT(alpha >> 4)
 		. += TO_HEX_DIGIT(alpha)
 
@@ -902,9 +902,9 @@ ColorTone(rgb, tone)
 		return color
 
 	var/list/RGB = ReadRGB(color)
-	RGB[1] = CLAMP(RGB[1] + value, 0, 255)
-	RGB[2] = CLAMP(RGB[2] + value, 0, 255)
-	RGB[3] = CLAMP(RGB[3] + value, 0, 255)
+	RGB[1] = clamp(RGB[1] + value, 0, 255)
+	RGB[2] = clamp(RGB[2] + value, 0, 255)
+	RGB[3] = clamp(RGB[3] + value, 0, 255)
 	return rgb(RGB[1], RGB[2], RGB[3])
 
 
@@ -945,7 +945,7 @@ ColorTone(rgb, tone)
 	WRITE_FILE(GLOB.iconCache[iconKey], icon)
 	var/iconData = GLOB.iconCache.ExportText(iconKey)
 	var/list/partial = splittext(iconData, "{")
-	return replacetext(copytext(partial[2], 3, -5), "\n", "")
+	return replacetext(copytext_char(partial[2], 3, -5), "\n", "")
 
 
 /proc/icon2html(thing, target, icon_state, dir, frame = 1, moving = FALSE)
@@ -1051,13 +1051,12 @@ ColorTone(rgb, tone)
 	var/static/list/humanoid_icon_cache = list()
 	if(!icon_id || !humanoid_icon_cache[icon_id])
 		var/mob/living/carbon/human/dummy/body = generate_or_wait_for_human_dummy(dummy_key)
-
-		prefs?.copy_to(body,TRUE,FALSE)
-
-		J?.equip(body, TRUE, FALSE, outfit_override = outfit_override)
-
-		if(outfit_override)
-			body.equipOutfit(outfit_override,visualsOnly = TRUE)
+		if(prefs)
+			prefs.copy_to(body,TRUE,FALSE)
+		if(J)
+			J.equip_dummy(body, outfit_override = outfit_override)
+		else if(outfit_override)
+			body.equipOutfit(outfit_override, visualsOnly = TRUE)
 
 
 		var/icon/out_icon = icon('icons/effects/effects.dmi', "nothing")

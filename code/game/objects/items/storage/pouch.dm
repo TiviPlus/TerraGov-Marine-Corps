@@ -52,9 +52,10 @@
 	icon_state = "large_drop"
 	draw_mode = 0
 
-/obj/item/storage/pouch/general/large/command
-	fill_type = /obj/item/binoculars/tactical
-	fill_number = 1
+/obj/item/storage/pouch/general/large/command/Initialize()
+	. = ..()
+	new /obj/item/binoculars/tactical(src)
+	new /obj/item/megaphone(src)
 
 
 /obj/item/storage/pouch/general/som
@@ -118,6 +119,7 @@
 		/obj/item/stack/medical/ointment,
 		/obj/item/reagent_containers/hypospray/autoinjector,
 		/obj/item/stack/medical/bruise_pack,
+		/obj/item/storage/pill_bottle/packet/tricordrazine,
 		/obj/item/stack/medical/splint)
 
 /obj/item/storage/pouch/firstaid/full
@@ -127,9 +129,28 @@
 	. = ..()
 	new /obj/item/stack/medical/ointment (src)
 	new /obj/item/reagent_containers/hypospray/autoinjector/tramadol (src)
-	new /obj/item/reagent_containers/hypospray/autoinjector/tricordrazine (src)
+	new /obj/item/storage/pill_bottle/packet/tricordrazine (src)
 	new /obj/item/stack/medical/bruise_pack (src)
 	new /obj/item/stack/medical/splint (src)
+
+
+/obj/item/storage/pouch/firstaid/injectors
+	name = "first-aid pouch"
+	desc = "It can contain autoinjectors."
+	icon_state = "firstaid"
+	storage_slots = 5
+	can_hold = list(/obj/item/reagent_containers/hypospray/autoinjector)
+
+/obj/item/storage/pouch/firstaid/injectors/full
+	desc = "Contains 3 combat autoinjectors, an oxycodone injector, and a stimulant injector."
+
+/obj/item/storage/pouch/firstaid/injectors/full/Initialize()
+	. = ..()
+	new /obj/item/reagent_containers/hypospray/autoinjector/combat (src)
+	new /obj/item/reagent_containers/hypospray/autoinjector/combat (src)
+	new /obj/item/reagent_containers/hypospray/autoinjector/combat (src)
+	new /obj/item/reagent_containers/hypospray/autoinjector/oxycodone (src)
+	new /obj/item/reagent_containers/hypospray/autoinjector/synaptizine_expired (src)
 
 
 /obj/item/storage/pouch/firstaid/som
@@ -141,6 +162,7 @@
 		/obj/item/stack/medical/ointment,
 		/obj/item/reagent_containers/hypospray/autoinjector,
 		/obj/item/stack/medical/bruise_pack,
+		/obj/item/storage/pill_bottle/packet/tricordrazine,
 		/obj/item/stack/medical/splint)
 
 
@@ -164,7 +186,8 @@
 	max_w_class = 3
 	can_hold = list(
 		/obj/item/weapon/gun/pistol,
-		/obj/item/weapon/gun/revolver)
+		/obj/item/weapon/gun/revolver,
+		/obj/item/weapon/gun/smg/standard_machinepistol)
 	draw_mode = 1
 
 
@@ -203,7 +226,8 @@
 
 	can_hold = list(
 		/obj/item/ammo_magazine/pistol,
-		/obj/item/ammo_magazine/revolver)
+		/obj/item/ammo_magazine/revolver,
+		/obj/item/ammo_magazine/smg/standard_machinepistol)
 
 /obj/item/storage/pouch/magazine/pistol/large
 	name = "large pistol magazine pouch"
@@ -217,6 +241,10 @@
 /obj/item/storage/pouch/magazine/pistol/pmc_mateba
 	fill_type = /obj/item/ammo_magazine/revolver/mateba
 	fill_number = 3
+
+/obj/item/storage/pouch/magazine/pistol/large/mateba
+	fill_type = /obj/item/ammo_magazine/revolver/mateba
+	fill_number = 6
 
 /obj/item/storage/pouch/magazine/pistol/vp70
 	fill_type = /obj/item/ammo_magazine/pistol/vp70
@@ -281,7 +309,19 @@
 	fill_number = 4
 
 /obj/item/storage/pouch/explosive/upp
-	fill_type = /obj/item/explosive/plastique
+	fill_type = /obj/item/explosive/grenade/frag/upp
+	fill_number = 4
+
+/obj/item/storage/pouch/grenade
+	name = "Grenade pouch"
+	desc = "It can contain grenades."
+	icon_state = "explosive"
+	storage_slots = 6
+	can_hold = list(
+		/obj/item/explosive/grenade)
+
+/obj/item/storage/pouch/grenade/slightlyfull
+	fill_type = /obj/item/explosive/grenade/frag
 	fill_number = 4
 
 /obj/item/storage/pouch/medical
@@ -299,6 +339,7 @@
 		/obj/item/storage/pill_bottle,
 		/obj/item/stack/medical,
 		/obj/item/flashlight/pen,
+		/obj/item/storage/pill_bottle/packet,
 		/obj/item/reagent_containers/hypospray)
 
 /obj/item/storage/pouch/medical/full/Initialize()
@@ -314,8 +355,37 @@
 	storage_slots = 7
 	max_storage_space = 14
 	can_hold = list(
-		/obj/item/reagent_containers/hypospray/autoinjector
-	)
+		/obj/item/reagent_containers/hypospray/autoinjector)
+
+/obj/item/storage/pouch/autoinjector/full/Initialize()
+	. = ..()
+	new /obj/item/reagent_containers/hypospray/autoinjector/combat(src)
+	new /obj/item/reagent_containers/hypospray/autoinjector/combat(src)
+	new /obj/item/reagent_containers/hypospray/autoinjector/combat(src)
+	new /obj/item/reagent_containers/hypospray/autoinjector/quickclot (src)
+	new /obj/item/reagent_containers/hypospray/autoinjector/dexalinplus (src)
+	new /obj/item/reagent_containers/hypospray/autoinjector/hypervene(src)
+	new /obj/item/reagent_containers/hypospray/autoinjector/synaptizine(src)
+
+/obj/item/storage/pouch/autoinjector/advanced
+	name = "auto-injector pouch"
+	desc = "A pouch specifically for auto-injectors. This one comes pre-loaded with goodies!"
+	icon_state = "autoinjector"
+	storage_slots = 7
+	max_storage_space = 14
+	can_hold = list(
+		/obj/item/reagent_containers/hypospray/autoinjector)
+
+/obj/item/storage/pouch/autoinjector/advanced/full/Initialize()
+	. = ..()
+	new /obj/item/reagent_containers/hypospray/autoinjector/combat_advanced(src)
+	new /obj/item/reagent_containers/hypospray/autoinjector/combat_advanced(src)
+	new /obj/item/reagent_containers/hypospray/autoinjector/combat_advanced(src)
+	new /obj/item/reagent_containers/hypospray/autoinjector/combat_advanced (src)
+	new /obj/item/reagent_containers/hypospray/autoinjector/synaptizine (src)
+	new /obj/item/reagent_containers/hypospray/autoinjector/synaptizine(src)
+	new /obj/item/reagent_containers/hypospray/autoinjector/hyperzine(src)
+
 
 
 /obj/item/storage/pouch/syringe
@@ -420,7 +490,6 @@
 		/obj/item/flashlight,
 		/obj/item/whistle,
 		/obj/item/binoculars,
-		/obj/item/map/current_map,
 		/obj/item/squad_beacon)
 
 /obj/item/storage/pouch/field_pouch/full/Initialize()
@@ -428,7 +497,6 @@
 	new /obj/item/motiondetector (src)
 	new /obj/item/whistle (src)
 	new /obj/item/radio (src)
-	new /obj/item/map/current_map (src)
 	new /obj/item/binoculars/tactical (src)
 
 
@@ -503,30 +571,30 @@
 
 
 /obj/item/storage/pouch/shotgun/attackby(obj/item/I, mob/user, params)
-	if(istype(I, /obj/item/ammo_magazine/shotgun))
-		var/obj/item/ammo_magazine/shotgun/M = I
+	if(istype(I, /obj/item/ammo_magazine))
+		var/obj/item/ammo_magazine/M = I
 
-		if(!M.current_rounds)
-			to_chat(user, "<span class='warning'>[M] is empty.</span>")
-			return
+		if(M.flags_magazine & AMMUNITION_REFILLABLE)
+			if(!M.current_rounds)
+				to_chat(user, "<span class='warning'>[M] is empty.</span>")
+				return
 
-		if(length(contents) >= storage_slots)
-			to_chat(user, "<span class='warning'>[src] is full.</span>")
-			return
+			if(length(contents) >= storage_slots)
+				to_chat(user, "<span class='warning'>[src] is full.</span>")
+				return
 
-		to_chat(user, "<span class='notice'>You start refilling [src] with [M].</span>")
 
-		if(!do_after(user, 15, TRUE, src, BUSY_ICON_GENERIC))
-			return
+			to_chat(user, "<span class='notice'>You start refilling [src] with [M].</span>")
+			if(!do_after(user, 1.5 SECONDS, TRUE, src, BUSY_ICON_GENERIC))
+				return
 
-		for(var/x in 1 to (storage_slots - length(contents)))
-			if(!handle_item_insertion(M.create_handful(), 1, user))
-				break
+			for(var/x in 1 to (storage_slots - length(contents)))
+				var/cont = handle_item_insertion(M.create_handful(), 1, user)
+				if(!cont)
+					break
 
-		playsound(user.loc, "rustle", 15, 1, 6)
-		to_chat(user, "<span class='notice'>You refill [src] with [M].</span>")
+			playsound(user.loc, "rustle", 15, TRUE, 6)
+			to_chat(user, "<span class='notice'>You refill [src] with [M].</span>")
+			return TRUE
 
-		return TRUE
-
-	else
-		return ..()
+	return ..()

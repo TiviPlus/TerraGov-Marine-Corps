@@ -76,7 +76,9 @@
 	parrot_sleep_dur = parrot_sleep_max //In case someone decides to change the max without changing the duration var
 
 
-/mob/living/simple_animal/parrot/death(gibbed)
+/mob/living/simple_animal/parrot/death(gibbing, deathmessage, silent)
+	if(stat == DEAD)
+		return ..()
 	if(held_item)
 		held_item.forceMove(drop_location())
 		held_item = null
@@ -159,8 +161,8 @@
 				ears.forceMove(drop_location())
 				ears = null
 				for(var/possible_phrase in speak)
-					if(copytext(possible_phrase,1,3) in GLOB.department_radio_keys)
-						possible_phrase = copytext(possible_phrase,3)
+					if(copytext_char(possible_phrase, 2, 3) in GLOB.department_radio_keys)
+						possible_phrase = copytext_char(possible_phrase, 3)
 
 	//Adding things to inventory
 	else if(href_list["add_inv"])
@@ -258,7 +260,7 @@
 		icon_state = icon_living
 
 
-/mob/living/simple_animal/parrot/bullet_act(obj/item/projectile/Proj)
+/mob/living/simple_animal/parrot/bullet_act(obj/projectile/Proj)
 	. = ..()
 	if(!stat && !client)
 		if(parrot_state == PARROT_PERCH)
@@ -325,8 +327,8 @@
 					//50/50 chance to not use the radio at all
 					var/useradio = prob(50)
 
-					if((copytext(possible_phrase, 1, 2) in GLOB.department_radio_prefixes) && (copytext(possible_phrase, 2, 3) in GLOB.department_radio_keys))
-						possible_phrase = "[useradio ? pick(available_channels) : ""][copytext(possible_phrase, 3)]" //crop out the channel prefix
+					if((possible_phrase[1] in GLOB.department_radio_prefixes) && (copytext_char(possible_phrase, 2, 3) in GLOB.department_radio_keys))
+						possible_phrase = "[useradio ? pick(available_channels) : ""][copytext_char(possible_phrase, 3)]" //crop out the channel prefix
 					else
 						possible_phrase = "[useradio ? pick(available_channels) : ""][possible_phrase]"
 
@@ -334,8 +336,8 @@
 
 			else //If we have no headset or channels to use, dont try to use any!
 				for(var/possible_phrase in speak)
-					if((copytext(possible_phrase,1,2) in GLOB.department_radio_prefixes) && (copytext(possible_phrase,2,3) in GLOB.department_radio_keys))
-						possible_phrase = copytext(possible_phrase,3) //crop out the channel prefix
+					if((possible_phrase[1] in GLOB.department_radio_prefixes) && (copytext_char(possible_phrase, 2, 3) in GLOB.department_radio_keys))
+						possible_phrase = copytext_char(possible_phrase, 3) //crop out the channel prefix
 					newspeak.Add(possible_phrase)
 			speak = newspeak
 
@@ -372,11 +374,11 @@
 				parrot_state = PARROT_SWOOP | PARROT_RETURN
 			return
 
-		if(parrot_interest && parrot_interest in view(src))
+		if(parrot_interest && (parrot_interest in view(src)))
 			parrot_state = PARROT_SWOOP | PARROT_STEAL
 			return
 
-		if(parrot_perch && parrot_perch in view(src))
+		if(parrot_perch && (parrot_perch in view(src)))
 			parrot_state = PARROT_SWOOP | PARROT_RETURN
 			return
 
@@ -564,7 +566,7 @@
 	return ..()
 
 
-/mob/living/simple_animal/parrot/Poly/death(gibbed)
+/mob/living/simple_animal/parrot/Poly/on_death()
 	if(!memory_saved)
 		Write_Memory(TRUE)
 	if(prob(0.666))
@@ -606,6 +608,7 @@
 	color = "#FFFFFF77"
 	speak_chance = 20
 	status_flags = GODMODE
+	resistance_flags = RESIST_ALL
 
 
 /mob/living/simple_animal/parrot/Poly/ghost/Initialize()

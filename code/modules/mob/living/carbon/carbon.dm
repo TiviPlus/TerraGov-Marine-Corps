@@ -1,6 +1,7 @@
 /mob/living/carbon/Initialize()
 	. = ..()
 	RegisterSignal(src, COMSIG_CARBON_DEVOURED_BY_XENO, .proc/on_devour_by_xeno)
+	adjust_nutrition_speed(0)
 
 
 /mob/living/carbon/Destroy()
@@ -15,9 +16,7 @@
 	. = ..()
 	if(.)
 		if(nutrition && stat != DEAD)
-			nutrition -= HUNGER_FACTOR/10
-			if(m_intent == MOVE_INTENT_RUN)
-				nutrition -= HUNGER_FACTOR/10
+			adjust_nutrition(-HUNGER_FACTOR * 0.1 * ((m_intent == MOVE_INTENT_RUN) ? 2 : 1))
 
 		// Moving around increases germ_level faster
 		if(germ_level < GERM_LEVEL_MOVE_CAP && prob(8))
@@ -29,13 +28,6 @@
 	if(!chestburst && (status_flags & XENO_HOST) && isxenolarva(user))
 		var/mob/living/carbon/xenomorph/larva/L = user
 		L.initiate_burst(src)
-
-
-/mob/living/carbon/gib()
-	if(legcuffed)
-		dropItemToGround(legcuffed)
-
-	return ..()
 
 
 /mob/living/carbon/attack_paw(mob/living/carbon/monkey/user)
@@ -59,11 +51,9 @@
 			"<span class='warning'> You hear a heavy electrical crack.</span>" \
 		)
 		if(isxeno(src) && mob_size == MOB_SIZE_BIG)
-			stun(1)//Sadly, something has to stop them from bumping them 10 times in a second
-			knock_down(1)
+			Paralyze(4 SECONDS)
 		else
-			stun(10)//This should work for now, more is really silly and makes you lay there forever
-			knock_down(10)
+			Paralyze(8 SECONDS)
 	else
 		src.visible_message(
 			"<span class='warning'> [src] was mildly shocked by the [source].</span>", \
@@ -118,26 +108,25 @@
 	if(stat == DEAD) //Corpses don't puke
 		return
 
-	if(cooldowns[COOLDOWN_PUKE])
+	if(COOLDOWN_CHECK(src, COOLDOWN_PUKE))
 		return
 
-	cooldowns[COOLDOWN_PUKE] = TRUE
+	COOLDOWN_START(src, COOLDOWN_PUKE, 40 SECONDS) //5 seconds before the actual action plus 35 before the next one.
 	to_chat(src, "<spawn class='warning'>You feel like you are about to throw up!")
 	addtimer(CALLBACK(src, .proc/do_vomit), 5 SECONDS)
 
 
 /mob/living/carbon/proc/do_vomit()
-	stun(5)
+	Stun(10 SECONDS)
 	visible_message("<spawn class='warning'>[src] throws up!","<spawn class='warning'>You throw up!", null, 5)
-	playsound(loc, 'sound/effects/splat.ogg', 25, 1, 7)
+	playsound(loc, 'sound/effects/splat.ogg', 25, TRUE, 7)
 
 	var/turf/location = loc
 	if (istype(location, /turf))
 		location.add_vomit_floor(src, 1)
 
-	nutrition = max(nutrition - 40, 0)
+	adjust_nutrition(-40)
 	adjustToxLoss(-3)
-	addtimer(VARSET_LIST_CALLBACK(cooldowns, COOLDOWN_PUKE, FALSE), 35 SECONDS) //wait 35 seconds before next volley
 
 
 /mob/living/carbon/proc/help_shake_act(mob/living/carbon/shaker)
@@ -147,22 +136,24 @@
 	if(src == shaker)
 		return
 
-	if(lying || sleeping)
+	if(IsAdminSleeping())
+		to_chat(shaker, "<span class='highdanger'>This player has been admin slept, do not interfere with them.</span>")
+		return
+
+	if(lying_angle || IsSleeping())
 		if(client)
-			adjust_sleeping(-5)
-		if(sleeping == 0)
+			AdjustSleeping(-10 SECONDS)
+		if(!IsSleeping())
 			set_resting(FALSE)
 		shaker.visible_message("<span class='notice'>[shaker] shakes [src] trying to get [p_them()] up!",
 			"<span class='notice'>You shake [src] trying to get [p_them()] up!", null, 4)
 
-		if(knocked_out)
-			adjust_knockedout(-3)
-		if(stunned)
-			adjust_stunned(-3)
-		if(knocked_down)
+		AdjustUnconscious(-60)
+		AdjustStun(-60)
+		if(IsParalyzed())
 			if(staminaloss)
 				adjustStaminaLoss(-20, FALSE)
-			adjust_knocked_down(-3)
+		AdjustParalyzed(-60)
 
 		playsound(loc, 'sound/weapons/thudswoosh.ogg', 25, TRUE, 5)
 		return
@@ -221,7 +212,7 @@
 	if (istype(I, /obj/item/grab))
 		var/obj/item/grab/G = I
 		if(ismob(G.grabbed_thing))
-			if(grab_level >= GRAB_NECK)
+			if(grab_state >= GRAB_NECK)
 				var/mob/living/M = G.grabbed_thing
 				spin_throw = FALSE //thrown mobs don't spin
 				thrown_thing = M
@@ -234,7 +225,14 @@
 					log_combat(usr, M, "thrown", addition="from [start_T_descriptor] with the target [end_T_descriptor]")
 			else
 				to_chat(src, "<span class='warning'>You need a better grip!</span>")
-
+	else if(istype(I, /obj/item/riding_offhand))
+		var/obj/item/riding_offhand/riding_item = I
+		spin_throw = FALSE
+		thrown_thing = riding_item.rider
+		var/turf/start_T = get_turf(loc) //Get the start and target tile for the descriptors
+		var/turf/end_T = get_turf(target)
+		if(start_T && end_T)
+			log_combat(usr, thrown_thing, "thrown", addition = "from tile at [start_T.x], [start_T.y], [start_T.z] in area [get_area(start_T)] with the target tile at [end_T.x], [end_T.y], [end_T.z] in area [get_area(end_T)]")
 	else //real item in hand, not a grab
 		thrown_thing = I
 		dropItemToGround(I, TRUE)
@@ -298,11 +296,11 @@
 	set name = "Sleep"
 	set category = "IC"
 
-	if(sleeping)
+	if(IsSleeping())
 		to_chat(src, "<span class='warning'>You are already sleeping</span>")
 		return
 	if(alert(src,"You sure you want to sleep for a while?","Sleep","Yes","No") == "Yes")
-		sleeping = 20 //Short nap
+		SetSleeping(40 SECONDS) //Short nap
 
 
 /mob/living/carbon/Bump(atom/movable/AM)
@@ -314,19 +312,20 @@
 	set waitfor = 0
 	if(buckled) return FALSE //can't slip while buckled
 	if(run_only && (m_intent != MOVE_INTENT_RUN)) return FALSE
-	if(lying) return FALSE //can't slip if already lying down.
+	if(lying_angle)
+		return FALSE //can't slip if already lying down.
 	stop_pulling()
 	to_chat(src, "<span class='warning'>You slipped on \the [slip_source_name? slip_source_name : "floor"]!</span>")
 	playsound(src.loc, 'sound/misc/slip.ogg', 25, 1)
-	stun(stun_level)
-	knock_down(weaken_level)
+	Stun(stun_level)
+	Paralyze(weaken_level)
 	. = TRUE
-	if(slide_steps && lying)//lying check to make sure we downed the mob
+	if(slide_steps && lying_angle)//lying check to make sure we downed the mob
 		var/slide_dir = dir
 		for(var/i=1, i<=slide_steps, i++)
 			step(src, slide_dir)
 			sleep(2)
-			if(!lying)
+			if(!lying_angle)
 				break
 
 
@@ -443,8 +442,8 @@
 	. = ..()
 	if(!.)
 		return
-	log_admin("[key_name(src)] (Job: [job]) has been away for 15 minutes.")
-	message_admins("[ADMIN_TPMONTY(src)] (Job: [job]) has been away for 15 minutes.")
+	log_admin("[key_name(src)] (Job: [job.title]) has been away for 15 minutes.")
+	message_admins("[ADMIN_TPMONTY(src)] (Job: [job.title]) has been away for 15 minutes.")
 
 /mob/living/carbon/xenomorph/on_sdd_grace_period_end()
 	. = ..()
@@ -461,3 +460,26 @@
 
 	to_chat(src, "<span class='xenoannounce'>We are an old xenomorph re-awakened from slumber!</span>")
 	playsound_local(get_turf(src), 'sound/effects/xeno_newlarva.ogg')
+
+
+/mob/living/carbon/verb/middle_mousetoggle()
+	set name = "Toggle Middle/Shift Clicking"
+	set desc = "Toggles between using middle mouse click and shift click for selected ability use."
+	set category = "IC"
+
+	middle_mouse_toggle = !middle_mouse_toggle
+	if(!middle_mouse_toggle)
+		to_chat(src, "<span class='notice'>The selected special ability will now be activated with shift clicking.</span>")
+	else
+		to_chat(src, "<span class='notice'>The selected special ability will now be activated with middle mouse clicking.</span>")
+
+/mob/living/carbon/set_stat(new_stat)
+	. = ..()
+	if(isnull(.))
+		return
+	if(stat == UNCONSCIOUS)
+		blind_eyes(1)
+		disabilities |= DEAF
+	else if(. == UNCONSCIOUS)
+		adjust_blindness(-1)
+		disabilities &= ~DEAF

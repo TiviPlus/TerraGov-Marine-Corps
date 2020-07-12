@@ -66,6 +66,11 @@
 		_y + (-dwidth+width-1)*sin + (-dheight+height-1)*cos
 		)
 
+/// Return number of turfs
+/obj/docking_port/proc/return_number_of_turfs()
+	var/list/L = return_coords()
+	return (L[3]-L[1]) * (L[4]-L[2])
+
 //returns turfs within our projected rectangle in no particular order
 /obj/docking_port/proc/return_turfs()
 	var/list/L = return_coords()
@@ -222,9 +227,12 @@
 	var/area/shuttle/transit/assigned_area
 	var/obj/docking_port/mobile/owner
 
+	var/spawn_time
+
 /obj/docking_port/stationary/transit/Initialize()
 	. = ..()
 	SSshuttle.transit += src
+	spawn_time = world.time
 
 /obj/docking_port/stationary/transit/Destroy(force=FALSE)
 	if(force)
@@ -233,6 +241,7 @@
 		SSshuttle.transit -= src
 		if(owner)
 			if(owner.assigned_transit == src)
+				log_world("A transit dock was qdeled while it was assigned to [owner].")
 				owner.assigned_transit = null
 			owner = null
 		if(!QDELETED(reserved_area))
@@ -284,6 +293,8 @@
 
 	var/crashing = FALSE
 
+	var/shuttle_flags = NONE
+
 /obj/docking_port/mobile/proc/register()
 	SSshuttle.mobile += src
 
@@ -309,7 +320,7 @@
 	var/list/all_turfs = return_ordered_turfs(x, y, z, dir)
 	for(var/i in 1 to all_turfs.len)
 		var/turf/curT = all_turfs[i]
-		var/area/cur_area = curT.loc
+		var/area/cur_area = get_area(curT)
 		if(istype(cur_area, area_type))
 			shuttle_areas[cur_area] = TRUE
 
@@ -390,6 +401,8 @@
 
 /obj/docking_port/mobile/proc/transit_failure()
 	message_admins("Shuttle [src] repeatedly failed to create transit zone.")
+	log_debug("Setting [src]/[src.id] idle")
+	set_idle()
 
 //call the shuttle to destination S
 /obj/docking_port/mobile/proc/request(obj/docking_port/stationary/S)
@@ -466,6 +479,7 @@
 			WARNING("shuttle \"[id]\" could not enter transit space. Docked at [S0 ? S0.id : "null"]. Transit dock [S1 ? S1.id : "null"].")
 		else
 			previous = S0
+			return TRUE
 	else
 		WARNING("shuttle \"[id]\" could not enter transit space. S0=[S0 ? S0.id : "null"] S1=[S1 ? S1.id : "null"]")
 
@@ -550,23 +564,12 @@
 
 	return ripple_turfs
 
-///obj/docking_port/mobile/proc/check_poddoors()
-//	for(var/obj/machinery/door/poddoor/shuttledock/pod in GLOB.airlocks)
-//		pod.check()
-
 /obj/docking_port/mobile/proc/dock_id(id)
 	var/port = SSshuttle.getDock(id)
 	if(port)
 		. = initiate_docking(port)
 	else
 		. = null
-
-/obj/effect/landmark/shuttle_import
-	name = "Shuttle Import"
-
-// Never move the shuttle import landmark, otherwise things get WEIRD
-/obj/effect/landmark/shuttle_import/onShuttleMove()
-	return FALSE
 
 //used by shuttle subsystem to check timers
 /obj/docking_port/mobile/proc/check()
@@ -712,7 +715,7 @@
 	if(timeleft > 1 HOURS)
 		return "--:--"
 	else if(timeleft > 0)
-		return "[add_zero(num2text((timeleft / 60) % 60),2)]:[add_zero(num2text(timeleft % 60), 2)]"
+		return "[add_leading(num2text((timeleft / 60) % 60), 2, "0")]:[add_leading(num2text(timeleft % 60), 2, "0")]"
 	else
 		return "00:00"
 
@@ -778,7 +781,7 @@
 			CRASH("Invalid hyperspace sound phase: [phase]")
 	for(var/A in areas)
 		for(var/obj/machinery/door/E in A)	//dumb, I know, but playing it on the engines doesn't do it justice
-			playsound(E, s, 100, FALSE, max(width, height) - world.view)
+			playsound(E, s, 100, FALSE, max(width, height) - WORLD_VIEW_NUM)
 */
 // Losing all initial engines should get you 2
 // Adding another set of engines at 0.5 time
@@ -812,13 +815,13 @@
 		var/change_per_engine = (1 - ENGINE_COEFF_MIN) / ENGINE_DEFAULT_MAXSPEED_ENGINES // 5 by default
 		if(initial_engines > 0)
 			change_per_engine = (1 - ENGINE_COEFF_MIN) / initial_engines // or however many it had
-		return CLAMP(1 - delta * change_per_engine,ENGINE_COEFF_MIN,ENGINE_COEFF_MAX)
+		return clamp(1 - delta * change_per_engine,ENGINE_COEFF_MIN,ENGINE_COEFF_MAX)
 	if(new_value < initial_engines)
 		var/delta = initial_engines - new_value
 		var/change_per_engine = 1 //doesn't really matter should not be happening for 0 engine shuttles
 		if(initial_engines > 0)
 			change_per_engine = (ENGINE_COEFF_MAX -  1) / initial_engines //just linear drop to max delay
-		return CLAMP(1 + delta * change_per_engine,ENGINE_COEFF_MIN,ENGINE_COEFF_MAX)
+		return clamp(1 + delta * change_per_engine,ENGINE_COEFF_MIN,ENGINE_COEFF_MAX)
 
 
 /obj/docking_port/mobile/proc/in_flight()

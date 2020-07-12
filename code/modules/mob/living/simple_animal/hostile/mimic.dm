@@ -69,7 +69,7 @@
 		icon_state = initial(icon_state)
 		if(prob(15) && iscarbon(target))
 			var/mob/living/carbon/C = target
-			C.knock_down(10)
+			C.Paralyze(20 SECONDS)
 			C.visible_message("<span class='danger'>\The [src] knocks down \the [C]!</span>", \
 					"<span class='userdanger'>\The [src] knocks you down!</span>")
 
@@ -85,7 +85,7 @@
 	icon_state = initial(icon_state)
 
 
-/mob/living/simple_animal/hostile/mimic/crate/death()
+/mob/living/simple_animal/hostile/mimic/crate/on_death()
 	var/obj/structure/closet/crate/C = new(get_turf(src))
 	// Put loot in crate
 	for(var/obj/O in src)
@@ -122,9 +122,10 @@ GLOBAL_LIST_INIT(protected_objects, list(/obj/structure/table, /obj/structure/ca
 		death()
 
 
-/mob/living/simple_animal/hostile/mimic/copy/death()
-	for(var/atom/movable/M in src)
-		M.forceMove(get_turf(src))
+/mob/living/simple_animal/hostile/mimic/copy/on_death()
+	for(var/am in contents)
+		var/atom/movable/thing = am
+		thing.forceMove(get_turf(src))
 	return ..()
 
 
@@ -186,7 +187,7 @@ GLOBAL_LIST_INIT(protected_objects, list(/obj/structure/table, /obj/structure/ca
 	. = ..()
 	if(knockdown_people && . && prob(15) && iscarbon(target))
 		var/mob/living/carbon/C = target
-		C.knock_down(10)
+		C.Paralyze(20 SECONDS)
 		C.visible_message("<span class='danger'>\The [src] knocks down \the [C]!</span>", \
 				"<span class='userdanger'>\The [src] knocks you down!</span>")
 

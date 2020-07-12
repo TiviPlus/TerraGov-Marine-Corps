@@ -35,7 +35,7 @@
 	use_power = NO_POWER_USE
 	req_access = list(ACCESS_CIVILIAN_ENGINEERING)
 	resistance_flags = UNACIDABLE
-	interaction_flags = INTERACT_MACHINE_NANO
+	interaction_flags = INTERACT_MACHINE_TGUI
 	var/area/area
 	var/areastring = null
 	var/obj/item/cell/cell
@@ -76,7 +76,7 @@
 	var/global/list/status_overlays_environ
 	var/obj/item/circuitboard/apc/electronics = null
 
-	ui_x = 450 
+	ui_x = 450
 	ui_y = 460
 
 /obj/machinery/power/apc/connect_to_network()
@@ -145,7 +145,7 @@
 
 		//Is starting with a power cell installed, create it and set its charge level
 		if(cell_type)
-			cell = new cell_type(src)
+			set_cell(new cell_type(src))
 			cell.charge = start_charge * cell.maxcharge / 100.0 //Convert percentage to actual value
 			cell.update_icon()
 
@@ -167,6 +167,21 @@
 		//Break few ACPs on the colony
 		if(!start_charge && is_ground_level(z) && prob(10))
 			addtimer(CALLBACK(src, .proc/set_broken), 5)
+
+
+///Wrapper to guarantee powercells are properly nulled and avoid hard deletes.
+/obj/machinery/power/apc/proc/set_cell(obj/item/cell/new_cell)
+	if(cell)
+		UnregisterSignal(cell, COMSIG_PARENT_QDELETING)
+	cell = new_cell
+	if(cell)
+		RegisterSignal(cell, COMSIG_PARENT_QDELETING, .proc/on_cell_deletion)
+
+
+///Called by the deletion of the referenced powercell.
+/obj/machinery/power/apc/proc/on_cell_deletion(obj/item/cell/source, force)
+	set_cell(null)
+
 
 /obj/machinery/power/apc/proc/make_terminal()
 	//Create a terminal object at the same position as original turf loc
@@ -320,10 +335,10 @@
 	. = ..()
 
 	if(istype(I, /obj/item/cell) && opened) //Trying to put a cell inside
-		if(user.mind?.cm_skills && user.mind.cm_skills.engineer < SKILL_ENGINEER_ENGI)
+		if(user.skills.getRating("engineer") < SKILL_ENGINEER_ENGI)
 			user.visible_message("<span class='notice'>[user] fumbles around figuring out how to fit [I] into [src].</span>",
 			"<span class='notice'>You fumble around figuring out how to fit [I] into [src].</span>")
-			var/fumbling_time = 50 * ( SKILL_ENGINEER_ENGI - user.mind.cm_skills.engineer )
+			var/fumbling_time = 5 SECONDS * ( SKILL_ENGINEER_ENGI - user.skills.getRating("engineer") )
 			if(!do_after(user, fumbling_time, TRUE, src, BUSY_ICON_UNSKILLED))
 				return
 
@@ -338,17 +353,17 @@
 		if(!user.transferItemToLoc(I, src))
 			return
 
-		cell = I
+		set_cell(I)
 		user.visible_message("<span class='notice'>[user] inserts [I] into [src]!",
 		"<span class='notice'>You insert [I] into [src]!")
 		chargecount = 0
 		update_icon()
 
 	else if(istype(I, /obj/item/card/id)) //Trying to unlock the interface with an ID card
-		if(user.mind?.cm_skills && user.mind.cm_skills.engineer < SKILL_ENGINEER_ENGI)
+		if(user.skills.getRating("engineer") < SKILL_ENGINEER_ENGI)
 			user.visible_message("<span class='notice'>[user] fumbles around figuring out where to swipe [I] on [src].</span>",
 			"<span class='notice'>You fumble around figuring out where to swipe [I] on [src].</span>")
-			var/fumbling_time = 30 * ( SKILL_ENGINEER_ENGI - user.mind.cm_skills.engineer )
+			var/fumbling_time = 3 SECONDS * ( SKILL_ENGINEER_ENGI - user.skills.getRating("engineer") )
 			if(!do_after(user, fumbling_time, TRUE, src, BUSY_ICON_UNSKILLED))
 				return
 
@@ -376,10 +391,10 @@
 	else if(iscablecoil(I) && !terminal && opened && has_electronics != APC_ELECTRONICS_SECURED)
 		var/obj/item/stack/cable_coil/C = I
 
-		if(user.mind?.cm_skills && user.mind.cm_skills.engineer < SKILL_ENGINEER_ENGI)
+		if(user.skills.getRating("engineer") < SKILL_ENGINEER_ENGI)
 			user.visible_message("<span class='notice'>[user] fumbles around figuring out what to do with [src].</span>",
 			"<span class='notice'>You fumble around figuring out what to do with [src].</span>")
-			var/fumbling_time = 50 * ( SKILL_ENGINEER_ENGI - user.mind.cm_skills.engineer )
+			var/fumbling_time = 5 SECONDS * ( SKILL_ENGINEER_ENGI - user.skills.getRating("engineer") )
 			if(!do_after(user, fumbling_time, TRUE, src, BUSY_ICON_UNSKILLED))
 				return
 
@@ -415,10 +430,10 @@
 		terminal.connect_to_network()
 
 	else if(istype(I, /obj/item/circuitboard/apc) && opened && has_electronics == APC_ELECTRONICS_MISSING && !(machine_stat & BROKEN))
-		if(user.mind?.cm_skills && user.mind.cm_skills.engineer < SKILL_ENGINEER_ENGI)
+		if(user.skills.getRating("engineer") < SKILL_ENGINEER_ENGI)
 			user.visible_message("<span class='notice'>[user] fumbles around figuring out what to do with [I].</span>",
 			"<span class='notice'>You fumble around figuring out what to do with [I].</span>")
-			var/fumbling_time = 50 * ( SKILL_ENGINEER_ENGI - user.mind.cm_skills.engineer )
+			var/fumbling_time = 5 SECONDS * ( SKILL_ENGINEER_ENGI - user.skills.getRating("engineer") )
 			if(!do_after(user, fumbling_time, TRUE, src, BUSY_ICON_UNSKILLED))
 				return
 
@@ -436,20 +451,20 @@
 		qdel(I)
 
 	else if(istype(I, /obj/item/circuitboard/apc) && opened && has_electronics == APC_ELECTRONICS_MISSING && (machine_stat & BROKEN))
-		if(user.mind?.cm_skills && user.mind.cm_skills.engineer < SKILL_ENGINEER_ENGI)
+		if(user.skills.getRating("engineer") < SKILL_ENGINEER_ENGI)
 			user.visible_message("<span class='notice'>[user] fumbles around figuring out what to do with [I].</span>",
 			"<span class='notice'>You fumble around figuring out what to do with [I].</span>")
-			var/fumbling_time = 50 * ( SKILL_ENGINEER_ENGI - user.mind.cm_skills.engineer )
+			var/fumbling_time = 5 SECONDS * ( SKILL_ENGINEER_ENGI - user.skills.getRating("engineer") )
 			if(!do_after(user, fumbling_time, TRUE, src, BUSY_ICON_UNSKILLED))
 				return
 
 		to_chat(user, "<span class='warning'>You cannot put the board inside, the frame is damaged.</span>")
 
 	else if(istype(I, /obj/item/frame/apc) && opened && (machine_stat & BROKEN))
-		if(user.mind?.cm_skills && user.mind.cm_skills.engineer < SKILL_ENGINEER_ENGI)
+		if(user.skills.getRating("engineer") < SKILL_ENGINEER_ENGI)
 			user.visible_message("<span class='notice'>[user] fumbles around figuring out what to do with [I].</span>",
 			"<span class='notice'>You fumble around figuring out what to do with [I].</span>")
-			var/fumbling_time = 50 * ( SKILL_ENGINEER_ENGI - user.mind.cm_skills.engineer )
+			var/fumbling_time = 5 SECONDS * ( SKILL_ENGINEER_ENGI - user.skills.getRating("engineer") )
 			if(!do_after(user, fumbling_time, TRUE, src, BUSY_ICON_UNSKILLED))
 				return
 
@@ -472,10 +487,10 @@
 		update_icon()
 
 	else if(istype(I, /obj/item/frame/apc) && opened)
-		if(user.mind?.cm_skills && user.mind.cm_skills.engineer < SKILL_ENGINEER_ENGI)
+		if(user.skills.getRating("engineer") < SKILL_ENGINEER_ENGI)
 			user.visible_message("<span class='notice'>[user] fumbles around figuring out what to do with [I].</span>",
 			"<span class='notice'>You fumble around figuring out what to do with [I].</span>")
-			var/fumbling_time = 50 * ( SKILL_ENGINEER_ENGI - user.mind.cm_skills.engineer )
+			var/fumbling_time = 5 SECONDS * ( SKILL_ENGINEER_ENGI - user.skills.getRating("engineer") )
 			if(!do_after(user, fumbling_time, TRUE, src, BUSY_ICON_UNSKILLED))
 				return
 
@@ -509,10 +524,10 @@
 			if(terminal)
 				to_chat(user, "<span class='warning'>Disconnect the wires first!</span>")
 				return
-			if(user.mind?.cm_skills && user.mind.cm_skills.engineer < SKILL_ENGINEER_ENGI)
+			if(user.skills.getRating("engineer") < SKILL_ENGINEER_ENGI)
 				user.visible_message("<span class='notice'>[user] fumbles around figuring out how to remove the power cell from [src].</span>",
 				"<span class='notice'>You fumble around figuring out how to remove the power cell from [src].</span>")
-				var/fumbling_time = 50 * ( SKILL_ENGINEER_ENGI - user.mind.cm_skills.engineer )
+				var/fumbling_time = 5 SECONDS * ( SKILL_ENGINEER_ENGI - user.skills.getRating("engineer") )
 				if(!do_after(user, fumbling_time, TRUE, src, BUSY_ICON_UNSKILLED))
 					return
 			I.play_tool_sound(src)
@@ -557,17 +572,17 @@
 	. = TRUE
 	if(opened)
 		if(cell)
-			if(user.mind?.cm_skills && user.mind.cm_skills.engineer < SKILL_ENGINEER_ENGI)
+			if(user.skills.getRating("engineer") < SKILL_ENGINEER_ENGI)
 				user.visible_message("<span class='notice'>[user] fumbles around figuring out what to do with [I].</span>",
 				"<span class='notice'>You fumble around figuring out what to do with [I].</span>")
-				var/fumbling_time = 50 * ( SKILL_ENGINEER_ENGI - user.mind.cm_skills.engineer )
+				var/fumbling_time = 5 SECONDS * ( SKILL_ENGINEER_ENGI - user.skills.getRating("engineer") )
 				if(!do_after(user, fumbling_time, TRUE, src, BUSY_ICON_UNSKILLED))
 					return
 			user.visible_message("[user] removes \the [cell] from [src]!", "<span class='notice'>You remove \the [cell].</span>")
 			var/turf/T = get_turf(user)
 			cell.forceMove(T)
 			cell.update_icon()
-			cell = null
+			set_cell(null)
 			charging = APC_NOT_CHARGING
 			update_icon()
 			return
@@ -603,10 +618,10 @@
 	if(!opened || has_electronics || terminal)
 		return
 
-	if(user.mind?.cm_skills && user.mind.cm_skills.engineer < SKILL_ENGINEER_ENGI)
+	if(user.skills.getRating("engineer") < SKILL_ENGINEER_ENGI)
 		user.visible_message("<span class='notice'>[user] fumbles around figuring out what to do with [I].</span>",
 		"<span class='notice'>You fumble around figuring out what to do with [I].</span>")
-		var/fumbling_time = 50 * ( SKILL_ENGINEER_ENGI - user.mind.cm_skills.engineer )
+		var/fumbling_time = 5 SECONDS * ( SKILL_ENGINEER_ENGI - user.skills.getRating("engineer") )
 		if(!do_after(user, fumbling_time, TRUE, src, BUSY_ICON_UNSKILLED))
 			return
 
@@ -640,16 +655,16 @@
 		return
 
 	if(opened && cell && !issilicon(user))
-		if(user.mind?.cm_skills && user.mind.cm_skills.engineer < SKILL_ENGINEER_ENGI)
+		if(user.skills.getRating("engineer") < SKILL_ENGINEER_ENGI)
 			user.visible_message("<span class='notice'>[user] fumbles around figuring out what to do with [src].</span>",
 			"<span class='notice'>You fumble around figuring out what to do with [src].</span>")
-			var/fumbling_time = 50 * ( SKILL_ENGINEER_ENGI - user.mind.cm_skills.engineer )
+			var/fumbling_time = 5 SECONDS * ( SKILL_ENGINEER_ENGI - user.skills.getRating("engineer") )
 			if(!do_after(user, fumbling_time, TRUE, src, BUSY_ICON_UNSKILLED))
 				return
 		user.visible_message("[user] removes \the [cell] from [src]!", "<span class='notice'>You remove \the [cell].</span>")
 		user.put_in_hands(cell)
 		cell.update_icon()
-		cell = null
+		set_cell(null)
 		charging = APC_NOT_CHARGING
 		update_icon()
 		return
@@ -666,7 +681,7 @@
 	ui = SStgui.try_update_ui(user, src, ui_key, ui, force_open)
 
 	if(!ui)
-		ui = new(user, src, ui_key, "apc", name, ui_x, ui_y, master_ui, state)
+		ui = new(user, src, ui_key, "Apc", name, ui_x, ui_y, master_ui, state)
 		ui.open()
 
 /obj/machinery/power/apc/ui_data(mob/user)
@@ -1005,17 +1020,17 @@
 
 /obj/machinery/power/apc/ex_act(severity)
 	switch(severity)
-		if(1)
+		if(EXPLODE_DEVASTATE)
 			cell?.ex_act(1) //More lags woohoo
 			qdel(src)
-		if(2)
+		if(EXPLODE_HEAVY)
 			if(prob(50))
 				return
 			set_broken()
 			if(!cell || prob(50))
 				return
 			cell.ex_act(2)
-		if(3)
+		if(EXPLODE_LIGHT)
 			if(prob(75))
 				return
 			set_broken()

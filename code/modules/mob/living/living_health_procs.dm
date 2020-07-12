@@ -8,7 +8,7 @@
 /mob/living/proc/adjustBruteLoss(amount, updating_health = FALSE)
 	if(status_flags & GODMODE)
 		return FALSE	//godmode
-	bruteloss = CLAMP(bruteloss + amount, 0, maxHealth * 2)
+	bruteloss = clamp(bruteloss + amount, 0, maxHealth * 2)
 	if(updating_health)
 		updatehealth()
 
@@ -19,7 +19,7 @@
 /mob/living/proc/adjustFireLoss(amount, updating_health = FALSE)
 	if(status_flags & GODMODE)
 		return FALSE	//godmode
-	fireloss = CLAMP(fireloss + amount, 0, maxHealth * 2)
+	fireloss = clamp(fireloss + amount, 0, maxHealth * 2)
 
 	if(updating_health)
 		updatehealth()
@@ -31,7 +31,7 @@
 /mob/living/proc/adjustOxyLoss(amount)
 	if(status_flags & GODMODE)
 		return FALSE	//godmode
-	oxyloss = CLAMP(oxyloss + amount, 0, maxHealth * 2)
+	oxyloss = clamp(oxyloss + amount, 0, maxHealth * 2)
 
 /mob/living/proc/setOxyLoss(amount)
 	if(status_flags & GODMODE)
@@ -45,7 +45,7 @@
 /mob/living/proc/adjustToxLoss(amount)
 	if(status_flags & GODMODE)
 		return FALSE	//godmode
-	toxloss = CLAMP(toxloss + amount, 0, maxHealth * 2)
+	toxloss = clamp(toxloss + amount, 0, maxHealth * 2)
 
 /mob/living/proc/setToxLoss(amount)
 	if(status_flags & GODMODE)
@@ -59,7 +59,7 @@
 /mob/living/proc/adjustStaminaLoss(amount, update = TRUE, feedback = TRUE)
 	if(status_flags & GODMODE)
 		return FALSE	//godmode
-	staminaloss = CLAMP(staminaloss + amount, -max_stamina_buffer, maxHealth * 2)
+	staminaloss = clamp(staminaloss + amount, -max_stamina_buffer, maxHealth * 2)
 	if(amount > 0)
 		last_staminaloss_dmg = world.time
 	if(update)
@@ -73,16 +73,13 @@
 		updateStamina(feedback)
 
 /mob/living/proc/updateStamina(feedback = TRUE)
-	if(staminaloss < maxHealth * 1.5)
+	if(staminaloss < max(health * 1.5,0))
 		return
-	switch(knocked_down)
-		if(0)
-			if(feedback)
-				visible_message("<span class='warning'>\The [src] slumps to the ground, too weak to continue fighting.</span>",
-					"<span class='warning'>You slump to the ground, you're too exhausted to keep going...</span>")
-			knock_down(4)
-		if(1 to 3)
-			set_knocked_down(4, FALSE)
+	if(!IsParalyzed())
+		if(feedback)
+			visible_message("<span class='warning'>\The [src] slumps to the ground, too weak to continue fighting.</span>",
+				"<span class='warning'>You slump to the ground, you're too exhausted to keep going...</span>")
+	Paralyze(80)
 
 
 /mob/living/carbon/human/updateStamina(feedback = TRUE)
@@ -106,7 +103,7 @@
 /mob/living/proc/adjustCloneLoss(amount)
 	if(status_flags & GODMODE)
 		return FALSE	//godmode
-	cloneloss = CLAMP(cloneloss+amount,0,maxHealth*2)
+	cloneloss = clamp(cloneloss+amount,0,maxHealth*2)
 
 /mob/living/proc/setCloneLoss(amount)
 	if(status_flags & GODMODE)
@@ -119,7 +116,7 @@
 /mob/living/proc/adjustBrainLoss(amount)
 	if(status_flags & GODMODE)
 		return FALSE	//godmode
-	brainloss = CLAMP(brainloss+amount,0,maxHealth*2)
+	brainloss = clamp(brainloss+amount,0,maxHealth*2)
 
 /mob/living/proc/setBrainLoss(amount)
 	if(status_flags & GODMODE)
@@ -143,6 +140,24 @@ mob/living/proc/adjustHalLoss(amount) //This only makes sense for carbon.
 
 /mob/living/proc/set_Losebreath(amount, forced = FALSE)
 	return
+
+/mob/living/proc/adjustDrowsyness(amount)
+	if(status_flags & GODMODE)
+		return FALSE
+	setDrowsyness(max(drowsyness + amount, 0))
+
+/mob/living/proc/setDrowsyness(amount)
+	if(status_flags & GODMODE)
+		return FALSE
+	if(drowsyness == amount)
+		return
+	. = drowsyness //Old value
+	drowsyness = amount
+	if(drowsyness)
+		if(!.)
+			add_movespeed_modifier(MOVESPEED_ID_DROWSINESS, TRUE, 0, NONE, TRUE, 6)
+		return
+	remove_movespeed_modifier(MOVESPEED_ID_DROWSINESS)
 
 
 // heal ONE limb, organ gets randomly selected from damaged ones.
@@ -202,13 +217,18 @@ mob/living/proc/adjustHalLoss(amount) //This only makes sense for carbon.
 
 
 /mob/living/proc/on_revive()
+	SEND_SIGNAL(src, COMSIG_MOB_REVIVE)
+	timeofdeath = 0
 	GLOB.alive_living_list += src
 	GLOB.dead_mob_list -= src
 
 /mob/living/carbon/human/on_revive()
 	. = ..()
+	revive_grace_time = initial(revive_grace_time)
 	GLOB.alive_human_list += src
 	GLOB.dead_human_list -= src
+	LAZYADD(GLOB.humans_by_zlevel["[z]"], src)
+	RegisterSignal(src, COMSIG_MOVABLE_Z_CHANGED, .proc/human_z_changed)
 
 /mob/living/carbon/xenomorph/on_revive()
 	. = ..()
@@ -226,9 +246,7 @@ mob/living/proc/adjustHalLoss(amount) //This only makes sense for carbon.
 	setOxyLoss(0)
 	setCloneLoss(0)
 	setBrainLoss(0)
-	set_knocked_out(0)
-	set_stunned(0)
-	set_knocked_down(0)
+	remove_all_status_effect()
 	ExtinguishMob()
 	fire_stacks = 0
 
@@ -256,13 +274,8 @@ mob/living/proc/adjustHalLoss(amount) //This only makes sense for carbon.
 		qdel(L)
 	DISABLE_BITFIELD(status_flags, XENO_HOST)
 
-	// remove the character from the list of the dead
-	if(stat == DEAD)
-		on_revive()
-		timeofdeath = 0
-
 	// restore us to conciousness
-	stat = CONSCIOUS
+	set_stat(CONSCIOUS)
 	updatehealth()
 
 	// make the icons look correct
@@ -278,7 +291,7 @@ mob/living/proc/adjustHalLoss(amount) //This only makes sense for carbon.
 
 
 /mob/living/carbon/revive()
-	nutrition = 400
+	set_nutrition(400)
 	setHalLoss(0)
 	setTraumatic_Shock(0)
 	setShock_Stage(0)
@@ -289,28 +302,11 @@ mob/living/proc/adjustHalLoss(amount) //This only makes sense for carbon.
 		dropItemToGround(handcuffed)
 	update_handcuffed(initial(handcuffed))
 
-	if(legcuffed && !initial(legcuffed))
-		dropItemToGround(legcuffed)
-	update_legcuffed(initial(legcuffed))
-
 	return ..()
 
 
 /mob/living/carbon/human/revive()
-	for(var/datum/limb/O in limbs)
-		if(O.limb_status & LIMB_ROBOT)
-			O.limb_status = LIMB_ROBOT
-		else
-			O.limb_status = NONE
-		O.perma_injury = 0
-		O.germ_level = 0
-		O.wounds.Cut()
-		O.heal_limb_damage(1000, 1000, TRUE, TRUE)
-		O.reset_limb_surgeries()
-
-	var/datum/limb/head/h = get_limb("head")
-	h.disfigured = FALSE
-	name = get_visible_name()
+	restore_all_organs()
 
 	if(species && !(species.species_flags & NO_BLOOD))
 		restore_blood()
@@ -345,7 +341,7 @@ mob/living/proc/adjustHalLoss(amount) //This only makes sense for carbon.
 /mob/living/carbon/xenomorph/revive()
 	plasma_stored = xeno_caste.plasma_max
 	stagger = 0
-	slowdown = 0
+	set_slowdown(0)
 	if(stat == DEAD)
 		hive?.on_xeno_revive(src)
 	return ..()

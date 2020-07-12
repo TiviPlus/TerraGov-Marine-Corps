@@ -146,7 +146,7 @@
 
 /obj/item/storage/syringe_case
 	name = "syringe case"
-	desc = "It's an medical case for storing syringes and bottles."
+	desc = "It's a medical case for storing syringes and bottles."
 	icon_state = "syringe_case"
 	throw_speed = 2
 	throw_range = 8
@@ -160,68 +160,95 @@
 		/obj/item/reagent_containers/hypospray/autoinjector)
 
 /obj/item/storage/syringe_case/regular
+	name = "basic syringe case"
+	desc = "It's a medical case for storing syringes and bottles. This one contains basic meds."
 
-/obj/item/storage/syringe_case/regular/Initialize(mapload, ...)
+/obj/item/storage/syringe_case/regular/PopulateContents()
 	. = ..()
 	new /obj/item/reagent_containers/syringe(src)
 	new /obj/item/reagent_containers/glass/bottle/inaprovaline(src)
 	new /obj/item/reagent_containers/glass/bottle/tricordrazine(src)
 
 /obj/item/storage/syringe_case/burn
+	name = "burn syringe case"
+	desc = "It's a medical case for storing syringes and bottles. This one contains meds designed to treat burns."
 
-/obj/item/storage/syringe_case/burn/Initialize(mapload, ...)
+/obj/item/storage/syringe_case/burn/PopulateContents()
 	. = ..()
 	new /obj/item/reagent_containers/syringe(src)
 	new /obj/item/reagent_containers/glass/bottle/kelotane(src)
 	new /obj/item/reagent_containers/glass/bottle/oxycodone(src)
 
 /obj/item/storage/syringe_case/tox
+	name = "toxins syringe case"
+	desc = "It's a medical case for storing syringes and bottles. This one contains meds designed to treat toxins."
 
-/obj/item/storage/syringe_case/tox/Initialize(mapload, ...)
+/obj/item/storage/syringe_case/tox/PopulateContents()
 	. = ..()
 	new /obj/item/reagent_containers/syringe(src)
 	new /obj/item/reagent_containers/glass/bottle/dylovene(src)
 	new /obj/item/reagent_containers/glass/bottle/hypervene(src)
 
 /obj/item/storage/syringe_case/oxy
+	name = "oxyloss syringe case"
+	desc = "It's a medical case for storing syringes and bottles. This one contains meds designed to treat oxygen deprivation."
 
-/obj/item/storage/syringe_case/oxy/Initialize(mapload, ...)
+/obj/item/storage/syringe_case/oxy/PopulateContents()
 	. = ..()
 	new /obj/item/reagent_containers/syringe(src)
 	new /obj/item/reagent_containers/glass/bottle/inaprovaline(src)
 	new /obj/item/reagent_containers/glass/bottle/dexalin(src)
 
 /obj/item/storage/syringe_case/meralyne
+	name = "syringe case (meralyne)"
+	desc = "It's a medical case for storing syringes and bottles. This one contains Meralyne."
 
-/obj/item/storage/syringe_case/meralyne/Initialize(mapload, ...)
+/obj/item/storage/syringe_case/meralyne/PopulateContents()
 	. = ..()
 	new /obj/item/reagent_containers/syringe(src)
 	new /obj/item/reagent_containers/glass/bottle/meralyne(src)
 	new /obj/item/reagent_containers/glass/bottle/meralyne(src)
 
 /obj/item/storage/syringe_case/dermaline
+	name = "syringe case (dermaline)"
+	desc = "It's a medical case for storing syringes and bottles. This one contains Dermaline."
 
-/obj/item/storage/syringe_case/dermaline/Initialize(mapload, ...)
+/obj/item/storage/syringe_case/dermaline/PopulateContents()
 	. = ..()
 	new /obj/item/reagent_containers/syringe(src)
 	new /obj/item/reagent_containers/glass/bottle/dermaline(src)
 	new /obj/item/reagent_containers/glass/bottle/dermaline(src)
 
 /obj/item/storage/syringe_case/meraderm
+	name = "syringe case (meraderm)"
+	desc = "It's a medical case for storing syringes and bottles. This one contains Meraderm."
 
-/obj/item/storage/syringe_case/meraderm/Initialize(mapload, ...)
+/obj/item/storage/syringe_case/meraderm/PopulateContents()
 	. = ..()
 	new /obj/item/reagent_containers/syringe(src)
 	new /obj/item/reagent_containers/glass/bottle/meraderm(src)
 	new /obj/item/reagent_containers/glass/bottle/meraderm(src)
 
 /obj/item/storage/syringe_case/ironsugar
+	name = "syringe case (ironsugar)"
+	desc = "It's a medical case for storing syringes and bottles. This one contains Ironsugar."
 
-/obj/item/storage/syringe_case/ironsugar/Initialize(mapload, ...)
+/obj/item/storage/syringe_case/ironsugar/PopulateContents()
 	. = ..()
 	new /obj/item/reagent_containers/syringe(src)
 	new /obj/item/reagent_containers/glass/bottle/ironsugar(src)
 	new /obj/item/reagent_containers/glass/bottle/ironsugar(src)
+
+/obj/item/storage/syringe_case/combat
+	name = "syringe case (combat)"
+	desc = "It's a medical case for storing syringes and bottles. This one contains combat autoinjectors."
+
+/obj/item/storage/syringe_case/combat/PopulateContents()
+	. = ..()
+	new /obj/item/reagent_containers/hypospray/autoinjector/combat(src)
+	new /obj/item/reagent_containers/hypospray/autoinjector/combat(src)
+	new /obj/item/reagent_containers/hypospray/autoinjector/combat(src)
+
 
 /*
 * Pill Bottles
@@ -277,11 +304,13 @@
 
 /obj/item/storage/pill_bottle/kelotane
 	name = "kelotane pill bottle"
+	desc = "Contains pills that heal burns, but cause slight pain. Take two to heal faster, but have slightly more pain."
 	icon_state = "pill_canister2"
 	pill_type_to_fill = /obj/item/reagent_containers/pill/kelotane
 
 /obj/item/storage/pill_bottle/dylovene
 	name = "dylovene pill bottle"
+	desc = "Contains pills that heal toxic damage and purge toxins and neurotoxins of all kinds."
 	icon_state = "pill_canister6"
 	pill_type_to_fill = /obj/item/reagent_containers/pill/dylovene
 
@@ -292,8 +321,15 @@
 
 /obj/item/storage/pill_bottle/tramadol
 	name = "tramadol pill bottle"
+	desc = "Contains pills that numb pain. Take two for a stronger effect at the cost of a toxic effect."
 	icon_state = "pill_canister5"
 	pill_type_to_fill = /obj/item/reagent_containers/pill/tramadol
+
+/obj/item/storage/pill_bottle/paracetamol
+	name = "paracetamol pill bottle"
+	desc = "Contains pills that mildly numb pain. Take two for a slightly stronger effect."
+	icon_state = "pill_canister5"
+	pill_type_to_fill = /obj/item/reagent_containers/pill/paracetamol
 
 /obj/item/storage/pill_bottle/spaceacillin
 	name = "spaceacillin pill bottle"
@@ -302,6 +338,7 @@
 
 /obj/item/storage/pill_bottle/bicaridine
 	name = "bicaridine pill bottle"
+	desc = "Contains pills that heal cuts and bruises, but cause slight pain. Take two to heal faster, but have slightly more pain."
 	icon_state = "pill_canister11"
 	pill_type_to_fill = /obj/item/reagent_containers/pill/bicaridine
 
@@ -312,11 +349,13 @@
 
 /obj/item/storage/pill_bottle/alkysine
 	name = "alkysine pill bottle"
+	desc = "Contains pills that heal brain damage."
 	icon_state = "pill_canister7"
 	pill_type_to_fill = /obj/item/reagent_containers/pill/alkysine
 
 /obj/item/storage/pill_bottle/imidazoline
 	name = "imidazoline pill bottle"
+	desc = "Contains pills that heal eye damage."
 	icon_state = "pill_canister9"
 	pill_type_to_fill = /obj/item/reagent_containers/pill/imidazoline
 
@@ -354,7 +393,7 @@
 
 /obj/item/storage/pill_bottle/zoom
 	name = "zoom pill bottle"
-	desc = "Containts highly illegal drugs. Trade brain for speed."
+	desc = "Containts highly illegal drugs. Trade heart for speed."
 	max_storage_space = 7
 	pill_type_to_fill = /obj/item/reagent_containers/pill/zoom
 
@@ -388,11 +427,9 @@
 			to_chat(L, "<span class='notice'>It must have some kind of ID lock...</span>")
 			return FALSE
 
-	if(req_role && L.mind)
-		var/datum/mind/M = L.mind
-		if(req_role && M.assigned_role && M.assigned_role != req_role)
-			to_chat(L, "<span class='notice'>It must have some kind of special lock...</span>")
-			return FALSE
+	if(req_role && (!L.job || L.job.title != req_role))
+		to_chat(L, "<span class='notice'>It must have some kind of special lock...</span>")
+		return FALSE
 
 	return TRUE
 

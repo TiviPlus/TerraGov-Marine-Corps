@@ -5,6 +5,7 @@
 	maxHealth = 20
 	status_flags = CANPUSH
 	gender = PLURAL
+	buckle_flags = NONE
 
 	//Icons
 	var/icon_living = ""
@@ -58,6 +59,8 @@
 		gender = pick(MALE, FEMALE)
 	if(!real_name)
 		real_name = name
+	if(speed)
+		update_simplemob_varspeed()
 
 
 /mob/living/simple_animal/Destroy()
@@ -81,7 +84,7 @@
 
 /mob/living/simple_animal/updatehealth()
 	. = ..()
-	health = CLAMP(health, 0, maxHealth)
+	health = clamp(health, 0, maxHealth)
 
 
 /mob/living/simple_animal/update_stat()
@@ -91,7 +94,7 @@
 		if(health <= 0)
 			death()
 		else
-			stat = CONSCIOUS
+			set_stat(CONSCIOUS)
 	med_hud_set_status()
 
 
@@ -127,28 +130,41 @@
 	return
 
 
-/mob/living/simple_animal/death(gibbed)
-	. = ..()
-	if(!gibbed)
-		if(deathmessage || !del_on_death)
-			emote("deathgasp")
-	if(del_on_death)
-		. = ..()
-		//Prevent infinite loops if the mob Destroy() is overridden in such
-		//a manner as to cause a call to death() again
-		del_on_death = FALSE
-		qdel(src)
-	else
-		health = 0
-		icon_state = icon_dead
-		density = FALSE
+/mob/living/simple_animal/death(gibbing, deathmessage, silent)
+	if(stat == DEAD)
 		return ..()
+	if(!silent && !gibbing && !del_on_death && !deathmessage && src.deathmessage)
+		emote("deathgasp")
+		silent = TRUE //No need to for the parent to deathmessage again.
+	return ..()
+
+
+/mob/living/simple_animal/on_death()
+	health = 0
+	icon_state = icon_dead
+	density = FALSE
+
+	. = ..()
+
+	if(del_on_death && !QDELETED(src))
+		qdel(src)
 
 
 /mob/living/simple_animal/gib_animation()
 	if(!icon_gib)
 		return
 	new /obj/effect/overlay/temp/gib_animation/animal(loc, src, icon_gib)
+
+
+/mob/living/simple_animal/proc/set_varspeed(var_value)
+	speed = var_value
+	update_simplemob_varspeed()
+
+
+/mob/living/simple_animal/proc/update_simplemob_varspeed()
+	if(speed == 0)
+		remove_movespeed_modifier(MOVESPEED_ID_SIMPLEMOB_VARSPEED, TRUE)
+	add_movespeed_modifier(MOVESPEED_ID_SIMPLEMOB_VARSPEED, TRUE, 100, multiplicative_slowdown = speed, override = TRUE)
 
 
 /mob/living/simple_animal/update_transform()
@@ -164,7 +180,7 @@
 		animate(src, transform = ntransform, time = 2, easing = EASE_IN|EASE_OUT)
 
 
-/mob/living/simple_animal/bullet_act(obj/item/projectile/Proj)
+/mob/living/simple_animal/bullet_act(obj/projectile/Proj)
 	if(!Proj || Proj.damage <= 0)
 		return FALSE
 
@@ -218,12 +234,6 @@
 	return TRUE
 
 
-/mob/living/simple_animal/movement_delay()
-	. = ..()
-	. += speed
-	. += CONFIG_GET(number/outdated_movedelay/animal_delay)
-
-
 /mob/living/simple_animal/Stat()
 	. = ..()
 
@@ -232,16 +242,17 @@
 
 
 /mob/living/simple_animal/ex_act(severity)
-	flash_eyes()
+	flash_act()
 
 	switch(severity)
-		if(1)
-			adjustBruteLoss(500)
+		if(EXPLODE_DEVASTATE)
 			gib()
-		if(2)
+		if(EXPLODE_HEAVY)
 			adjustBruteLoss(60)
-		if(3)
+			UPDATEHEALTH(src)
+		if(EXPLODE_LIGHT)
 			adjustBruteLoss(30)
+			UPDATEHEALTH(src)
 
 
 /mob/living/simple_animal/get_idcard(hand_first)
@@ -371,7 +382,7 @@
 /mob/living/simple_animal/proc/adjustHealth(amount, updating_health = TRUE, forced = FALSE)
 	if(!forced && (status_flags & GODMODE))
 		return FALSE
-	bruteloss = round(CLAMP(bruteloss + amount, 0, maxHealth), 0.1)
+	bruteloss = round(clamp(bruteloss + amount, 0, maxHealth), 0.1)
 	if(updating_health)
 		updatehealth()
 	return amount

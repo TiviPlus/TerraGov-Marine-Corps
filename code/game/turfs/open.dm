@@ -6,11 +6,15 @@
 	var/slayer = 0 //snow layer
 	var/wet = 0 //whether the turf is wet (only used by floors).
 	var/has_catwalk = FALSE
+	var/shoefootstep = FOOTSTEP_FLOOR
+	var/barefootstep = FOOTSTEP_HARD
+	var/mediumxenofootstep = FOOTSTEP_HARD
+	var/heavyxenofootstep = FOOTSTEP_GENERIC_HEAVY
 
 /turf/open/Entered(atom/A, atom/OL)
 	if(iscarbon(A))
 		var/mob/living/carbon/C = A
-		if(!C.lying && !(C.buckled && istype(C.buckled,/obj/structure/bed/chair)))
+		if(!C.lying_angle && !(C.buckled && istype(C.buckled,/obj/structure/bed/chair)))
 			if(ishuman(C))
 				var/mob/living/carbon/human/H = C
 
@@ -61,6 +65,10 @@
 
 /turf/open/river
 	can_bloody = FALSE
+	shoefootstep = FOOTSTEP_WATER
+	barefootstep = FOOTSTEP_WATER
+	mediumxenofootstep = FOOTSTEP_WATER
+	heavyxenofootstep = FOOTSTEP_WATER
 
 
 // Beach
@@ -68,6 +76,9 @@
 /turf/open/beach
 	name = "beach"
 	icon = 'icons/misc/beach.dmi'
+	shoefootstep = FOOTSTEP_SAND
+	barefootstep = FOOTSTEP_SAND
+	mediumxenofootstep = FOOTSTEP_SAND
 
 
 /turf/open/beach/sand
@@ -83,15 +94,66 @@
 	name = "water"
 	icon_state = "water"
 	can_bloody = FALSE
+	shoefootstep = FOOTSTEP_WATER
+	barefootstep = FOOTSTEP_WATER
+	mediumxenofootstep = FOOTSTEP_WATER
+	heavyxenofootstep = FOOTSTEP_WATER
 
 /turf/open/beach/water/New()
 	..()
 	overlays += image("icon"='icons/misc/beach.dmi',"icon_state"="water2","layer"=MOB_LAYER+0.1)
 
+/obj/effect/beach_overlay
+	name = "beach_overlay"
+	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
+	layer = RIVER_OVERLAY_LAYER
+	plane = FLOOR_PLANE
+
+/turf/open/beach/water/Entered(atom/movable/AM)
+	. = ..()
+	if(has_catwalk)
+		return
+	if(iscarbon(AM))
+		var/mob/living/carbon/C = AM
+		var/beachwater_slowdown = 1.75
+
+		if(ishuman(C))
+			var/mob/living/carbon/human/H = AM
+			cleanup(H)
+
+		else if(isxeno(C))
+			if(!isxenoboiler(C))
+				beachwater_slowdown = 1.3
+			else
+				beachwater_slowdown = -0.5
+
+		if(C.on_fire)
+			C.ExtinguishMob()
+
+		C.next_move_slowdown += beachwater_slowdown
+
+
+/turf/open/beach/water/proc/cleanup(mob/living/carbon/human/H)
+	if(H.back?.clean_blood())
+		H.update_inv_back()
+	if(H.wear_suit?.clean_blood())
+		H.update_inv_wear_suit()
+	if(H.w_uniform?.clean_blood())
+		H.update_inv_w_uniform()
+	if(H.gloves?.clean_blood())
+		H.update_inv_gloves()
+	if(H.shoes?.clean_blood())
+		H.update_inv_shoes()
+	H.clean_blood()
+
 /turf/open/beach/water2
 	name = "water"
 	icon_state = "water"
 	can_bloody = FALSE
+	shoefootstep = FOOTSTEP_WATER
+	barefootstep = FOOTSTEP_WATER
+	mediumxenofootstep = FOOTSTEP_WATER
+	heavyxenofootstep = FOOTSTEP_WATER
 
 /turf/open/beach/water2/New()
 	..()
@@ -101,6 +163,10 @@
 	name = "sea"
 	icon_state = "seadeep"
 	can_bloody = FALSE
+	shoefootstep = FOOTSTEP_WATER
+	barefootstep = FOOTSTEP_WATER
+	mediumxenofootstep = FOOTSTEP_WATER
+	heavyxenofootstep = FOOTSTEP_WATER
 
 
 //Nostromo turfs
@@ -111,6 +177,10 @@
 	icon = 'icons/turf/ground_map.dmi'
 	icon_state = "seadeep"
 	can_bloody = FALSE
+	shoefootstep = FOOTSTEP_WATER
+	barefootstep = FOOTSTEP_WATER
+	mediumxenofootstep = FOOTSTEP_WATER
+	heavyxenofootstep = FOOTSTEP_WATER
 
 //SHUTTLE 'FLOORS'
 //not a child of turf/open/floor because shuttle floors are magic and don't behave like real floors.
@@ -123,17 +193,30 @@
 
 
 /turf/open/shuttle/check_alien_construction(mob/living/builder, silent = FALSE, planned_building)
-	if(planned_building == /turf/closed/wall/resin)
+	if(ispath(planned_building, /turf/closed/wall/)) // Shuttles move and will leave holes in the floor during transit
 		if(!silent)
 			to_chat(builder, "<span class='warning'>This place seems unable to support a wall.</span>")
 		return FALSE
 	return ..()
 
+/turf/open/shuttle/blackfloor
+	icon_state = "floor7"
 
 /turf/open/shuttle/dropship
 	name = "floor"
 	icon_state = "rasputin1"
 
+/turf/open/shuttle/dropship/three
+	icon_state = "rasputin3"
+
+/turf/open/shuttle/dropship/five
+	icon_state = "rasputin5"
+
+/turf/open/shuttle/dropship/seven
+	icon_state = "rasputin7"
+
+/turf/open/shuttle/dropship/eight
+	icon_state = "rasputin8"
 
 //not really plating, just the look
 /turf/open/shuttle/plating
@@ -149,6 +232,23 @@
 	icon = 'icons/turf/escapepods.dmi'
 	icon_state = "floor3"
 
+/turf/open/shuttle/escapepod/plain
+	icon_state = "floor1"
+
+/turf/open/shuttle/escapepod/zero
+	icon_state = "floor0"
+
+/turf/open/shuttle/escapepod/two
+	icon_state = "floor2"
+
+/turf/open/shuttle/escapepod/four
+	icon_state = "floor4"
+
+/turf/open/shuttle/escapepod/five
+	icon_state = "floor5"
+
+/turf/open/shuttle/escapepod/six
+	icon_state = "floor6"
 
 // Elevator floors
 /turf/open/shuttle/elevator
@@ -158,4 +258,121 @@
 /turf/open/shuttle/elevator/grating
 	icon_state = "floor_grating"
 
+// LAVA
 
+/turf/open/lavaland
+	icon = 'icons/turf/lava.dmi'
+	plane = FLOOR_PLANE
+	baseturfs = /turf/open/lavaland/lava
+
+/turf/open/lavaland/lava
+	name = "lava"
+	icon_state = "full"
+
+	light_range = 4
+	light_power = 0.75
+	light_color = LIGHT_COLOR_LAVA
+
+/turf/open/lavaland/lava/is_weedable()
+	return FALSE
+
+/turf/open/lavaland/lava/corner
+	icon_state = "corner"
+
+/turf/open/lavaland/lava/side
+	icon_state = "side"
+
+/turf/open/lavaland/lava/lpiece
+	icon_state = "lpiece"
+
+/turf/open/lavaland/lava/New()
+	..()
+
+/turf/open/lavaland/lava/Entered(atom/movable/AM)
+	if(burn_stuff(AM))
+		START_PROCESSING(SSobj, src)
+
+/turf/open/lavaland/lava/Exited(atom/movable/Obj, atom/newloc)
+	. = ..()
+	if(isliving(Obj))
+		var/mob/living/L = Obj
+		if(!islava(newloc) && !L.on_fire)
+			L.update_fire()
+
+/turf/open/lavaland/lava/process()
+	if(!burn_stuff())
+		STOP_PROCESSING(SSobj, src)
+
+/turf/open/lavaland/lava/proc/burn_stuff(AM)
+	. = 0
+
+	var/thing_to_check = src
+	if (AM)
+		thing_to_check = list(AM)
+	for(var/thing in thing_to_check)
+		if(isobj(thing))
+			var/obj/O = thing
+			O.fire_act(10000, 1000)
+
+		else if (isliving(thing))
+			var/mob/living/L = thing
+			if(L.stat == DEAD)
+				continue
+
+			if(!L.on_fire || L.getFireLoss() <= 200)
+				L.take_overall_damage(null, 20, clamp(L.getarmor(null, "fire"), 0, 80))
+				L.adjust_fire_stacks(20)
+				L.IgniteMob()
+				. = 1
+
+/turf/open/lavaland/lava/attackby(obj/item/C, mob/user, params)
+	..()
+	if(istype(C, /obj/item/stack/rods))
+		var/obj/item/stack/rods/R = C
+		var/turf/open/lavaland/catwalk/H = locate(/turf/open/lavaland/catwalk, src)
+		if(H)
+			to_chat(user, "<span class='warning'>There is already a catwalk here!</span>")
+			return
+		if(!do_after(user, 5 SECONDS, FALSE))
+			to_chat(user, "<span class='warning'>It takes time to construct a catwalk!</span>")
+			return
+		if(R.use(4))
+			to_chat(user, "<span class='notice'>You construct a heatproof catwalk.</span>")
+			playsound(src, 'sound/weapons/genhit.ogg', 50, TRUE)
+			ChangeTurf(/turf/open/lavaland/catwalk/built)
+		else
+			to_chat(user, "<span class='warning'>You need four rods to build a heatproof catwalk.</span>")
+		return
+
+/turf/open/lavaland/basalt
+	name = "basalt"
+	icon_state = "basalt"
+
+/turf/open/lavaland/basalt/glowing
+	icon_state = "basaltglow"
+	light_range = 4
+	light_power = 0.75
+	light_color = LIGHT_COLOR_LAVA
+
+/turf/open/lavaland/catwalk
+	name = "catwalk"
+	icon_state = "lavacatwalk"
+	light_range = 4
+	light_power = 0.75
+	light_color = LIGHT_COLOR_LAVA
+
+/turf/open/lavaland/catwalk/built
+	var/deconstructing = FALSE
+
+/turf/open/lavaland/catwalk/built/attack_alien(mob/living/carbon/xenomorph/M)
+	if(M.a_intent != INTENT_HARM)
+		return
+	if(deconstructing)
+		return
+	deconstructing = TRUE
+	if(!do_after(M, 10 SECONDS, TRUE, src, BUSY_ICON_BUILD))
+		deconstructing = FALSE
+		return
+	deconstructing = FALSE
+	playsound(src, 'sound/weapons/genhit.ogg', 50, TRUE)
+	ChangeTurf(/turf/open/lavaland/lava)

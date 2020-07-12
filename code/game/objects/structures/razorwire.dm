@@ -10,7 +10,7 @@
 	throwpass = TRUE	//You can throw objects over this
 	climbable = TRUE
 	resistance_flags = XENO_DAMAGEABLE
-	var/list/entangled_list = list()
+	var/list/entangled_list
 	var/sheet_type = /obj/item/stack/barbed_wire
 	var/sheet_type2 = /obj/item/stack/rods
 	var/table_prefix = "" //used in update_icon()
@@ -33,6 +33,7 @@
 
 /obj/structure/razorwire/Initialize()
 	. = ..()
+	AddElement(/datum/element/egrill)
 	for(var/obj/structure/razorwire/T in loc)
 		if(T != src)
 			qdel(T)
@@ -44,6 +45,8 @@
 	var/mob/living/M = O
 	if(CHECK_BITFIELD(M.restrained_flags, RESTRAINED_RAZORWIRE))
 		return
+	if(!M.density)
+		return
 	playsound(src, 'sound/effects/barbed_wire_movement.ogg', 25, 1)
 	var/armor_block = null
 	var/def_zone = ran_zone()
@@ -52,63 +55,63 @@
 	UPDATEHEALTH(M)
 	razorwire_tangle(M)
 
-/obj/structure/razorwire/proc/razorwire_tangle(mob/living/M, duration = RAZORWIRE_ENTANGLE_DELAY)
+
+/obj/structure/razorwire/proc/razorwire_tangle(mob/living/entangled, duration = RAZORWIRE_ENTANGLE_DELAY)
 	if(QDELETED(src)) //Sanity check so that you can't get entangled if the razorwire is destroyed; this happens apparently.
-		return
-	M.cooldowns[COOLDOWN_ENTANGLE] = addtimer(VARSET_LIST_CALLBACK(M.cooldowns, COOLDOWN_ENTANGLE, null), duration)
-	M.visible_message("<span class='danger'>[M] gets entangled in the barbed wire!</span>",
+		CRASH("QDELETED razorwire called razorwire_tangle()")
+	COOLDOWN_START(entangled, COOLDOWN_ENTANGLE, duration)
+	entangled.visible_message("<span class='danger'>[entangled] gets entangled in the barbed wire!</span>",
 	"<span class='danger'>You got entangled in the barbed wire! Resist to untangle yourself after [duration * 0.1] seconds since you were entangled!</span>", null, null, 5)
-	M.set_frozen(TRUE)
-	entangled_list += M //Add the entangled person to the trapped list.
-	M.entangled_by = src
-	ENABLE_BITFIELD(M.restrained_flags, RESTRAINED_RAZORWIRE)
-	RegisterSignal(M, COMSIG_LIVING_DO_RESIST, .proc/resisted_against)
+	do_razorwire_tangle(entangled)
 
 
-/obj/structure/razorwire/resisted_against(datum/source, mob/living/entangled)
-	if(entangled.cooldowns[COOLDOWN_ENTANGLE])
+/obj/structure/razorwire/proc/do_razorwire_tangle(mob/living/entangled)
+	ADD_TRAIT(entangled, TRAIT_IMMOBILE, type)
+	ENABLE_BITFIELD(entangled.restrained_flags, RESTRAINED_RAZORWIRE)
+	LAZYADD(entangled_list, entangled) //Add the entangled person to the trapped list.
+	RegisterSignal(entangled, COMSIG_LIVING_DO_RESIST, /atom/movable.proc/resisted_against)
+	RegisterSignal(entangled, COMSIG_PARENT_QDELETING, .proc/do_razorwire_untangle)
+	RegisterSignal(entangled, COMSIG_MOVABLE_UNCROSS, .proc/on_entangled_uncross)
+	RegisterSignal(entangled, COMSIG_MOVABLE_PULL_MOVED, .proc/razorwire_untangle)
+
+
+/obj/structure/razorwire/resisted_against(datum/source)
+	var/mob/living/entangled = source
+	if(COOLDOWN_CHECK(entangled, COOLDOWN_ENTANGLE))
 		entangled.visible_message("<span class='danger'>[entangled] attempts to disentangle itself from [src] but is unsuccessful!</span>",
 		"<span class='warning'>You fail to disentangle yourself!</span>")
 		return FALSE
 	return razorwire_untangle(entangled)
 
-
-/obj/structure/razorwire/proc/razorwire_untangle(mob/living/M)
-	var/armor_block = null
+/obj/structure/razorwire/proc/razorwire_untangle(mob/living/entangled)
+	entangled.next_move_slowdown += RAZORWIRE_SLOWDOWN //big slowdown
+	do_razorwire_untangle(entangled)
+	visible_message("<span class='danger'>[entangled] disentangles from [src]!</span>")
+	playsound(src, 'sound/effects/barbed_wire_movement.ogg', 25, TRUE)
 	var/def_zone = ran_zone()
-	armor_block = M.run_armor_check(def_zone, "melee")
-	visible_message("<span class='danger'>[M] disentangles from [src]!</span>")
-	playsound(src, 'sound/effects/barbed_wire_movement.ogg', 25, 1)
-	entangled_list -= M
-	M.entangled_by = null
-	M.cooldowns[COOLDOWN_ENTANGLE] = FALSE
-	M.set_frozen(FALSE)
-	M.update_canmove()
-	M.apply_damage(rand(RAZORWIRE_BASE_DAMAGE * 0.8, RAZORWIRE_BASE_DAMAGE * 1.2), BRUTE, def_zone, armor_block, TRUE) //Apply damage as we tear free
-	UPDATEHEALTH(M)
-	M.next_move_slowdown += RAZORWIRE_SLOWDOWN //big slowdown
-	DISABLE_BITFIELD(M.restrained_flags, RESTRAINED_RAZORWIRE)
-	UnregisterSignal(M, COMSIG_LIVING_DO_RESIST)
+	var/armor_block = entangled.run_armor_check(def_zone, "melee")
+	entangled.apply_damage(RAZORWIRE_BASE_DAMAGE * RAZORWIRE_MIN_DAMAGE_MULT_MED, BRUTE, def_zone, armor_block, TRUE) //Apply damage as we tear free
+	UPDATEHEALTH(entangled)
 	return TRUE
 
 
-/obj/structure/razorwire/CheckExit(atom/movable/O as mob|obj, target as turf)
-	if(isliving(O))
-		var/mob/living/M = O
-		if(M.entangled_by)
-			razorwire_untangle(M)
-	return ..()
+///This proc is used for signals, so if you plan on adding a second argument, or making it return a value, then change those RegisterSignal's referncing it first.
+/obj/structure/razorwire/proc/do_razorwire_untangle(mob/living/entangled)
+	UnregisterSignal(entangled, list(COMSIG_PARENT_QDELETING, COMSIG_LIVING_DO_RESIST, COMSIG_MOVABLE_UNCROSS, COMSIG_MOVABLE_PULL_MOVED))
+	LAZYREMOVE(entangled_list, entangled)
+	DISABLE_BITFIELD(entangled.restrained_flags, RESTRAINED_RAZORWIRE)
+	REMOVE_TRAIT(entangled, TRAIT_IMMOBILE, type)
+
+
+/obj/structure/razorwire/proc/on_entangled_uncross(datum/source, atom/movable/uncrosser)
+	razorwire_untangle(uncrosser)
+
 
 /obj/structure/razorwire/Destroy()
 	for(var/i in entangled_list)
-		var/mob/living/L = i
-		L.set_frozen(FALSE)
-		L.update_canmove()
-		if(L.entangled_by == src)
-			L.entangled_by = null
-			L.cooldowns[COOLDOWN_ENTANGLE] = FALSE
-	entangled_list.Cut()
+		do_razorwire_untangle(i)
 	return ..()
+
 
 /obj/structure/razorwire/attackby(obj/item/I, mob/user, params)
 	. = ..()
@@ -123,7 +126,7 @@
 
 		var/mob/living/M = G.grabbed_thing
 		if(user.a_intent == INTENT_HARM)
-			if(user.grab_level <= GRAB_AGGRESSIVE)
+			if(user.grab_state <= GRAB_AGGRESSIVE)
 				to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
 				return
 
@@ -136,9 +139,9 @@
 			log_combat(user, M, "spartaed", "", "against \the [src]")
 			playsound(src, 'sound/effects/barbed_wire_movement.ogg', 25, 1)
 
-		else if(user.grab_level >= GRAB_AGGRESSIVE)
+		else if(user.grab_state >= GRAB_AGGRESSIVE)
 			M.forceMove(loc)
-			M.knock_down(5)
+			M.Paralyze(10 SECONDS)
 			user.visible_message("<span class='danger'>[user] throws [M] on [src].</span>",
 			"<span class='danger'>You throw [M] on [src].</span>")
 		return
@@ -146,9 +149,7 @@
 	else if(iswirecutter(I))
 		user.visible_message("<span class='notice'>[user] starts disassembling [src].</span>",
 		"<span class='notice'>You start disassembling [src].</span>")
-		var/delay_disassembly = SKILL_TASK_AVERAGE
-		if(user.mind?.cm_skills && user.mind.cm_skills.engineer) //Higher skill lowers the delay.
-			delay_disassembly -= 5 + user.mind.cm_skills.engineer * 5
+		var/delay_disassembly = SKILL_TASK_AVERAGE - (0.5 SECONDS + user.skills.getRating("engineer"))
 
 		if(!do_after(user, delay_disassembly, TRUE, src, BUSY_ICON_BUILD))
 			return
@@ -163,9 +164,7 @@
 		if(!WT.remove_fuel(0, user))
 			return
 
-		var/delay = SKILL_TASK_TOUGH
-		if(user.mind?.cm_skills && user.mind.cm_skills.engineer) //Higher skill lowers the delay.
-			delay -= 10 + user.mind.cm_skills.engineer * 5
+		var/delay = SKILL_TASK_TOUGH - (1 SECONDS + user.skills.getRating("engineer") * 5)
 		user.visible_message("<span class='notice'>[user] begins repairing damage to [src].</span>",
 		"<span class='notice'>You begin repairing the damage to [src].</span>")
 		playsound(loc, 'sound/items/welder2.ogg', 25, 1)
@@ -189,13 +188,13 @@
 
 /obj/structure/razorwire/ex_act(severity)
 	switch(severity)
-		if(1)
+		if(EXPLODE_DEVASTATE)
 			visible_message("<span class='danger'>[src] is blown apart!</span>")
 			deconstruct(FALSE)
 			return
-		if(2)
+		if(EXPLODE_HEAVY)
 			take_damage(rand(33, 66))
-		if(3)
+		if(EXPLODE_LIGHT)
 			take_damage(rand(10, 33))
 	update_icon()
 

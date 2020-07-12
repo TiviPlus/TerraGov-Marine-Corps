@@ -451,8 +451,9 @@
 	new /obj/item/clothing/shoes/white(src)
 	new /obj/item/clothing/shoes/white(src)
 	new /obj/item/storage/belt/medical(src)
+	new /obj/item/clothing/under/rank/medical/blue(src)
 	new /obj/item/clothing/under/rank/medical/green(src)
-	new /obj/item/clothing/under/rank/medical/green(src)
+	new /obj/item/clothing/under/rank/medical/purple(src)
 	new /obj/item/clothing/mask/surgical(src)
 	new /obj/item/clothing/head/surgery/green(src)
 	new /obj/item/clothing/glasses/hud/health(src)
@@ -487,6 +488,7 @@
 	new /obj/item/clothing/gloves/white(src)
 	new /obj/item/clothing/under/whites(src)
 	new /obj/item/clothing/head/white_dress(src)
+	new /obj/item/flash(src)
 
 /obj/structure/closet/secure_closet/shiptech
 	name = "Requisitions' Locker"

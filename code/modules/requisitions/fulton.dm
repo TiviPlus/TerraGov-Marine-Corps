@@ -8,7 +8,6 @@
 	resistance_flags = UNACIDABLE|INDESTRUCTIBLE
 	var/atom/movable/vis_obj/fulton_baloon/baloon
 	var/obj/effect/fulton_extraction_holder/holder_obj
-	var/active = FALSE
 
 
 /obj/item/fulton_extraction_pack/Initialize()
@@ -66,9 +65,7 @@
 	if(spirited_away.anchored)
 		spirited_away.anchored = FALSE
 	if(isliving(spirited_away))
-		var/mob/living/kidnapped = spirited_away
-		kidnapped.set_frozen(TRUE)
-		kidnapped.update_canmove()
+		ADD_TRAIT(spirited_away, TRAIT_IMMOBILE, type)
 	spirited_away.moveToNullspace()
 	baloon.icon_state = initial(baloon.icon_state)
 	holder_obj.vis_contents += baloon
@@ -163,13 +160,13 @@
 	return ..()
 
 
-/obj/item/fulton_extraction_pack/adminbus/tool_attack_chain(mob/user, atom/target)
-	. = TRUE
+/obj/item/fulton_extraction_pack/adminbus/preattack(mob/user, atom/target)
 	if(!isturf(target.loc) || !ismovableatom(target))
 		return FALSE
 	if(active)
 		to_chat(user, "<span class='warning'>The fulton device is not yet ready to extract again. Wait a moment.</span>")
 		return FALSE
+	. = TRUE
 	if(istype(target, /obj/structure/fulton_extraction_point))
 		if(linked_extraction_point && linked_extraction_point == target)
 			linked_extraction_point = null
@@ -201,8 +198,7 @@
 	if(linked_extraction_point)
 		movable_target.forceMove(get_turf(linked_extraction_point))
 		if(isliving(movable_target))
-			var/mob/living/living_target = target
-			living_target.set_frozen(TRUE)
+			REMOVE_TRAIT(movable_target, TRAIT_IMMOBILE, type)
 	else
 		qdel(target)
 

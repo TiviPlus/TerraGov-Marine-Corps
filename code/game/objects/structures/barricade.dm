@@ -122,22 +122,25 @@
 		user.visible_message("<span class='notice'>[user] sets up [I] on [src].</span>",
 		"<span class='notice'>You set up [I] on [src].</span>")
 
-		if(!closed)
-			wired_overlay = image('icons/Marine/barricades.dmi', icon_state = "[barricade_type]_wire")
-		else
-			wired_overlay = image('icons/Marine/barricades.dmi', icon_state = "[barricade_type]_closed_wire")
-
 		B.use(1)
-		overlays += wired_overlay
-		modify_max_integrity(max_integrity + 50)
-		update_icon()
-		can_wire = FALSE
-		is_wired = TRUE
-		climbable = FALSE
+		wire()
+		
 
+/obj/structure/barricade/proc/wire()
+	if(!closed)
+		wired_overlay = image('icons/Marine/barricades.dmi', icon_state = "[barricade_type]_wire")
+	else
+		wired_overlay = image('icons/Marine/barricades.dmi', icon_state = "[barricade_type]_closed_wire")
+
+	overlays += wired_overlay
+	can_wire = FALSE
+	is_wired = TRUE
+	climbable = FALSE
+	modify_max_integrity(max_integrity + 50)
+	update_icon()
 
 /obj/structure/barricade/wirecutter_act(mob/living/user, obj/item/I)
-	if(!is_wired)
+	if(!is_wired || user.action_busy)
 		return FALSE
 
 	user.visible_message("<span class='notice'>[user] begin removing the barbed wire on [src].</span>",
@@ -173,13 +176,13 @@
 
 /obj/structure/barricade/ex_act(severity)
 	switch(severity)
-		if(1.0)
+		if(EXPLODE_DEVASTATE)
 			visible_message("<span class='danger'>[src] is blown apart!</span>")
 			deconstruct(FALSE)
 			return
-		if(2.0)
+		if(EXPLODE_HEAVY)
 			take_damage(rand(33, 66))
-		if(3.0)
+		if(EXPLODE_LIGHT)
 			take_damage(rand(10, 33))
 	update_icon()
 
@@ -379,6 +382,8 @@
 	desc = "A sturdy and easily assembled barricade made of metal plates, often used for quick fortifications. Use a blowtorch to repair."
 	icon_state = "metal_0"
 	max_integrity = 200
+	soft_armor = list("melee" = 0, "bullet" = 0, "laser" = 0, "energy" = 0, "bomb" = 0, "bio" = 100, "rad" = 0, "fire" = 80, "acid" = 40)
+	coverage = 128
 	crusher_resistant = TRUE
 	barricade_resistance = 10
 	stack_type = /obj/item/stack/sheet/metal
@@ -447,10 +452,10 @@
 		to_chat(user, "<span class='warning'>[src] doesn't need repairs.</span>")
 		return TRUE
 
-	if(user.mind?.cm_skills && user.mind.cm_skills.engineer < SKILL_ENGINEER_METAL)
+	if(user.skills.getRating("engineer") < SKILL_ENGINEER_METAL)
 		user.visible_message("<span class='notice'>[user] fumbles around figuring out how to repair [src].</span>",
 		"<span class='notice'>You fumble around figuring out how to repair [src].</span>")
-		var/fumbling_time = 5 SECONDS * ( SKILL_ENGINEER_METAL - user.mind.cm_skills.engineer )
+		var/fumbling_time = 5 SECONDS * ( SKILL_ENGINEER_METAL - user.skills.getRating("engineer") )
 		if(!do_after(user, fumbling_time, TRUE, src, BUSY_ICON_BUILD))
 			return TRUE
 
@@ -481,10 +486,10 @@
 		return FALSE
 	switch(build_state)
 		if(BARRICADE_METAL_ANCHORED) //Protection panel removed step. Screwdriver to put the panel back, wrench to unsecure the anchor bolts
-			if(user.mind?.cm_skills && user.mind.cm_skills.construction < SKILL_CONSTRUCTION_METAL)
+			if(user.skills.getRating("construction") < SKILL_CONSTRUCTION_METAL)
 				user.visible_message("<span class='notice'>[user] fumbles around figuring out how to assemble [src].</span>",
 				"<span class='notice'>You fumble around figuring out how to assemble [src].</span>")
-				var/fumbling_time = 1 SECONDS * ( SKILL_CONSTRUCTION_METAL - user.mind.cm_skills.construction )
+				var/fumbling_time = 1 SECONDS * ( SKILL_CONSTRUCTION_METAL - user.skills.getRating("construction") )
 				if(!do_after(user, fumbling_time, TRUE, src, BUSY_ICON_UNSKILLED))
 					return TRUE
 
@@ -498,10 +503,10 @@
 			return TRUE
 
 		if(BARRICADE_METAL_FIRM) //Fully constructed step. Use screwdriver to remove the protection panels to reveal the bolts
-			if(user.mind?.cm_skills && user.mind.cm_skills.construction < SKILL_CONSTRUCTION_METAL)
+			if(user.skills.getRating("construction") < SKILL_CONSTRUCTION_METAL)
 				user.visible_message("<span class='notice'>[user] fumbles around figuring out how to disassemble [src].</span>",
 				"<span class='notice'>You fumble around figuring out how to disassemble [src].</span>")
-				var/fumbling_time = 1 SECONDS * ( SKILL_CONSTRUCTION_METAL - user.mind.cm_skills.construction )
+				var/fumbling_time = 1 SECONDS * ( SKILL_CONSTRUCTION_METAL - user.skills.getRating("construction") )
 				if(!do_after(user, fumbling_time, TRUE, src, BUSY_ICON_UNSKILLED))
 					return TRUE
 
@@ -521,10 +526,10 @@
 		return FALSE
 	switch(build_state)
 		if(BARRICADE_METAL_ANCHORED) //Protection panel removed step. Screwdriver to put the panel back, wrench to unsecure the anchor bolts
-			if(user.mind?.cm_skills && user.mind.cm_skills.construction < SKILL_CONSTRUCTION_METAL)
+			if(user.skills.getRating("construction") < SKILL_CONSTRUCTION_METAL)
 				user.visible_message("<span class='notice'>[user] fumbles around figuring out how to disassemble [src].</span>",
 				"<span class='notice'>You fumble around figuring out how to disassemble [src].</span>")
-				var/fumbling_time = 1 SECONDS * ( SKILL_CONSTRUCTION_METAL - user.mind.cm_skills.construction )
+				var/fumbling_time = 1 SECONDS * ( SKILL_CONSTRUCTION_METAL - user.skills.getRating("construction") )
 				if(!do_after(user, fumbling_time, TRUE, src, BUSY_ICON_UNSKILLED))
 					return TRUE
 
@@ -541,10 +546,10 @@
 			return TRUE
 
 		if(BARRICADE_METAL_LOOSE) //Anchor bolts loosened step. Apply crowbar to unseat the panel and take apart the whole thing. Apply wrench to resecure anchor bolts
-			if(user.mind?.cm_skills && user.mind.cm_skills.construction < SKILL_CONSTRUCTION_METAL)
+			if(user.skills.getRating("construction") < SKILL_CONSTRUCTION_METAL)
 				user.visible_message("<span class='notice'>[user] fumbles around figuring out how to assemble [src].</span>",
 				"<span class='notice'>You fumble around figuring out how to assemble [src].</span>")
-				var/fumbling_time = 10 * ( SKILL_CONSTRUCTION_METAL - user.mind.cm_skills.construction )
+				var/fumbling_time = 1 SECONDS * ( SKILL_CONSTRUCTION_METAL - user.skills.getRating("construction") )
 				if(!do_after(user, fumbling_time, TRUE, src, BUSY_ICON_UNSKILLED))
 					return TRUE
 
@@ -571,10 +576,10 @@
 		return FALSE
 	switch(build_state)
 		if(BARRICADE_METAL_LOOSE) //Anchor bolts loosened step. Apply crowbar to unseat the panel and take apart the whole thing. Apply wrench to resecure anchor bolts
-			if(user.mind?.cm_skills && user.mind.cm_skills.construction < SKILL_CONSTRUCTION_METAL)
+			if(user.skills.getRating("construction") < SKILL_CONSTRUCTION_METAL)
 				user.visible_message("<span class='notice'>[user] fumbles around figuring out how to disassemble [src].</span>",
 				"<span class='notice'>You fumble around figuring out how to disassemble [src].</span>")
-				var/fumbling_time = 5 SECONDS * ( SKILL_CONSTRUCTION_METAL - user.mind.cm_skills.construction )
+				var/fumbling_time = 5 SECONDS * ( SKILL_CONSTRUCTION_METAL - user.skills.getRating("construction") )
 				if(!do_after(user, fumbling_time, TRUE, src, BUSY_ICON_UNSKILLED))
 					return TRUE
 
@@ -600,11 +605,11 @@
 
 /obj/structure/barricade/metal/ex_act(severity)
 	switch(severity)
-		if(1)
+		if(EXPLODE_DEVASTATE)
 			take_damage(rand(400, 600))
-		if(2)
+		if(EXPLODE_HEAVY)
 			take_damage(rand(150, 350))
-		if(3)
+		if(EXPLODE_LIGHT)
 			take_damage(rand(50, 100))
 
 	update_icon()
@@ -623,6 +628,8 @@
 	desc = "A very sturdy barricade made out of plasteel panels, the pinnacle of strongpoints. Use a blowtorch to repair. Can be flipped down to create a path."
 	icon_state = "plasteel_closed_0"
 	max_integrity = 600
+	soft_armor = list("melee" = 0, "bullet" = 0, "laser" = 0, "energy" = 0, "bomb" = 0, "bio" = 100, "rad" = 0, "fire" = 80, "acid" = 40)
+	coverage = 128
 	crusher_resistant = TRUE
 	barricade_resistance = 20
 	stack_type = /obj/item/stack/sheet/plasteel
@@ -687,10 +694,10 @@
 
 		tool_cooldown = world.time + 10
 
-		if(user.mind?.cm_skills && user.mind.cm_skills.engineer < SKILL_ENGINEER_PLASTEEL)
+		if(user.skills.getRating("engineer") < SKILL_ENGINEER_PLASTEEL)
 			user.visible_message("<span class='notice'>[user] fumbles around figuring out how to repair [src].</span>",
 			"<span class='notice'>You fumble around figuring out how to repair [src].</span>")
-			var/fumbling_time = 50 * ( SKILL_ENGINEER_PLASTEEL - user.mind.cm_skills.engineer )
+			var/fumbling_time = 5 SECONDS * ( SKILL_ENGINEER_PLASTEEL - user.skills.getRating("engineer") )
 			if(!do_after(user, fumbling_time, TRUE, src, BUSY_ICON_UNSKILLED, extra_checks = CALLBACK(WT, /obj/item/tool/weldingtool/proc/isOn)))
 				return
 
@@ -728,10 +735,10 @@
 				if(busy || tool_cooldown > world.time || user.action_busy)
 					return
 				tool_cooldown = world.time + 10
-				if(user.mind?.cm_skills && user.mind.cm_skills.engineer < SKILL_ENGINEER_PLASTEEL)
+				if(user.skills.getRating("engineer") < SKILL_ENGINEER_PLASTEEL)
 					user.visible_message("<span class='notice'>[user] fumbles around figuring out how to disassemble [src].</span>",
 					"<span class='notice'>You fumble around figuring out how to disassemble [src].</span>")
-					var/fumbling_time = 10 * ( SKILL_ENGINEER_PLASTEEL - user.mind.cm_skills.engineer )
+					var/fumbling_time = 1 SECONDS * ( SKILL_ENGINEER_PLASTEEL - user.skills.getRating("engineer") )
 					if(!do_after(user, fumbling_time, TRUE, src, BUSY_ICON_UNSKILLED))
 						return
 
@@ -753,10 +760,10 @@
 				if(busy || tool_cooldown > world.time || user.action_busy)
 					return
 				tool_cooldown = world.time + 10
-				if(user.mind?.cm_skills && user.mind.cm_skills.engineer < SKILL_ENGINEER_PLASTEEL)
+				if(user.skills.getRating("engineer") < SKILL_ENGINEER_PLASTEEL)
 					user.visible_message("<span class='notice'>[user] fumbles around figuring out how to assemble [src].</span>",
 					"<span class='notice'>You fumble around figuring out how to assemble [src].</span>")
-					var/fumbling_time = 10 * ( SKILL_ENGINEER_PLASTEEL - user.mind.cm_skills.engineer )
+					var/fumbling_time = 1 SECONDS * ( SKILL_ENGINEER_PLASTEEL - user.skills.getRating("engineer") )
 					if(!do_after(user, fumbling_time, TRUE, src, BUSY_ICON_UNSKILLED))
 						return
 				user.visible_message("<span class='notice'>[user] set [src]'s protection panel back.</span>",
@@ -768,10 +775,10 @@
 				if(busy || tool_cooldown > world.time || user.action_busy)
 					return
 				tool_cooldown = world.time + 10
-				if(user.mind?.cm_skills && user.mind.cm_skills.engineer < SKILL_ENGINEER_PLASTEEL)
+				if(user.skills.getRating("engineer") < SKILL_ENGINEER_PLASTEEL)
 					user.visible_message("<span class='notice'>[user] fumbles around figuring out how to disassemble [src].</span>",
 					"<span class='notice'>You fumble around figuring out how to disassemble [src].</span>")
-					var/fumbling_time = 10 * ( SKILL_ENGINEER_PLASTEEL - user.mind.cm_skills.engineer )
+					var/fumbling_time = 1 SECONDS * ( SKILL_ENGINEER_PLASTEEL - user.skills.getRating("engineer") )
 					if(!do_after(user, fumbling_time, TRUE, src, BUSY_ICON_UNSKILLED))
 						return
 				user.visible_message("<span class='notice'>[user] loosens [src]'s anchor bolts.</span>",
@@ -786,10 +793,10 @@
 				if(busy || tool_cooldown > world.time || user.action_busy)
 					return
 				tool_cooldown = world.time + 10
-				if(user.mind?.cm_skills && user.mind.cm_skills.engineer < SKILL_ENGINEER_PLASTEEL)
+				if(user.skills.getRating("engineer") < SKILL_ENGINEER_PLASTEEL)
 					user.visible_message("<span class='notice'>[user] fumbles around figuring out how to assemble [src].</span>",
 					"<span class='notice'>You fumble around figuring out how to assemble [src].</span>")
-					var/fumbling_time = 10 * ( SKILL_ENGINEER_PLASTEEL - user.mind.cm_skills.engineer )
+					var/fumbling_time = 1 SECONDS * ( SKILL_ENGINEER_PLASTEEL - user.skills.getRating("engineer") )
 					if(!do_after(user, fumbling_time, TRUE, src, BUSY_ICON_UNSKILLED))
 						return
 				user.visible_message("<span class='notice'>[user] secures [src]'s anchor bolts.</span>",
@@ -804,10 +811,10 @@
 				if(busy || tool_cooldown > world.time)
 					return
 				tool_cooldown = world.time + 10
-				if(user.mind?.cm_skills && user.mind.cm_skills.engineer < SKILL_ENGINEER_PLASTEEL)
+				if(user.skills.getRating("engineer") < SKILL_ENGINEER_PLASTEEL)
 					user.visible_message("<span class='notice'>[user] fumbles around figuring out how to disassemble [src].</span>",
 					"<span class='notice'>You fumble around figuring out how to disassemble [src].</span>")
-					var/fumbling_time = 50 * ( SKILL_ENGINEER_PLASTEEL - user.mind.cm_skills.engineer )
+					var/fumbling_time = 5 SECONDS * ( SKILL_ENGINEER_PLASTEEL - user.skills.getRating("engineer") )
 					if(!do_after(user, fumbling_time, TRUE, src, BUSY_ICON_UNSKILLED))
 						return
 				user.visible_message("<span class='notice'>[user] starts unseating [src]'s panels.</span>",
@@ -855,11 +862,11 @@
 
 /obj/structure/barricade/plasteel/ex_act(severity)
 	switch(severity)
-		if(1)
+		if(EXPLODE_DEVASTATE)
 			take_damage(rand(450, 650))
-		if(2)
+		if(EXPLODE_HEAVY)
 			take_damage(rand(200, 400))
-		if(3)
+		if(EXPLODE_LIGHT)
 			take_damage(rand(50, 150))
 
 	update_icon()
@@ -874,6 +881,8 @@
 	icon_state = "sandbag_0"
 	barricade_resistance = 15
 	max_integrity = 400
+	soft_armor = list("melee" = 0, "bullet" = 0, "laser" = 0, "energy" = 0, "bomb" = 0, "bio" = 100, "rad" = 0, "fire" = 80, "acid" = 40)
+	coverage = 128
 	stack_type = /obj/item/stack/sandbags
 	hit_sound = "sound/weapons/genhit.ogg"
 	barricade_type = "sandbag"

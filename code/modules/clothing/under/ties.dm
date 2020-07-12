@@ -78,7 +78,7 @@
 				var/sound = "pulse"
 				var/sound_strength
 
-				if(M.stat == DEAD || (M.status_flags&FAKEDEATH))
+				if(M.stat == DEAD || HAS_TRAIT(M, TRAIT_FAKEDEATH))
 					sound_strength = "cannot hear"
 					sound = "anything"
 				else
@@ -361,7 +361,7 @@
 /mob/living/carbon/human/proc/do_holster()
 	. = COMSIG_KB_ACTIVATED //The return value must be a flag compatible with the signals triggering this.
 
-	if(incapacitated() || lying)
+	if(incapacitated() || lying_angle)
 		return
 
 	if(!istype(w_uniform, /obj/item/clothing/under))
@@ -518,6 +518,7 @@
 	cant_hold = list(
 		/obj/item/stack/razorwire,
 		/obj/item/stack/sheet,
+		/obj/item/ammo_magazine/smg/standard_smg,
 		/obj/item/stack/sandbags,
 		/obj/item/stack/snow)
 
@@ -540,13 +541,15 @@
 	hold = /obj/item/storage/internal/tie/white_vest
 
 /obj/item/storage/internal/tie/white_vest
-	storage_slots = 8
+	storage_slots = 12
+	max_storage_space = 24
+	max_w_class = WEIGHT_CLASS_BULKY
+
 	can_hold = list(
 		/obj/item/tool/surgery,
-		/obj/item/stack/medical/advanced,
-		/obj/item/clothing/mask/surgical,
-		/obj/item/clothing/gloves/latex,
-		/obj/item/stack/nanopaste)
+		/obj/item/stack/medical/advanced/bruise_pack,
+		/obj/item/stack/nanopaste
+		)
 
 /obj/item/clothing/tie/storage/white_vest/medic
 	name = "corpsman webbing"

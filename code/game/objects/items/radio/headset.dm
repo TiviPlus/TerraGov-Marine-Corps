@@ -155,6 +155,7 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 	icon_state = "cargo_headset"
 	item_state = "headset"
 	frequency = FREQ_COMMON
+	flags_atom = CONDUCT | PREVENT_CONTENTS_EXPLOSION
 	var/obj/machinery/camera/camera
 	var/datum/atom_hud/squadhud = null
 	var/mob/living/carbon/human/wearer = null
@@ -178,6 +179,8 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 		enable_squadhud()
 	if(camera)
 		camera.c_tag = user.name
+		if(user.assigned_squad)
+			camera.network |= lowertext(user.assigned_squad.name)
 	return ..()
 
 
@@ -191,6 +194,8 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 			squadhud = null
 	if(camera)
 		camera.c_tag = "Unknown"
+		if(user.assigned_squad)
+			camera.network -= lowertext(user.assigned_squad.name)
 	return ..()
 
 
@@ -373,29 +378,21 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 	freerange = TRUE
 
 
-/obj/item/radio/headset/mainship/marine/Initialize(mapload, squad, rank)
+/obj/item/radio/headset/mainship/marine/Initialize(mapload, datum/squad/squad, rank)
 	if(squad)
-		icon_state = "headset_marine_[lowertext(squad)]"
-		var/dat = "marine [lowertext(squad)]"
-		switch(squad)
-			if("Alpha")
-				frequency = FREQ_ALPHA
-			if("Bravo")
-				frequency = FREQ_BRAVO
-			if("Charlie")
-				frequency = FREQ_CHARLIE
-			if("Delta")
-				frequency = FREQ_DELTA
+		icon_state = "headset_marine_[lowertext(squad.name)]"
+		var/dat = "marine [lowertext(squad.name)]"
+		frequency = squad.radio_freq
 		switch(rank)
-			if(SQUAD_LEADER)
+			if(/datum/job/terragov/squad/leader)
 				dat += " leader"
 				keyslot2 = /obj/item/encryptionkey/squadlead
 				use_command = TRUE
 				command = TRUE
-			if(SQUAD_ENGINEER)
+			if(/datum/job/terragov/squad/engineer)
 				dat += " engineer"
 				keyslot2 = /obj/item/encryptionkey/engi
-			if(SQUAD_CORPSMAN)
+			if(/datum/job/terragov/squad/corpsman)
 				dat += " corpsman"
 				keyslot2 = /obj/item/encryptionkey/med
 		name = dat + " radio headset"
@@ -406,6 +403,10 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 	name = "marine alpha radio headset"
 	icon_state = "headset_marine_alpha"
 	frequency = FREQ_ALPHA //default frequency is alpha squad channel, not FREQ_COMMON
+
+/obj/item/radio/headset/mainship/marine/alpha/LateInitialize(mapload)
+	. = ..()
+	camera.network += list("alpha")
 
 
 /obj/item/radio/headset/mainship/marine/alpha/lead
@@ -431,6 +432,10 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 	icon_state = "headset_marine_bravo"
 	frequency = FREQ_BRAVO
 
+/obj/item/radio/headset/mainship/marine/bravo/LateInitialize(mapload)
+	. = ..()
+	camera.network += list("bravo")
+
 
 /obj/item/radio/headset/mainship/marine/bravo/lead
 	name = "marine bravo leader radio headset"
@@ -449,11 +454,14 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 	keyslot2 = /obj/item/encryptionkey/med
 
 
-
 /obj/item/radio/headset/mainship/marine/charlie
 	name = "marine charlie radio headset"
 	icon_state = "headset_marine_charlie"
 	frequency = FREQ_CHARLIE
+
+/obj/item/radio/headset/mainship/marine/charlie/LateInitialize(mapload)
+	. = ..()
+	camera.network += list("charlie")
 
 
 /obj/item/radio/headset/mainship/marine/charlie/lead
@@ -478,6 +486,10 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 	name = "marine delta radio headset"
 	icon_state = "headset_marine_delta"
 	frequency = FREQ_DELTA
+
+/obj/item/radio/headset/mainship/marine/delta/LateInitialize(mapload)
+	. = ..()
+	camera.network += list("delta")
 
 
 /obj/item/radio/headset/mainship/marine/delta/lead
@@ -514,10 +526,10 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 	keyslot2 = /obj/item/encryptionkey/mcom
 
 
-/obj/item/radio/headset/distress/wolves
-	name = "Steel Wolves headset"
+/obj/item/radio/headset/distress/usl
+	name = "Non standard headset"
 	frequency = FREQ_CIV_GENERAL
-	keyslot = /obj/item/encryptionkey/wolves
+	keyslot = /obj/item/encryptionkey/usl
 
 
 /obj/item/radio/headset/distress/commando
@@ -534,3 +546,7 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 /obj/item/radio/headset/distress/som
 	name = "\improper Sons of Mars headset"
 	keyslot = /obj/item/encryptionkey/som
+
+/obj/item/radio/headset/distress/sectoid
+	name = "\improper alien headset"
+	keyslot = /obj/item/encryptionkey/sectoid

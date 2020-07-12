@@ -50,7 +50,7 @@
 
 		var/status
 		var/health
-		var/job
+		var/datum/job/job
 
 		if(isliving(M))
 			var/mob/living/L = M
@@ -65,7 +65,7 @@
 			health = "Oxy: [L.getOxyLoss()]  Tox: [L.getToxLoss()]  Fire: [L.getFireLoss()]  Brute: [L.getBruteLoss()]  Clone: [L.getCloneLoss()]  Brain: [L.getBrainLoss()]  Stamina: [L.getStaminaLoss()]"
 
 		to_chat(usr, {"<span class='notice'><hr><b>Info about [M.real_name]:</b>
-Type: [M.type] | Gender: [M.gender] |[job ? " Job: [job]" : ""]
+Type: [M.type] | Gender: [M.gender] |[job ? " Job: [job.title]" : ""]
 Location: [AREACOORD(M.loc)]
 Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 <span class='admin'><span class='message'>[ADMIN_FULLMONTY(M)]</span></span><hr></span>"})
@@ -188,24 +188,28 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 			if("gethumans")
 				log_admin("[key_name(usr)] mass-teleported all humans.")
 				message_admins("[ADMIN_TPMONTY(usr)] mass-teleported all humans.")
+				to_chat(GLOB.alive_human_list, "<span class='highdanger'>[key_name_admin(usr, FALSE)] mass-teleported all humans.</span>")
 				for(var/i in GLOB.alive_human_list)
 					var/mob/M = i
 					M.forceMove(T)
 			if("getxenos")
 				log_admin("[key_name(usr)] mass-teleported all Xenos.")
 				message_admins("[ADMIN_TPMONTY(usr)] mass-teleported all Xenos.")
+				to_chat(GLOB.alive_xeno_list, "<span class='highdanger'>[key_name_admin(usr, FALSE)] mass-teleported all xenos.</span>")
 				for(var/i in GLOB.alive_xeno_list)
 					var/mob/M = i
 					M.forceMove(T)
 			if("getall")
 				log_admin("[key_name(usr)] mass-teleported everyone.")
 				message_admins("[ADMIN_TPMONTY(usr)] mass-teleported everyone.")
+				to_chat(GLOB.mob_living_list, "<span class='highdanger'>[key_name_admin(usr, FALSE)] mass-teleported everyone.</span>")
 				for(var/i in GLOB.mob_living_list)
 					var/mob/M = i
 					M.forceMove(T)
 			if("rejuvall")
 				log_admin("[key_name(usr)] mass-rejuvenated cliented mobs.")
 				message_admins("[ADMIN_TPMONTY(usr)] mass-rejuvenated cliented mobs.")
+				to_chat(GLOB.mob_living_list, "<span class='highdanger'>[key_name_admin(usr, FALSE)] mass-rejuvenated everyone.</span>")
 				for(var/i in GLOB.mob_living_list)
 					var/mob/living/L = i
 					if(!L.client)
@@ -303,6 +307,8 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 				newmob = M.change_mob_type(/mob/living/carbon/xenomorph/warrior, location, null, delmob)
 			if("runner")
 				newmob = M.change_mob_type(/mob/living/carbon/xenomorph/runner, location, null, delmob)
+			if("panther")
+				newmob = M.change_mob_type(/mob/living/carbon/xenomorph/panther, location, null, delmob)
 			if("drone")
 				newmob = M.change_mob_type(/mob/living/carbon/xenomorph/drone, location, null, delmob)
 			if("sentinel")
@@ -339,8 +345,6 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 				newmob = M.change_mob_type(/mob/living/carbon/human, location, null, delmob, "Moth")
 			if("ai")
 				newmob = M.change_mob_type(/mob/living/silicon/ai, location, null, delmob)
-				var/datum/job/J = SSjob.GetJobType(/datum/job/ai)
-				J.assign(newmob, preference_source = newmob.client)
 
 		C.holder.show_player_panel(newmob)
 
@@ -461,6 +465,8 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 			return
 
 		to_chat(H, "<span class='boldnotice'>Please stand by for a message from TGMC:<br/>[input]</span>")
+		var/sound/S = sound('sound/effects/sos-morse-code.ogg', channel = CHANNEL_ADMIN)
+		SEND_SOUND(H, S)
 
 		log_admin("[key_name(usr)] replied to [ADMIN_TPMONTY(H)]'s TGMC message with: [input].")
 		message_admins("[ADMIN_TPMONTY(usr)] replied to [ADMIN_TPMONTY(H)]'s' TGMC message with: [input]")
@@ -727,6 +733,7 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 			return
 
 		var/mob/sender
+		var/subject = "No subject"
 		if(href_list["faxreply"])
 			var/ref = locate(href_list["faxreply"])
 			if(!ref)
@@ -743,8 +750,9 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 				message_staff("[key_name_admin(usr)] marked and started replying to a fax from [key_name_admin(F.sender)].")
 
 			sender = F.sender
+			subject = "re: [F.title]"
 
-		var/dep = input("Who do you want to message?", "Fax Message") as null|anything in list(CORPORATE_LIAISON, "Combat Information Center", COMMAND_MASTER_AT_ARMS, "Brig", "Research", "Warden")
+		var/dep = input("Who do you want to message?", "Fax Message") as null|anything in list(CORPORATE_LIAISON, "Combat Information Center", "Brig", "Research", "Warden")
 		if(!dep)
 			return
 
@@ -752,7 +760,9 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 		if(!department)
 			return
 
-		var/subject = input("Enter the subject line", "Fax Message", "") as text|null
+		var/custom_subject = input("Enter the subject line", "Fax Message", subject) as text|null
+		if(custom_subject != "")
+			subject = custom_subject
 		var/type = input("Do you want to use the pencode, template or type a raw message?", "Fax Message") as null|anything in list("Pencode", "Template", "Raw")
 		if(!type)
 			return
@@ -930,7 +940,7 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 				message_admins("[ADMIN_TPMONTY(usr)] force-launched the escape pods.")
 
 			if("init_dest")
-				if(!SSevacuation.enable_self_destruct())
+				if(!SSevacuation.enable_self_destruct(TRUE))
 					to_chat(usr, "<span class='warning'>You are unable to authorize the self-destruct right now!</span>")
 					return
 
@@ -992,7 +1002,7 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 			return
 
 		var/list/offset = splittext(href_list["offset"],",")
-		var/number = CLAMP(text2num(href_list["object_count"]), 1, 100)
+		var/number = clamp(text2num(href_list["object_count"]), 1, 100)
 		var/X = length(offset) > 0 ? text2num(offset[1]) : 0
 		var/Y = length(offset) > 1 ? text2num(offset[2]) : 0
 		var/Z = length(offset) > 2 ? text2num(offset[3]) : 0
@@ -1584,8 +1594,11 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 
 		var/slot = href_list["addjobslot"]
 
-		var/datum/job/J = SSjob.name_occupations[slot]
-		J.total_positions++
+		var/datum/job/job = SSjob.name_occupations[slot]
+		if(!(job.job_flags & (JOB_FLAG_LATEJOINABLE|JOB_FLAG_ROUNDSTARTJOINABLE)))
+			to_chat(usr, "<span class='warning'>Job is not joinable.</span>")
+			return
+		job.add_job_positions(1)
 
 		usr.client.holder.job_slots()
 
@@ -1603,7 +1616,7 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 		if(J.current_positions >= J.total_positions)
 			to_chat(usr, "<span class='warning'>Filling would cause an overflow. Please add more slots first.</span>")
 			return
-		J.current_positions++
+		J.occupy_job_positions(1)
 
 		usr.client.holder.job_slots()
 
@@ -1621,7 +1634,7 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 		if(J.current_positions <= 0)
 			to_chat(usr, "<span class='warning'>Cannot free more job slots.</span>")
 			return
-		J.current_positions--
+		J.free_job_positions(1)
 
 		usr.client.holder.job_slots()
 
@@ -1635,16 +1648,53 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 
 		var/slot = href_list["removejobslot"]
 
-		var/datum/job/J = SSjob.name_occupations[slot]
-		if(J.total_positions <= 0 || (J.total_positions - 1) < J.current_positions)
+		var/datum/job/job = SSjob.name_occupations[slot]
+		if(!(job.job_flags & (JOB_FLAG_LATEJOINABLE|JOB_FLAG_ROUNDSTARTJOINABLE)))
+			to_chat(usr, "<span class='warning'>Job is not joinable.</span>")
+			return
+		if(job.total_positions <= 0 || job.total_positions <= job.current_positions)
 			to_chat(usr, "<span class='warning'>Cannot remove more job slots.</span>")
 			return
-		J.total_positions--
+		job.remove_job_positions(1)
 
 		usr.client.holder.job_slots()
 
 		log_admin("[key_name(src)] has removed a [slot] job slot.")
 		message_admins("[ADMIN_TPMONTY(usr)] has removed a [slot] job slot.")
+
+
+	else if(href_list["clearjobslots"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		var/slot = href_list["clearjobslots"]
+
+		var/datum/job/job = SSjob.name_occupations[slot]
+		if(!(job.job_flags & (JOB_FLAG_LATEJOINABLE|JOB_FLAG_ROUNDSTARTJOINABLE)))
+			to_chat(usr, "<span class='warning'>Job is not joinable.</span>")
+			return
+		job.set_job_positions(0)
+
+		usr.client.holder.job_slots()
+
+		log_admin("[key_name(src)] has cleared the [slot] job.")
+		message_admins("[ADMIN_TPMONTY(usr)] has cleared the [slot] job.")
+
+
+	else if(href_list["clearalljobslots"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		for(var/slot in SSjob.name_occupations)
+			var/datum/job/job = SSjob.name_occupations[slot]
+			if(!(job.job_flags & (JOB_FLAG_LATEJOINABLE|JOB_FLAG_ROUNDSTARTJOINABLE)))
+				continue
+			job.set_job_positions(0)
+
+		usr.client.holder.job_slots()
+
+		log_admin("[key_name(src)] has cleared all job slots.")
+		message_admins("[ADMIN_TPMONTY(usr)] has cleared all job slots.")
 
 
 	else if(href_list["unlimitjobslot"])
@@ -1653,8 +1703,11 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 
 		var/slot = href_list["unlimitjobslot"]
 
-		var/datum/job/J = SSjob.name_occupations[slot]
-		J.total_positions = -1
+		var/datum/job/job = SSjob.name_occupations[slot]
+		if(!(job.job_flags & (JOB_FLAG_LATEJOINABLE|JOB_FLAG_ROUNDSTARTJOINABLE)))
+			to_chat(usr, "<span class='warning'>Job is not joinable.</span>")
+			return
+		job.set_job_positions(-1)
 
 		usr.client.holder.job_slots()
 
@@ -1669,12 +1722,29 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 		var/slot = href_list["limitjobslot"]
 
 		var/datum/job/J = SSjob.name_occupations[slot]
-		J.total_positions = J.current_positions
+		J.set_job_positions(J.current_positions)
 
 		usr.client.holder.job_slots()
 
 		log_admin("[key_name(src)] has limited the [slot] job.")
 		message_admins("[ADMIN_TPMONTY(usr)] has limited the [slot] job.")
+
+
+	else if(href_list["overridejobsstart"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		var/override = href_list["overridejobsstart"]
+		switch(override)
+			if("true")
+				SSjob.ssjob_flags |= SSJOB_OVERRIDE_JOBS_START
+			if("false")
+				SSjob.ssjob_flags &= ~(SSJOB_OVERRIDE_JOBS_START)
+
+		usr.client.holder.job_slots()
+
+		log_admin("[key_name(src)] has set the roundstart job override value to [override].")
+		message_admins("[ADMIN_TPMONTY(usr)] has set the roundstart job override value to [override].")
 
 
 	else if(href_list["rankequip"])
@@ -1915,36 +1985,38 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 				change = input("Select a rank.", "Edit Rank") as null|anything in sortList(SSjob.name_occupations)
 				if(!change || !istype(H))
 					return
-				if(H.mind)
-					previous = H.mind.assigned_role
-					var/datum/job/J = SSjob.GetJob(change)
-					J.assign(H, preference_source = H.client)
-					if(href_list["doequip"])
-						H.set_equipment(J.title)
-						addition = ", equipping them"
-				else
-					previous = H.job
-					H.job = change
+				var/datum/job/J = SSjob.GetJob(change)
+				previous = H.job?.title
+				var/squad_to_insert_into
+				if(ismarinejob(J))
+					if(H.assigned_squad)
+						squad_to_insert_into = H.assigned_squad
+					else
+						squad_to_insert_into = pick(SSjob.active_squads)
+				H.apply_assigned_role_to_spawn(J, H.client, squad_to_insert_into, admin_action = TRUE)
+				if(href_list["doequip"])
+					H.set_equipment(J.title)
+					addition = ", equipping them"
 			if("skills")
 				var/list/skilltypes = subtypesof(/datum/skills)
-				var/list/skills = list()
+				var/list/skillnames = list()
 				for(var/i in skilltypes)
 					var/datum/skills/S = i
-					skills[initial(S.name)] = S
-				var/newskillset = input("Select a skillset.", "Edit Rank") as null|anything in sortList(skills)
-				if(!newskillset || !istype(H) || !H.mind)
+					skillnames[initial(S.name)] = S
+				var/newskillset = input("Select a skillset.", "Edit Rank") as null|anything in sortList(skillnames)
+				if(!newskillset)
 					return
-				var/pickedtype = skills[newskillset]
-				var/datum/skills/S = new pickedtype
-				previous = H.mind.cm_skills.name
-				change = S.name
-				H.mind.cm_skills = S
+				var/pickedtype = skillnames[newskillset]
+				var/datum/skills/S = pickedtype
+				previous = H.skills.name
+				change = initial(S.name)
+				H.skills = getSkillsType(pickedtype)
 			if("commstitle")
 				change = input("Input a comms title - \[Requisitions (Title)\]", "Edit Rank") as null|text
 				if(!change || !istype(H) || !H.mind)
 					return
-				previous = H.mind.comm_title
-				H.mind.comm_title = change
+				previous = H.comm_title
+				H.comm_title = change
 			if("chattitle")
 				var/obj/item/card/id/C = locate(href_list["id"]) in GLOB.id_card_list
 				change = input("Input a chat title - Title Jane Doe screams!", "Edit Rank") as null|text
@@ -1986,11 +2058,9 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 				change = input("Choose the marine's new squad.", "Change Squad") as null|anything in SSjob.squads
 				if(!change || !istype(H))
 					return
-				if(H.mind && !(H.mind.assigned_role in GLOB.jobs_marines))
+				if(!ismarinejob(H.job))
+					to_chat(usr, "<span class='warning'>Only marine jobs may be part of squads.</span>")
 					return
-				else if(!(H.job in GLOB.jobs_marines))
-					return
-
 				H.change_squad(change)
 			if("equipment")
 				var/list/job_paths = subtypesof(/datum/outfit/job)
@@ -2104,3 +2174,11 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 
 		log_admin("[key_name(usr)] changed [href_list["xeno"]] of [X] from [previous] to [change].")
 		message_admins("[ADMIN_TPMONTY(usr)] changed [href_list["xeno"]] of [ADMIN_TPMONTY(X)] from [previous] to [change].")
+	else if(href_list["adminapproval"])
+		var/approval_id = href_list["adminapproval"] // Already text at this point
+		if(GLOB.admin_approvals[approval_id] != -1)
+			to_chat(usr, "<span class='warning'>That approval has already been answered with '[GLOB.admin_approvals[approval_id]]'</span>")
+			return
+		GLOB.admin_approvals[approval_id] = href_list["option"]
+		log_admin("[key_name(usr)] answered '[href_list["option"]]' to the admin approval ([approval_id]).")
+		message_admins("[key_name(usr)] answered '[href_list["option"]]' to the admin approval ([approval_id]).")

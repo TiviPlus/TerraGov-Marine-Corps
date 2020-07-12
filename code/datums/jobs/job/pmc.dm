@@ -1,8 +1,8 @@
 /datum/job/pmc
 	access = ALL_PMC_ACCESS
 	minimal_access = ALL_PMC_ACCESS
-	skills_type = /datum/skills/pfc/pmc
-	faction = "Nanotrasen"
+	skills_type = /datum/skills/pmc
+	faction = FACTION_NANOTRASEN
 
 
 //PMC Standard

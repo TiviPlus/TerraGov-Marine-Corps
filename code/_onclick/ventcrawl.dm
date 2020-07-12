@@ -90,7 +90,7 @@ GLOBAL_LIST_INIT(ventcrawl_machinery, typecacheof(list(
 
 			visible_message("<span class='notice'>[src] scrambles into the ventilation ducts!</span>","<span class='notice'>You climb into the ventilation ducts.</span>")
 			if(!isxenohunter(src)) //Hunters silently enter/exit vents.
-				pick(playsound(src, 'sound/effects/alien_ventpass1.ogg', 35, 1), playsound(src, 'sound/effects/alien_ventpass2.ogg', 35, 1))
+				playsound(src, get_sfx("alien_ventpass"), 35, TRUE)
 
 			forceMove(vent_found)
 	else
@@ -119,14 +119,8 @@ GLOBAL_LIST_INIT(ventcrawl_machinery, typecacheof(list(
 			client.images += A.pipe_vision_img
 			pipes_shown += A.pipe_vision_img
 	is_ventcrawling = TRUE
+	SEND_SIGNAL(src, COMSIG_LIVING_ADD_VENTCRAWL)
 	return TRUE
-
-
-/mob/living/carbon/xenomorph/hunter/add_ventcrawl(obj/machinery/atmospherics/starting_machine)
-	. = ..()
-	if(.)
-		cancel_stealth()
-
 
 /mob/living/proc/remove_ventcrawl()
 	is_ventcrawling = FALSE

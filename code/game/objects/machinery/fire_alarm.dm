@@ -18,7 +18,7 @@ FIRE ALARM
 	var/lockdownbyai = 0
 	var/obj/item/circuitboard/firealarm/electronics = null
 	anchored = TRUE
-	use_power = 1
+	use_power = IDLE_POWER_USE
 	idle_power_usage = 2
 	active_power_usage = 6
 	power_channel = ENVIRON
@@ -193,7 +193,7 @@ FIRE ALARM
 	else if(href_list["tp"])
 		var/tp = text2num(href_list["tp"])
 		time += tp
-		time = CLAMP(time, 0, 120)
+		time = clamp(time, 0, 120)
 
 	updateUsrDialog()
 

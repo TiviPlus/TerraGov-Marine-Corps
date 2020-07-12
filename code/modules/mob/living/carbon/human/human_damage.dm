@@ -1,9 +1,8 @@
 //Updates the mob's health from limbs and mob damage variables
 /mob/living/carbon/human/updatehealth()
-
 	if(status_flags & GODMODE)
 		health = species.total_health
-		stat = CONSCIOUS
+		set_stat(CONSCIOUS)
 		return
 	var/total_burn	= 0
 	var/total_brute	= 0
@@ -23,7 +22,7 @@
 	med_hud_set_status()
 
 	var/health_deficiency = max((maxHealth - health), staminaloss)
-	
+
 	if(health_deficiency >= 40)
 		add_movespeed_modifier(MOVESPEED_ID_DAMAGE_SLOWDOWN, TRUE, 0, NONE, TRUE, health_deficiency / 25)
 	else
@@ -39,7 +38,7 @@
 		var/datum/internal_organ/brain/sponge = internal_organs_by_name["brain"]
 		if(sponge)
 			sponge.take_damage(amount, silent)
-			sponge.damage = CLAMP(sponge.damage, 0, maxHealth*2)
+			sponge.damage = clamp(sponge.damage, 0, maxHealth*2)
 			brainloss = sponge.damage
 		else
 			brainloss = 200
@@ -54,7 +53,7 @@
 	if(species?.has_organ["brain"])
 		var/datum/internal_organ/brain/sponge = internal_organs_by_name["brain"]
 		if(sponge)
-			sponge.damage = CLAMP(amount, 0, maxHealth*2)
+			sponge.damage = clamp(amount, 0, maxHealth*2)
 			brainloss = sponge.damage
 		else
 			brainloss = 200
@@ -375,7 +374,7 @@ In most cases it makes more sense to use apply_damage() instead! And make sure t
 /*
 This function restores all limbs.
 */
-/mob/living/carbon/human/restore_all_organs()
+/mob/living/carbon/human/restore_all_organs(updating_health = FALSE)
 	for(var/datum/limb/E in limbs)
 		E.rejuvenate()
 
@@ -386,6 +385,8 @@ This function restores all limbs.
 			var/datum/internal_organ/IO = new internal_organ_type(src)
 			internal_organs_by_name[organ_slot] = IO
 
+	if(updating_health)
+		updatehealth()
 
 
 /mob/living/carbon/human/proc/HealDamage(zone, brute, burn)

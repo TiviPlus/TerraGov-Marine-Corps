@@ -4,8 +4,8 @@
 //Just about ALL the procs are tied to the parent, not to the children
 //This is so they can be easily transferred between them without copypasta
 
-/mob/living/carbon/xenomorph/Initialize(mapload, can_spawn_in_centcomm)
-	verbs += /mob/living/proc/lay_down
+/mob/living/carbon/xenomorph/Initialize(mapload)
+	setup_verbs()
 	. = ..()
 
 	set_datum()
@@ -16,12 +16,25 @@
 	create_reagents(1000)
 	gender = NEUTER
 
-	GLOB.alive_xeno_list += src
+	switch(stat)
+		if(CONSCIOUS)
+			GLOB.alive_xeno_list += src
+			see_in_dark = xeno_caste.conscious_see_in_dark
+		if(UNCONSCIOUS)
+			GLOB.alive_xeno_list += src
+			see_in_dark = xeno_caste.unconscious_see_in_dark
+		if(DEAD)
+			see_in_dark = xeno_caste.unconscious_see_in_dark
+
 	GLOB.xeno_mob_list += src
 	GLOB.round_statistics.total_xenos_created++
+	SSblackbox.record_feedback("tally", "round_statistics", 1, "total_xenos_created")
 
-	if(!can_spawn_in_centcomm && is_centcom_level(z) && hivenumber == XENO_HIVE_NORMAL)
+	if(is_centcom_level(z) && hivenumber == XENO_HIVE_NORMAL)
 		hivenumber = XENO_HIVE_ADMEME //so admins can safely spawn xenos in Thunderdome for tests.
+
+	wound_overlay = new(null, src)
+	vis_contents += wound_overlay
 
 	set_initial_hivenumber()
 
@@ -40,9 +53,15 @@
 
 	update_action_button_icons()
 
+	if(!job) //It might be setup on spawn.
+		setup_job()
+
 	RegisterSignal(src, COMSIG_GRAB_SELF_ATTACK, .proc/devour_grabbed) //Devour ability.
 
 	AddComponent(/datum/component/bump_attack)
+
+	ADD_TRAIT(src, TRAIT_BATONIMMUNE, TRAIT_XENO)
+	ADD_TRAIT(src, TRAIT_FLASHBANGIMMUNE, TRAIT_XENO)
 
 
 /mob/living/carbon/xenomorph/proc/set_datum()
@@ -60,8 +79,13 @@
 	plasma_stored = xeno_caste.plasma_max
 	maxHealth = xeno_caste.max_health
 	health = maxHealth
-	speed = xeno_caste.speed
-	armor = getArmor(arglist(xeno_caste.armor))
+	setXenoCasteSpeed(xeno_caste.speed)
+	soft_armor = getArmor(arglist(xeno_caste.soft_armor))
+	hard_armor = getArmor(arglist(xeno_caste.hard_armor))
+
+
+/mob/living/carbon/xenomorph/set_armor_datum()
+	return //Handled in set_datum()
 
 
 /mob/living/carbon/xenomorph/proc/generate_nicknumber()
@@ -135,6 +159,13 @@
 		if(XENO_UPGRADE_THREE)
 			return XENO_UPGRADE_TWO
 
+/mob/living/carbon/xenomorph/proc/setup_job()
+	var/datum/job/xenomorph/xeno_job = SSjob.type_occupations[xeno_caste.job_type]
+	if(!xeno_job)
+		CRASH("Unemployment has reached to a xeno, who has failed to become a [xeno_caste.job_type]")
+	apply_assigned_role_to_spawn(xeno_job)
+
+
 /mob/living/carbon/xenomorph/examine(mob/user)
 	..()
 	if(isxeno(user) && xeno_caste.caste_desc)
@@ -173,17 +204,15 @@
 
 	remove_from_hive()
 
+	vis_contents -= wound_overlay
+	QDEL_NULL(wound_overlay)
+
 	. = ..()
 
 
 
 /mob/living/carbon/xenomorph/slip(slip_source_name, stun_level, weaken_level, run_only, override_noslip, slide_steps)
 	return FALSE
-
-/mob/living/carbon/xenomorph/handle_knocked_out()
-	if(knocked_out)
-		adjust_knockedout(-2)
-	return knocked_out
 
 /mob/living/carbon/xenomorph/start_pulling(atom/movable/AM, suppress_message = TRUE)
 	if(!isliving(AM))
@@ -204,7 +233,7 @@
 /mob/living/carbon/xenomorph/pull_response(mob/puller)
 	var/mob/living/carbon/human/H = puller
 	if(stat == CONSCIOUS && H.species?.count_human) // If the Xeno is conscious, fight back against a grab/pull
-		H.knock_down(rand(xeno_caste.tacklemin,xeno_caste.tacklemax))
+		H.Paralyze(rand(xeno_caste.tacklemin,xeno_caste.tacklemax) * 20)
 		playsound(H.loc, 'sound/weapons/pierce.ogg', 25, 1)
 		H.visible_message("<span class='warning'>[H] tried to pull [src] but instead gets a tail swipe to the head!</span>")
 		H.stop_pulling()
@@ -212,7 +241,7 @@
 	return TRUE
 
 /mob/living/carbon/xenomorph/resist_grab()
-	if(pulledby.grab_level)
+	if(pulledby.grab_state)
 		visible_message("<span class='danger'>[src] has broken free of [pulledby]'s grip!</span>", null, null, 5)
 	pulledby.stop_pulling()
 	. = 1
@@ -239,10 +268,10 @@
 /mob/living/carbon/xenomorph/point_to_atom(atom/A, turf/T)
 	//xeno leader get a bit arrow and less cooldown
 	if(queen_chosen_lead || isxenoqueen(src))
-		cooldowns[COOLDOWN_POINT] = addtimer(VARSET_LIST_CALLBACK(cooldowns, COOLDOWN_POINT, null), 1 SECONDS)
+		COOLDOWN_START(src, COOLDOWN_POINT, 1 SECONDS)
 		new /obj/effect/overlay/temp/point/big(T)
 	else
-		cooldowns[COOLDOWN_POINT] = addtimer(VARSET_LIST_CALLBACK(cooldowns, COOLDOWN_POINT, null), 5 SECONDS)
+		COOLDOWN_START(src, COOLDOWN_POINT, 5 SECONDS)
 		new /obj/effect/overlay/temp/point(T)
 	visible_message("<b>[src]</b> points to [A]")
 	return 1
@@ -300,3 +329,14 @@
 	if(!. || can_reenter_corpse)
 		return
 	set_afk_status(MOB_RECENTLY_DISCONNECTED, 5 SECONDS)
+
+/mob/living/carbon/xenomorph/set_stat(new_stat)
+	. = ..()
+	if(isnull(.))
+		return
+	switch(stat)
+		if(UNCONSCIOUS)
+			see_in_dark = xeno_caste.unconscious_see_in_dark
+		if(DEAD, CONSCIOUS)
+			if(. == UNCONSCIOUS)
+				see_in_dark = xeno_caste.conscious_see_in_dark

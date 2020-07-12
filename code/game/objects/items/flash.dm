@@ -30,7 +30,7 @@
 
 	log_combat(user, M, "attempted to flash", src)
 
-	if(user.mind && user.mind.cm_skills && user.mind.cm_skills.police < SKILL_POLICE_FLASH)
+	if(user.skills.getRating("police") < SKILL_POLICE_FLASH)
 		to_chat(user, "<span class='warning'>You don't seem to know how to use [src]...</span>")
 		return
 
@@ -61,12 +61,12 @@
 	var/flashfail = 0
 
 	if(iscarbon(M))
-		flashfail = !M.flash_eyes()
+		flashfail = !M.flash_act()
 		if(!flashfail)
-			M.knock_down(10)
+			M.Paralyze(20 SECONDS)
 
 	else if(issilicon(M))
-		M.knock_down(rand(5,10))
+		M.Paralyze(rand(10 SECONDS,20 SECONDS))
 	else
 		flashfail = 1
 
@@ -91,7 +91,7 @@
 	if(!user)
 		return
 
-	if(user.mind && user.mind.cm_skills && user.mind.cm_skills.police < SKILL_POLICE_FLASH)
+	if(user.skills.getRating("police") < SKILL_POLICE_FLASH)
 		to_chat(user, "<span class='warning'>You don't seem to know how to use [src]...</span>")
 		return
 
@@ -124,7 +124,7 @@
 				for(var/obj/item/cloaking_device/S in M)
 					S.active = 0
 					S.icon_state = "shield0"
-		M.flash_eyes()
+		M.flash_act()
 
 	return
 
@@ -140,8 +140,8 @@
 			times_used++
 			if(iscarbon(loc))
 				var/mob/living/carbon/M = loc
-				if(M.flash_eyes())
-					M.knock_down(10)
+				if(M.flash_act())
+					M.Paralyze(20 SECONDS)
 					M.visible_message("<span class='disarm'>[M] is blinded by the flash!</span>")
 	..()
 

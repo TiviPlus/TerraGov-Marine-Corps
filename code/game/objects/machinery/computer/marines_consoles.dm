@@ -3,7 +3,7 @@
 	desc = "You can use this to change ID's."
 	icon_state = "id"
 	req_access = list(ACCESS_MARINE_LOGISTICS)
-	circuit = "/obj/item/circuitboard/computer/card"
+	circuit = /obj/item/circuitboard/computer/card
 	resistance_flags = INDESTRUCTIBLE
 	var/obj/item/card/id/scan = null
 	var/obj/item/card/id/modify = null
@@ -102,7 +102,7 @@
 		var/jobs_all = ""
 		var/list/alljobs = (GLOB.jobs_regular_all - SYNTHETIC + "Custom")
 		for(var/job in alljobs)
-			jobs_all += "<a href='?src=\ref[src];choice=assign;assign_target=[job]'>[oldreplacetext(job, " ", "&nbsp")]</a> " //make sure there isn't a line break in the middle of a job
+			jobs_all += "<a href='?src=\ref[src];choice=assign;assign_target=[job]'>[replacetext(job, " ", "&nbsp")]</a> " //make sure there isn't a line break in the middle of a job
 
 
 		var/body
@@ -182,9 +182,9 @@
 				accesses += "<td style='width:14%' valign='top'>"
 				for(var/A in get_region_accesses(i))
 					if(A in modify.access)
-						accesses += "<a href='?src=\ref[src];choice=access;access_target=[A];allowed=0'><font color=\"red\">[oldreplacetext(get_access_desc(A), " ", "&nbsp")]</font></a> "
+						accesses += "<a href='?src=\ref[src];choice=access;access_target=[A];allowed=0'><font color=\"red\">[replacetext(get_access_desc(A), " ", "&nbsp")]</font></a> "
 					else
-						accesses += "<a href='?src=\ref[src];choice=access;access_target=[A];allowed=1'>[oldreplacetext(get_access_desc(A), " ", "&nbsp")]</a> "
+						accesses += "<a href='?src=\ref[src];choice=access;access_target=[A];allowed=1'>[replacetext(get_access_desc(A), " ", "&nbsp")]</a> "
 					accesses += "<br>"
 				accesses += "</td>"
 			accesses += "</tr></table>"
@@ -262,7 +262,7 @@
 			if (authenticated)
 				var/t1 = href_list["assign_target"]
 				if(t1 == "Custom")
-					var/temp_t = copytext(sanitize(input("Enter a custom job assignment.","Assignment")),1,MAX_MESSAGE_LEN)
+					var/temp_t = stripped_input("Enter a custom job assignment.","Assignment")
 					//let custom jobs function as an impromptu alt title, mainly for sechuds
 					if(temp_t && modify)
 						modify.assignment = temp_t
@@ -328,6 +328,11 @@
 		modify.name = text("[modify.registered_name]'s ID Card ([modify.assignment])")
 
 	updateUsrDialog()
+
+/obj/machinery/computer/marine_card/centcom
+	name = "CentCom Identification Computer"
+	circuit = /obj/item/circuitboard/computer/card/centcom
+	req_access = list(ACCESS_NT_CORPORATE)
 
 
 //This console changes a marine's squad. It's very simple.
@@ -412,18 +417,18 @@
 	else if(href_list["squad"])
 		if(allowed(usr))
 			if(modify && istype(modify))
-				var/squad_name = input("Which squad would you like to put the person in?") as null|anything in SSjob.squads
+				var/squad_name = input("Which squad would you like to put the person in?") as null|anything in SSjob.active_squads
 				if(!squad_name)
 					return
-				var/datum/squad/selected = SSjob.squads[squad_name]
+				var/datum/squad/selected = SSjob.active_squads[squad_name]
 
 				//First, remove any existing squad access and clear the card.
 				for(var/datum/squad/Q in SSjob.squads)
-					if(findtext(modify.assignment,Q.name)) //Found one!
+					if(findtext(modify.assignment, Q.name)) //Found one!
 						modify.access -= Q.access //Remove any access found.
 						to_chat(usr, "Old squad access removed.")
 
-				if(selected?.usable) //Now we have a proper squad. Change their ID to it.
+				if(selected) //Now we have a proper squad. Change their ID to it.
 					modify.assignment = "[selected.name] [modify.rank]" //Change the assignment - "Alpha Squad Marine"
 					modify.access += selected.access //Add their new squad access (if anything) to their ID.
 					to_chat(usr, "[selected.name] Squad added to card.")

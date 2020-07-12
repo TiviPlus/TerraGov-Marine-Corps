@@ -1,6 +1,8 @@
 #define UPLOAD_LIMIT			1000000	//Restricts client uploads to the server to 1MB
 #define UPLOAD_LIMIT_ADMIN		10000000	//Restricts admin uploads to the server to 10MB
 
+#define MIN_RECOMMENDED_CLIENT 1526
+
 #define LIMITER_SIZE	5
 #define CURRENT_SECOND	1
 #define SECOND_COUNT	2
@@ -200,6 +202,10 @@
 		GLOB.player_details[ckey] = player_details
 
 	. = ..()	//calls mob.Login()
+	if(length(GLOB.stickybanadminexemptions))
+		GLOB.stickybanadminexemptions -= ckey
+		if (!length(GLOB.stickybanadminexemptions))
+			restore_stickybans()
 
 	if(SSinput.initialized)
 		set_macros()
@@ -207,17 +213,22 @@
 
 	chatOutput.start() // Starts the chat
 
-	if(byond_version < 512 || (byond_build && byond_build < 1421))
-		to_chat(src, "<span class='userdanger'>Your version of byond is severely out of date.</span>")
+	if(byond_version < 513 || (byond_build && byond_build < 1526))
+		//to_chat(src, "<span class='userdanger'>Your version of byond is severely out of date.</span>")
+		to_chat(src, "<span class='userdanger'>TGMC now requires the first stable 513 build, please update your client to 513.1526.</span>")
 		to_chat(src, "<span class='danger'>Please download a new version of byond. If [byond_build] is the latest, you can go to <a href=\"https://secure.byond.com/download/build\">BYOND's website</a> to download other versions.</span>")
 		addtimer(CALLBACK(src, qdel(src), 2 SECONDS))
 		return
-
+/*	Save this for 514
 	if(!byond_build || byond_build < 1386)
 		message_admins("[key_name(src)] has been detected as spoofing their byond version. Connection rejected.")
 		log_access("Failed Login: [key] - Spoofed byond version")
 		qdel(src)
 		return
+
+	if(byond_build < MIN_RECOMMENDED_CLIENT)
+		to_chat(src, "<span class='userdanger'>Your version of byond has known client crash issues, it's recommended you update your version.</span>")
+		to_chat(src, "<span class='danger'>Please download a new version of byond. If [byond_build] is the latest, you can go to <a href=\"https://secure.byond.com/download/build\">BYOND's website</a> to download other versions.</span>")
 
 	if(num2text(byond_build) in GLOB.blacklisted_builds)
 		log_access("Failed login: [key] - blacklisted byond version")
@@ -225,7 +236,7 @@
 		to_chat(src, "<span class='danger'>Byond build [byond_build] ([byond_version].[byond_build]) has been blacklisted for the following reason: [GLOB.blacklisted_builds[num2text(byond_build)]].</span>")
 		to_chat(src, "<span class='danger'>Please download a new version of byond. If [byond_build] is the latest, you can go to <a href=\"https://secure.byond.com/download/build\">BYOND's website</a> to download other versions.</span>")
 		addtimer(CALLBACK(src, qdel(src), 2 SECONDS))
-		return
+		return*/
 
 	if(GLOB.custom_info)
 		to_chat(src, "<h1 class='alert'>Custom Information</h1>")
@@ -294,7 +305,7 @@
 			winset(src, "[child]", "[entries[child]]")
 			if(!ispath(child, /datum/verbs/menu))
 				var/procpath/verbpath = child
-				if(copytext(verbpath.name, 1, 2) != "@")
+				if(verbpath.name[1] != "@")
 					new child(src)
 
 	for(var/thing in prefs.menuoptions)
@@ -331,6 +342,7 @@
 	GLOB.ahelp_tickets.ClientLogout(src)
 	GLOB.directory -= ckey
 	GLOB.clients -= src
+	seen_messages = null
 	QDEL_LIST_ASSOC_VAL(char_render_holders)
 	Master.UpdateTickRate()
 	return ..()
@@ -423,9 +435,6 @@
 //Like for /atoms, but clients are their own snowflake FUCK
 /client/proc/setDir(newdir)
 	dir = newdir
-
-/client/proc/get_offset()
-	return max(abs(pixel_x / 32), abs(pixel_y / 32))
 
 
 /client/proc/show_character_previews(mutable_appearance/MA)
@@ -592,12 +601,22 @@
 				CRASH("Key check regex failed for [ckey]")
 
 
-/client/proc/update_movement_keys()
-	if(!prefs?.key_bindings)
+/client/proc/rescale_view(change, min, max)
+	var/viewscale = getviewsize(view)
+	var/x = viewscale[1]
+	var/y = viewscale[2]
+	x = clamp(x + change, min, max)
+	y = clamp(y + change, min,max)
+	change_view("[x]x[y]")
+
+
+/client/proc/update_movement_keys(datum/preferences/direct_prefs)
+	var/datum/preferences/D = prefs || direct_prefs
+	if(!D?.key_bindings)
 		return
 	movement_keys = list()
-	for(var/key in prefs.key_bindings)
-		for(var/kb_name in prefs.key_bindings[key])
+	for(var/key in D.key_bindings)
+		for(var/kb_name in D.key_bindings[key])
 			switch(kb_name)
 				if("North")
 					movement_keys[key] = NORTH
@@ -612,10 +631,13 @@
 /client/proc/change_view(new_size)
 	if(isnull(new_size))
 		CRASH("change_view called without argument.")
-
+	if(isnum(new_size))
+		CRASH("change_view called with a number argument. Use the string format instead.")
 	view = new_size
 	apply_clickcatcher()
 	mob.reload_fullscreens()
+	if(prefs.auto_fit_viewport)
+		addtimer(CALLBACK(src, .verb/fit_viewport, 1 SECONDS)) //Delayed to avoid wingets from Login calls.
 
 
 /client/proc/generate_clickcatcher()
@@ -672,6 +694,7 @@ GLOBAL_VAR_INIT(automute_on, null)
 	if(mute)
 		if(GLOB.automute_on && !check_rights(R_ADMIN, FALSE))
 			to_chat(src, "<span class='danger'>You have exceeded the spam filter. An auto-mute was applied.</span>")
+			create_message("note", ckey(key), "SYSTEM", "Automuted due to spam. Last message: '[last_message]'", null, null, FALSE, FALSE, null, FALSE, "Minor")
 			mute(src, mute_type, TRUE)
 		return TRUE
 

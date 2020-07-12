@@ -62,6 +62,7 @@
 	storage_capacity = 3 //Just room enough for that stripped armor, gun and whatnot.
 	anchored = FALSE
 	drag_delay = 2 //slightly easier than to drag the body directly.
+	obj_flags = CAN_BE_HIT | PROJ_IGNORE_DENSITY
 	var/foldedbag_path = /obj/item/bodybag
 	var/obj/item/bodybag/foldedbag_instance = null
 	var/obj/structure/bed/roller/roller_buckled //the roller bed this bodybag is attached to.
@@ -81,6 +82,12 @@
 		if(!isnull(foldedbag_instance.loc))
 			stack_trace("[src] destroyed while the [foldedbag_instance] foldedbag_instance was neither destroyed nor in nullspace. This shouldn't happen.")
 		QDEL_NULL(foldedbag_instance)
+	return ..()
+
+
+/obj/structure/closet/bodybag/is_buckled()
+	if(roller_buckled)
+		return roller_buckled
 	return ..()
 
 
@@ -150,18 +157,17 @@
 
 /obj/structure/closet/bodybag/MouseDrop(over_object, src_location, over_location)
 	. = ..()
-	if(over_object == usr && Adjacent(usr) && !roller_buckled)
-		if(!ishuman(usr))
-			return
-		if(opened)
-			return FALSE
-		if(length(contents))
-			return FALSE
-		visible_message("<span class='notice'>[usr] folds up [name].</span>")
-		if(QDELETED(foldedbag_instance))
-			foldedbag_instance = new foldedbag_path(loc, src)
-		usr.put_in_hands(foldedbag_instance)
-		moveToNullspace()
+	if(over_object != usr || !Adjacent(usr) || roller_buckled)
+		return
+	if(!ishuman(usr))
+		return
+	if(length(contents))
+		return FALSE
+	visible_message("<span class='notice'>[usr] folds up [name].</span>")
+	if(QDELETED(foldedbag_instance))
+		foldedbag_instance = new foldedbag_path(loc, src)
+	usr.put_in_hands(foldedbag_instance)
+	moveToNullspace()
 
 
 /obj/structure/closet/bodybag/Move(NewLoc, direct)
@@ -175,7 +181,8 @@
 
 
 /obj/structure/closet/bodybag/forceMove(atom/destination)
-	roller_buckled?.unbuckle()
+	if(roller_buckled)
+		roller_buckled.unbuckle_bodybag()
 	return ..()
 
 
@@ -198,6 +205,10 @@
 		"<span class='danger'>We slash \the [src] open!</span>", null, 5)
 	return TRUE
 
+/obj/structure/closet/bodybag/projectile_hit(obj/projectile/proj, cardinal_move, uncrossing)
+	. = ..()
+	if(src != proj.original_target) //You miss unless you click directly on the bodybag
+		return FALSE
 
 /obj/item/storage/box/bodybags
 	name = "body bags"
@@ -241,7 +252,7 @@
 /obj/structure/closet/bodybag/cryobag/open()
 	if(bodybag_occupant)
 		REMOVE_TRAIT(bodybag_occupant, TRAIT_STASIS, STASIS_BAG_TRAIT)
-		UnregisterSignal(bodybag_occupant, list(COMSIG_MOB_DEATH, COMSIG_PARENT_QDELETING))
+		UnregisterSignal(bodybag_occupant, list(COMSIG_MOB_DEATH, COMSIG_PARENT_PREQDELETED))
 	return ..()
 
 
@@ -257,10 +268,10 @@
 	. = ..()
 	if(bodybag_occupant)
 		ADD_TRAIT(bodybag_occupant, TRAIT_STASIS, STASIS_BAG_TRAIT)
-		RegisterSignal(bodybag_occupant, list(COMSIG_MOB_DEATH, COMSIG_PARENT_QDELETING), .proc/on_bodybag_occupant_death)
+		RegisterSignal(bodybag_occupant, list(COMSIG_MOB_DEATH, COMSIG_PARENT_PREQDELETED), .proc/on_bodybag_occupant_death)
 
 
-/obj/structure/closet/bodybag/cryobag/proc/on_bodybag_occupant_death(datum/source, gibbed)
+/obj/structure/closet/bodybag/cryobag/proc/on_bodybag_occupant_death(mob/source, gibbing)
 	if(!QDELETED(bodybag_occupant))
 		visible_message("<span class='notice'>\The [src] rejects the corpse.</span>")
 	open()
@@ -290,7 +301,7 @@
 	if(href_list["scanreport"])
 		if(!hasHUD(usr,"medical"))
 			return
-		if(get_dist(usr, src) > world.view)
+		if(get_dist(usr, src) > WORLD_VIEW_NUM)
 			to_chat(usr, "<span class='warning'>[src] is too far away.</span>")
 			return
 		for(var/datum/data/record/R in GLOB.datacore.medical)

@@ -25,11 +25,14 @@
 #define MODE_KEY_BINARY "n"
 #define MODE_TOKEN_BINARY ":n"
 
+#define MODE_SING "%"
+
 //Spans. Robot speech, italics, etc. Applied in compose_message().
 #define SPAN_YELL "yell"
 #define SPAN_ITALICS "italics"
 #define SPAN_COMMAND "command_headset"
 #define SPAN_ROBOT "robot"
+#define SPAN_SINGING "singing"
 
 //Eavesdropping
 #define EAVESDROP_EXTRA_RANGE 1 //how much past the specified message_range does the message get starred, whispering only
@@ -43,3 +46,8 @@
 #define FOLLOW_LINK(observer, target) "<a href=?src=[REF(observer)];track=[REF(target)]>(F)</a>"
 #define TURF_LINK(observer, turfy) "<a href=?src=[REF(observer)];jump=1;x=[turfy.x];y=[turfy.y];z=[turfy.z]>(T)</a>"
 #define FOLLOW_OR_TURF_LINK(observer, target, turfy) "<a href=?src=[REF(observer)];track=[REF(target)];jump=1;x=[turfy.x];y=[turfy.y];z=[turfy.z]>(F)</a>"
+
+
+//Used in visible_message_flags, audible_message_flags and runechat_flags
+#define COMBAT_MESSAGE (1<<0)
+#define EMOTE_MESSAGE (1<<1)

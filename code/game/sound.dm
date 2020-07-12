@@ -105,11 +105,40 @@
 /mob/proc/stop_sound_channel(chan)
 	SEND_SOUND(src, sound(null, repeat = 0, wait = 0, channel = chan))
 
-/client/proc/playtitlemusic(vol = 85)
+/client/proc/play_title_music()
 	if(!SSticker?.login_music)
 		return FALSE
 	if(prefs && (prefs.toggles_sound & SOUND_LOBBY))
-		SEND_SOUND(src, sound(SSticker.login_music, repeat = 0, wait = 0, volume = vol, channel = CHANNEL_LOBBYMUSIC)) // MAD JAMS
+		var/ytdl = CONFIG_GET(string/invoke_youtubedl)
+		if(!ytdl || !SSticker.login_music)
+			play_title_music_legacy()
+			return
+
+		var/list/output = world.shelleo("[ytdl] --format \"bestaudio\[ext=mp3]/best\[ext=mp4]\[height<=360]/bestaudio\[ext=m4a]/bestaudio\[ext=aac]\" --dump-single-json --no-playlist -- \"[shell_url_scrub(SSticker.login_music[1])]\"")
+		var/stdout = output[SHELLEO_STDOUT]
+
+		var/list/data = list()
+		data = safe_json_decode(stdout)
+		if(!data)
+			stack_trace("Lobby music - [SSticker.login_music[1]] failed to parse correctly")
+			play_title_music_legacy()
+			return
+		var/web_sound_url = ""
+		web_sound_url = data["url"]
+
+		var/list/music_extra_data = list()
+		music_extra_data["start"] = text2num(SSticker.login_music[2])
+		music_extra_data["end"] = text2num(SSticker.login_music[3])
+
+		chatOutput.sendMusic(web_sound_url,music_extra_data)
+
+/client/proc/play_title_music_legacy(vol = 85)
+	if(!SSticker?.login_music)
+		return FALSE
+	if(prefs && (prefs.toggles_sound & SOUND_LOBBY))
+		//Since this is the legacy, replace this hardcoded ogg with your list of hosted files
+		SEND_SOUND(src, sound('sound/music/DawsonChristian.ogg', repeat = 0, wait = 0, volume = vol, channel = CHANNEL_LOBBYMUSIC)) // MAD JAMS
+
 
 /proc/playsound_z(z, soundin, _volume) // Play sound for all online mobs on a given Z-level. Good for ambient sounds.
 	soundin = sound(get_sfx(soundin), channel = open_sound_channel(), volume = _volume)
@@ -144,6 +173,10 @@
 				S = pick('sound/weapons/genhit1.ogg', 'sound/weapons/genhit2.ogg', 'sound/weapons/genhit3.ogg')
 			if("pageturn")
 				S = pick('sound/effects/pageturn1.ogg', 'sound/effects/pageturn2.ogg','sound/effects/pageturn3.ogg')
+			if("terminal_type")
+				S = pick('sound/machines/terminal_button01.ogg', 'sound/machines/terminal_button02.ogg', 'sound/machines/terminal_button03.ogg', \
+					'sound/machines/terminal_button04.ogg', 'sound/machines/terminal_button05.ogg', 'sound/machines/terminal_button06.ogg', \
+					'sound/machines/terminal_button07.ogg', 'sound/machines/terminal_button08.ogg')
 			// Weapons/bullets
 			if("ballistic_hit")
 				S = pick('sound/bullets/bullet_impact1.ogg','sound/bullets/bullet_impact2.ogg','sound/bullets/bullet_impact3.ogg')
@@ -218,6 +251,8 @@
 				S = pick('sound/voice/alien_roar_larva1.ogg','sound/voice/alien_roar_larva2.ogg','sound/voice/alien_roar_larva3.ogg','sound/voice/alien_roar_larva4.ogg')
 			if("queen")
 				S = pick('sound/voice/alien_queen_command.ogg','sound/voice/alien_queen_command2.ogg','sound/voice/alien_queen_command3.ogg')
+			if("alien_ventpass")
+				S = pick('sound/effects/alien_ventpass1.ogg', 'sound/effects/alien_ventpass2.ogg')
 			// Human
 			if("male_scream")
 				S = pick('sound/voice/human_male_scream_1.ogg','sound/voice/human_male_scream_2.ogg','sound/voice/human_male_scream_3.ogg','sound/voice/human_male_scream_4.ogg','sound/voice/human_male_scream_5.ogg','sound/voice/human_male_scream_6.ogg')

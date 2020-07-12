@@ -29,7 +29,7 @@
 
 	density = FALSE
 	anchored = TRUE
-	use_power = 1
+	use_power = IDLE_POWER_USE
 	idle_power_usage = 20
 
 	icon = 'icons/obj/machines/computer.dmi'
@@ -37,20 +37,18 @@
 
 /obj/machinery/prop/mainship/computer/ex_act(severity)
 	switch(severity)
-		if(1.0)
+		if(EXPLODE_DEVASTATE)
 			qdel(src)
-			return
-		if(2.0)
+		if(EXPLODE_HEAVY)
 			if (prob(25))
 				qdel(src)
 				return
 			if (prob(50))
 				set_broken()
-		if(3.0)
+		if(EXPLODE_LIGHT)
 			if (prob(25))
 				set_broken()
-		else
-			return
+
 
 /obj/machinery/prop/mainship/computer/proc/set_broken()
 	machine_stat |= BROKEN
@@ -71,7 +69,7 @@
 
 	density = TRUE
 	anchored = TRUE
-	use_power = 1
+	use_power = IDLE_POWER_USE
 	idle_power_usage = 20
 
 	icon = 'icons/obj/machines/computer.dmi'
@@ -205,6 +203,8 @@
 	density = FALSE
 	layer = ABOVE_TURF_LAYER
 
+/obj/structure/prop/mainship/hangar_stencil/two
+	icon_state = "dropship2"
 
 /obj/structure/prop/mainship/cannon_cables
 	name = "\improper Cannon cables"
