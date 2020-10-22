@@ -24,7 +24,6 @@ SUBSYSTEM_DEF(render)
 		for(var/atom/o as() in GLOB.cached_images[i])
 			SEND_SIGNAL(o, COMSIG_ATOM_RENDER_CACHE_EMPTIED)
 		GLOB.cached_images -= i
-		qdel(i)
 
 	//Now that we've cleaned the cache lets send the images
 	for(var/user in GLOB.clients)
