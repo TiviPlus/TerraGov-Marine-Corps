@@ -40,6 +40,10 @@
 			click_proc = CALLBACK(src, .proc/uv_handle_click)
 		if(TURRET_TYPE_EXPLOSIVE)
 			click_proc = CALLBACK(src, .proc/uv_handle_click_explosive)
+		if(ROLLER_TYPE_ROLLAT)
+			click_proc = CALLBACK(src, .proc/roll_handle_click_rollat)
+		if(ROLLER_TYPE_EXPLODE)
+			click_proc = CALLBACK(src, .proc/roll_handle_click_explosive)
 		else
 			click_proc = null
 
@@ -52,6 +56,16 @@
 /datum/component/remote_control/proc/uv_handle_click_explosive(datum/source, atom/target, mob/user)
 	explosion(get_turf(controlled), 1, 2, 3, 4)
 	remote_control_off()
+
+///Called when a roller click while in roll mode
+/datum/component/remote_control/proc/roll_handle_click_rollat(datum/source, atom/target, mob/user)
+	controlled.throw_at(target, 4, 70, source)
+
+///Called when a explosive roller clicks and tries to explode itself outside of roll mode
+/datum/component/remote_control/proc/roll_handle_click_explosive(datum/source, atom/target, mob/user)
+	explosion(get_turf(controlled), 1, 2, 3, 4)
+	remote_control_off()
+
 
 ///Self explanatory, toggles remote control
 /datum/component/remote_control/proc/toggle_remote_control(datum/source, mob/user)

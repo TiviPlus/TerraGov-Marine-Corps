@@ -1,4 +1,5 @@
 #define VEHICLE_MUST_TURN (1<<0)
+#define VEHICLE_MECHANICAL (1<<1)
 
 #define TURRET_TYPE_HEAVY 2
 #define TURRET_TYPE_LIGHT 1

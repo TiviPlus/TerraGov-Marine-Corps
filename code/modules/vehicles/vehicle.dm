@@ -8,8 +8,8 @@
 	buckle_flags = CAN_BUCKLE|BUCKLE_PREVENTS_PULL
 	resistance_flags = XENO_DAMAGEABLE
 
-	var/on = FALSE
 	max_integrity = 100
+	var/on = FALSE
 	var/fire_dam_coeff = 1.0
 	var/brute_dam_coeff = 1.0
 	var/open = FALSE	//Maint panel
@@ -20,18 +20,22 @@
 	var/buckling_y = 0
 	var/move_sounds
 	var/change_dir_sounds
-	var/vehicle_flags = NONE
+	var/vehicle_flags = VEHICLE_MECHANICAL
+	var/destroy_descriptor = "suddenly blows apart!"
 
 	var/obj/item/cell/cell
 	var/charge_use = 5	//set this to adjust the amount of power the vehicle uses per move
+	var/list/deconstruct_results = list(
+		/obj/item/stack/rods,
+		/obj/item/stack/rods,
+		/obj/item/stack/cable_coil/cut,
+		/obj/effect/spawner/gibspawner/robot,
+		/obj/effect/decal/cleanable/blood/oil
+	)
 
 //-------------------------------------------
 // Standard procs
 //-------------------------------------------
-/obj/vehicle/Initialize()
-	. = ..()
-	return INITIALIZE_HINT_NORMAL
-
 
 /obj/vehicle/LateInitialize(mapload)
 	. = ..()
@@ -71,6 +75,8 @@
 /obj/vehicle/attackby(obj/item/I, mob/user, params)
 	. = ..()
 
+	if(!(vehicle_flags & VEHICLE_MECHANICAL))
+		return
 	if(isscrewdriver(I))
 		if(locked)
 			return
@@ -114,6 +120,8 @@
 				take_damage(rand(1, 5) * brute_dam_coeff)
 
 /obj/vehicle/emp_act(severity)
+	if(!(vehicle_flags & VEHICLE_MECHANICAL))
+		return
 	var/was_on = on
 	stat |= EMPED
 	new /obj/effect/overlay/temp/emp_sparks (loc)
@@ -143,26 +151,25 @@
 
 
 /obj/vehicle/deconstruct(disassembled = TRUE)
-	if(!disassembled)
-		visible_message("<span class='danger'>[src] blows apart!</span>")
+	for(var/m in buckled_mobs)
+		var/mob/living/passenger = m
+		passenger.apply_effects(5, 5)
+		unbuckle_mob(m)
 
-	new /obj/item/stack/rods(loc)
-	new /obj/item/stack/rods(loc)
-	new /obj/item/stack/cable_coil/cut(loc)
+	if(!disassembled)
+		visible_message("<span class='danger'>[src] [destroy_descriptor]</span>")
+
 
 	if(cell)
 		cell.forceMove(loc)
 		cell.update_icon()
 		set_cell(null)
 
-	for(var/m in buckled_mobs)
-		var/mob/living/passenger = m
-		passenger.apply_effects(5, 5)
-		unbuckle_mob(m)
+	if(!(vehicle_flags & VEHICLE_MECHANICAL))
+		return
 
-	new /obj/effect/spawner/gibspawner/robot(loc)
-	new /obj/effect/decal/cleanable/blood/oil(loc)
-
+	for(var/type in deconstruct_results)
+		new type(loc)
 	return ..()
 
 /obj/vehicle/proc/powercheck()
