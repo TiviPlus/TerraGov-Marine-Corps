@@ -5,66 +5,8 @@
 "aab" = (
 /turf/closed/wall/mainship,
 /area/mainship/living/cryo_cells)
-"aac" = (
-/obj/machinery/cryopod/right,
-/turf/open/floor/mainship,
-/area/mainship/living/cryo_cells)
-"aad" = (
-/obj/effect/landmark/start/job/squadcorpsman,
-/obj/machinery/power/apc/mainship,
-/obj/structure/cable,
-/obj/effect/landmark/start/latejoin,
-/turf/open/floor/mainship,
-/area/mainship/living/cryo_cells)
-"aae" = (
-/obj/machinery/cryopod,
-/turf/open/floor/mainship,
-/area/mainship/living/cryo_cells)
-"aaf" = (
-/obj/effect/landmark/start/job/squadengineer,
-/obj/effect/landmark/start/latejoin,
-/turf/open/floor/mainship,
-/area/mainship/living/cryo_cells)
-"aag" = (
-/obj/effect/landmark/start/job/squadcorpsman,
-/obj/effect/landmark/start/latejoin,
-/turf/open/floor/mainship,
-/area/mainship/living/cryo_cells)
-"aah" = (
-/obj/effect/landmark/start/job/squadcorpsman,
-/obj/structure/cable,
-/obj/effect/landmark/start/latejoin,
-/turf/open/floor/mainship,
-/area/mainship/living/cryo_cells)
-"aai" = (
-/obj/effect/landmark/start/job/crash/squadsmartgunner,
-/obj/effect/landmark/start/latejoin,
-/obj/machinery/camera/autoname/mainship{
-	dir = 4
-	},
-/turf/open/floor/mainship,
-/area/mainship/living/cryo_cells)
-"aaj" = (
-/obj/effect/landmark/start/job/crash/squadleader,
-/obj/effect/landmark/start/latejoin,
-/turf/open/floor/mainship,
-/area/mainship/living/cryo_cells)
-"aak" = (
-/obj/effect/landmark/start/job/crash/squadleader,
-/obj/structure/cable,
-/obj/effect/landmark/start/latejoin,
-/turf/open/floor/mainship,
-/area/mainship/living/cryo_cells)
 "aal" = (
-/obj/effect/landmark/start/job/crash/squadmarine,
-/obj/effect/landmark/start/latejoin,
-/turf/open/floor/mainship,
-/area/mainship/living/cryo_cells)
-"aam" = (
-/obj/effect/landmark/start/job/crash/squadmarine,
-/obj/structure/cable,
-/obj/effect/landmark/start/latejoin,
-/turf/open/floor/mainship,
+/turf/open/space/basic,
 /area/mainship/living/cryo_cells)
 "aan" = (
 /obj/machinery/vending/cola,
@@ -339,13 +281,6 @@
 /obj/item/reagent_containers/food/snacks/grown/poppy,
 /turf/open/floor/mainship,
 /area/mainship/living/port_garden)
-"abl" = (
-/obj/machinery/cryopod/right,
-/obj/machinery/light{
-	dir = 1
-	},
-/turf/open/floor/mainship,
-/area/mainship/living/cryo_cells)
 "abn" = (
 /obj/machinery/tank_part_fabricator,
 /turf/open/floor/mainship,
@@ -819,13 +754,6 @@
 /obj/structure/cable,
 /turf/open/floor/mainship,
 /area/mainship/command/telecomms)
-"adw" = (
-/obj/machinery/cryopod,
-/obj/machinery/light{
-	dir = 1
-	},
-/turf/open/floor/mainship,
-/area/mainship/living/cryo_cells)
 "adx" = (
 /obj/machinery/computer/security/marinemainship{
 	dir = 4;
@@ -1398,11 +1326,6 @@
 /obj/structure/closet/crate/delta,
 /turf/open/floor/mainship,
 /area/mainship/squads/req)
-"afX" = (
-/obj/effect/landmark/start/job/crash/squadsmartgunner,
-/obj/effect/landmark/start/latejoin,
-/turf/open/floor/mainship,
-/area/mainship/living/cryo_cells)
 "afY" = (
 /obj/machinery/camera/autoname/mainship,
 /turf/open/floor/mainship,
@@ -2605,6 +2528,10 @@
 /obj/machinery/light,
 /turf/open/floor/mainship,
 /area/mainship/squads/req)
+"xfR" = (
+/obj/effect/landmark/start/latejoin,
+/turf/open/floor/plating,
+/area/mainship/hallways/hangar)
 "xsM" = (
 /obj/machinery/light{
 	dir = 1
@@ -4609,11 +4536,11 @@ aaa
 aaa
 aaa
 aaa
-aab
-aab
-aab
-aab
-aab
+aal
+aal
+aal
+aal
+aal
 aab
 agN
 agN
@@ -4669,11 +4596,11 @@ aaa
 aaa
 aaa
 aaa
-aab
-aac
-aaf
-aai
-aac
+aal
+aal
+aal
+aal
+aal
 aal
 aan
 aaw
@@ -4729,11 +4656,11 @@ aaa
 aaa
 aaa
 aaa
-aab
-abl
-aag
-aaj
-aac
+aal
+aal
+aal
+aal
+aal
 aal
 aao
 aaw
@@ -4789,11 +4716,11 @@ aaa
 aaa
 aaa
 aaa
-aab
-aac
-aaf
-afX
-aac
+aal
+aal
+aal
+aal
+aal
 aal
 aap
 aaw
@@ -4849,12 +4776,12 @@ aaa
 aaa
 aaa
 aaa
-aab
-aad
-aah
-aak
-aak
-aam
+aal
+aal
+aal
+aal
+aal
+aal
 aar
 aar
 ade
@@ -4909,11 +4836,11 @@ aaa
 aaa
 aaa
 aaa
-aab
-aae
-aaf
-afX
-aae
+aal
+aal
+aal
+aal
+aal
 aal
 aas
 aaw
@@ -4969,11 +4896,11 @@ aaa
 aaa
 aaa
 aaa
-aab
-adw
-aag
-aaj
-aae
+aal
+aal
+aal
+aal
+aal
 aal
 aat
 aaw
@@ -5029,11 +4956,11 @@ aaa
 aaa
 aaa
 aaa
-aab
-aae
-aaf
-afX
-aae
+aal
+aal
+aal
+aal
+aal
 aal
 aau
 aaw
@@ -5089,12 +5016,12 @@ aaa
 aaa
 aaa
 aaa
-aab
-aab
-aab
-aab
-aab
-aab
+aal
+aal
+aal
+aal
+aal
+aal
 aab
 aab
 aaC
@@ -5118,7 +5045,7 @@ aht
 bOu
 bOu
 bOu
-bOu
+xfR
 bOu
 bOu
 bOu
@@ -5239,7 +5166,7 @@ bOu
 bOu
 bOu
 bOu
-bOu
+xfR
 bOu
 bOu
 bOu

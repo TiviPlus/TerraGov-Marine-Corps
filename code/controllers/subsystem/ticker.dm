@@ -11,7 +11,7 @@ SUBSYSTEM_DEF(ticker)
 	var/bypass_checks = FALSE 				//Bypass mode init checks
 	var/setup_failed = FALSE 				//If the setup has failed at any point
 
-	var/start_immediately = FALSE //If true, there is no lobby phase, the game starts immediately.
+	var/start_immediately = TRUE //If true, there is no lobby phase, the game starts immediately.
 	var/setup_done = FALSE //All game setup done including mode post setup and
 
 	var/datum/game_mode/mode = null
