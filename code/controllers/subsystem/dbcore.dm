@@ -63,7 +63,7 @@ SUBSYSTEM_DEF(dbcore)
 /datum/controller/subsystem/dbcore/proc/Connect()
 	if(IsConnected())
 		return TRUE
-
+/*
 	if(failed_connection_timeout <= world.time) //it's been more than 5 seconds since we failed to connect, reset the counter
 		failed_connections = 0
 
@@ -100,7 +100,7 @@ SUBSYSTEM_DEF(dbcore)
 		last_error = result["data"]
 		log_sql("Connect() failed | [last_error]")
 		++failed_connections
-
+*/
 /datum/controller/subsystem/dbcore/proc/CheckSchemaVersion()
 	if(CONFIG_GET(flag/sql_enabled))
 		if(Connect())
@@ -154,17 +154,17 @@ SUBSYSTEM_DEF(dbcore)
 	qdel(query_round_end)
 
 /datum/controller/subsystem/dbcore/proc/Disconnect()
-	failed_connections = 0
+	/*failed_connections = 0
 	if (connection)
 		rustg_sql_disconnect_pool(connection)
-	connection = null
+	connection = null*/
 
 /datum/controller/subsystem/dbcore/proc/IsConnected()
 	if (!CONFIG_GET(flag/sql_enabled))
 		return FALSE
 	if (!connection)
 		return FALSE
-	return json_decode(rustg_sql_connected(connection))["status"] == "online"
+	return 0//json_decode(rustg_sql_connected(connection))["status"] == "online"
 
 /datum/controller/subsystem/dbcore/proc/ErrorMsg()
 	if(!CONFIG_GET(flag/sql_enabled))
@@ -346,8 +346,7 @@ Delayed insert mode was removed in mysql 7 and only works with MyISAM type table
 		slow_query_check()
 
 /datum/db_query/proc/run_query(async)
-	var/job_result_str
-
+/*
 	if (async)
 		var/job_id = rustg_sql_query_async(connection, sql, json_encode(arguments))
 		in_progress = TRUE
@@ -373,7 +372,7 @@ Delayed insert mode was removed in mysql 7 and only works with MyISAM type table
 		if ("offline")
 			last_error = "offline"
 			return FALSE
-
+*/
 /datum/db_query/proc/slow_query_check()
 	message_admins("HEY! A database query timed out. Did the server just hang? <a href='?_src_=holder;[HrefToken()];slowquery=yes'>\[YES\]</a>|<a href='?_src_=holder;[HrefToken()];slowquery=no'>\[NO\]</a>")
 

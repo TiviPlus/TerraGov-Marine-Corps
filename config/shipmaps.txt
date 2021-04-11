@@ -13,7 +13,6 @@ Format:
 endmap
 
 map debugdalus
-	default
 	voteweight 0
 endmap
 
@@ -27,4 +26,5 @@ map risingstar
 endmap
 
 map sulaco
+	default
 endmap

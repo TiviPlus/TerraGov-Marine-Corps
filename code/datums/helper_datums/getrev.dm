@@ -5,6 +5,7 @@
 	var/list/testmerge = list()
 
 /datum/getrev/New()
+	return
 	testmerge = world.TgsTestMerges()
 	var/datum/tgs_revision_information/revinfo = world.TgsRevision()
 	if(revinfo)

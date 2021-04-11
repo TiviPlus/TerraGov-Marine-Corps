@@ -104,7 +104,7 @@
 
 /obj/screen/text/lobby/clickable/observe
 	screen_loc = "CENTER"
-	maptext = "<span class=menutext>Observe</span>"
+	maptext = "<span class=menutext>Lummox click here</span>"
 
 /obj/screen/text/lobby/clickable/observe/Click()
 	. = ..()
