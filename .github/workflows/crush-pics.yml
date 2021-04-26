@@ -1,4 +1,3 @@
-// https://github.com/bdougie/live/blob/main/.github/workflows/image-compression.yml
 name: Compress Images
 on:
   pull_request:
