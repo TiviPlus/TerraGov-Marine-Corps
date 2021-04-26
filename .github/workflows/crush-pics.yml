@@ -9,6 +9,7 @@ on:
       - '**.jpeg'
       - '**.png'
       - '**.webp'
+      - '**.dmi'
 jobs:
   build:
     # Only run on Pull Requests within the same repository, and not from forks.
