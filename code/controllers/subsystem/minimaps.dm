@@ -284,7 +284,7 @@ SUBSYSTEM_DEF(minimaps)
 	if(hashed_minimaps[hash])
 		return hashed_minimaps[hash]
 	var/obj/screen/minimap/map = new(null, zlevel, flags)
-	if (!map.icon) //Don't wanna save an unusable minimap for a z-level.
+	if(!map.icon) //Don't wanna save an unusable minimap for a z-level.
 		CRASH("Empty and unusable minimap generated for '[zlevel]-[flags]'") //Can be caused by atoms calling this proc before minimap subsystem initializing.
 	hashed_minimaps[hash] = map
 	return map
@@ -371,6 +371,53 @@ SUBSYSTEM_DEF(minimaps)
 		map = SSminimaps.fetch_minimap_object(default_overwatch_level, minimap_flags)
 		return
 	map = SSminimaps.fetch_minimap_object(newz, minimap_flags)
+
+///tgui start
+
+/datum/action/minimap/ui_assets(mob/user)
+	. = ..()
+	//blip items
+	. += get_asset_datum(/datum/asset/spritesheet/minimap)
+	//map items
+	for(var/zlevel in SSminimaps.minimaps_by_z)
+		. += icon2html(SSminimaps.minimaps_by_z[zlevel].hud_image)
+
+/datum/action/minimap/ui_static_data(mob/user)
+	. = list()
+	var/list/minimap_z_offsets = list()
+	for(var/zlevel in SSminimaps.minimaps_by_z)
+		minimap_z_offsets.["[zlevel]"] = list("x_offset" = SSminimaps.minimaps_by_z[zlevel].x_offset, "y_offset" = SSminimaps.minimaps_by_z[zlevel].y_offset)
+	.["minimap_z_offsets"]  = minimap_z_offsets
+
+/datum/action/minimap/ui_data(mob/user)
+	. = list()
+	.["owner_coords"] = list("x" = owner.x, "y" = owner.y, "z" = owner.z)
+	//generates a list like this:
+	var/list/target_coords = list()
+	for(var/target in SSminimaps.images_by_source)
+		for(var/flag in minimaps_by_z["[target.z]"].images_assoc)//hotspot?
+			if(!(minimap_flags & num2text(flag)))
+				continue
+			target_coords["[target]"] = list("x" = SSminimaps.images_by_source[target].pixel_x)
+			target_coords["[target]"]["y"] = SSminimaps.images_by_source[target].pixel_y
+			target_coords["[target]"]["z"] = target.z
+			target_coords["[target]"]["icon_state"] = SSminimaps.images_by_source[target].icon_state
+	.["target_coords"] = target_coords
+
+
+/datum/action/minimap/ui_state(mob/user)
+	return GLOB.always_state
+
+/datum/asset/spritesheet/minimap
+	name = "minimap"
+
+/datum/asset/spritesheet/minimap/register()
+	//preload all blip icons
+	InsertAll("minimap", 'icons/UI_icons/map_blips.dmi')
+	..()
+
+//tgui end
+
 
 /datum/action/minimap/xeno
 	minimap_flags = MINIMAP_FLAG_XENO
