@@ -386,7 +386,7 @@ SUBSYSTEM_DEF(minimaps)
 	. = list()
 	var/list/minimap_z_offsets = list()
 	for(var/zlevel in SSminimaps.minimaps_by_z)
-		minimap_z_offsets.["[zlevel]"] = list("x_offset" = SSminimaps.minimaps_by_z[zlevel].x_offset, "y_offset" = SSminimaps.minimaps_by_z[zlevel].y_offset)
+		minimap_z_offsets["[zlevel]"] = list("x_offset" = SSminimaps.minimaps_by_z[zlevel].x_offset, "y_offset" = SSminimaps.minimaps_by_z[zlevel].y_offset)
 	.["minimap_z_offsets"]  = minimap_z_offsets
 
 /datum/action/minimap/ui_data(mob/user)
@@ -394,8 +394,8 @@ SUBSYSTEM_DEF(minimaps)
 	.["owner_coords"] = list("x" = owner.x, "y" = owner.y, "z" = owner.z)
 	//generates a list like this:
 	var/list/target_coords = list()
-	for(var/target in SSminimaps.images_by_source)
-		for(var/flag in minimaps_by_z["[target.z]"].images_assoc)//hotspot?
+	for(var/atom/target AS in SSminimaps.images_by_source)
+		for(var/flag in SSminimaps.minimaps_by_z["[target.z]"].images_assoc)//hotspot?
 			if(!(minimap_flags & num2text(flag)))
 				continue
 			target_coords["[target]"] = list("x" = SSminimaps.images_by_source[target].pixel_x)
