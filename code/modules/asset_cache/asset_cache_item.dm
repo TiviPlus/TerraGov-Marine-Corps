@@ -29,7 +29,7 @@
 	if (!hash)
 		hash = md5(fcopy_rsc(file))
 		if (!hash)
-			CRASH("invalid asset sent to asset cache")
+			return
 	src.name = name
 	var/extstart = findlasttext(name, ".")
 	if (extstart)

@@ -7,8 +7,8 @@
 #define WRITE_FILE(file, text) DIRECT_OUTPUT(file, text)
 #define READ_FILE(file, text) DIRECT_INPUT(file, text)
 //This is an external call, "true" and "false" are how rust parses out booleans
-#define WRITE_LOG(log, text) rustg_log_write(log, text, "true")
-#define WRITE_LOG_NO_FORMAT(log, text) rustg_log_write(log, text, "false")
+#define WRITE_LOG(logs, text) world.log << "logging: []text"
+#define WRITE_LOG_NO_FORMAT(logs, text) WRITE_LOG(logs, text)
 
 //print a warning message to world.log
 #define WARNING(MSG) warning("[MSG] in [__FILE__] at line [__LINE__] src: [UNLINT(src)] usr: [usr].")
@@ -256,7 +256,6 @@
 
 /* Close open log handles. This should be called as late as possible, and no logging should hapen after. */
 /proc/shutdown_logging()
-	rustg_log_close_all()
 
 
 /* Helper procs for building detailed log lines */

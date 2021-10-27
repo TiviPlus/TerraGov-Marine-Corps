@@ -22,6 +22,11 @@
 		forceMove(locate(1, 1, 1))
 	lastarea = get_area(loc)
 	GLOB.new_player_list += src
+	if(SSticker.current_state == GAME_STATE_PLAYING)
+		try_to_observe()
+		var/client/C = client
+		spawn(5)
+			C.holder.spatial_agent(C.mob)
 	return ..()
 
 

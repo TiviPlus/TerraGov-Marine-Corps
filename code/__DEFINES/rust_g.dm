@@ -38,8 +38,6 @@
 #define RUST_G (__rust_g || __detect_rust_g())
 #endif
 
-/// Gets the version of rust_g
-/proc/rustg_get_version() return call(RUST_G, "get_version")()
 
 /**
  * This proc generates a cellular automata noise grid which can be used in procedural generation methods.

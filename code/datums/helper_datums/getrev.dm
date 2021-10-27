@@ -11,10 +11,10 @@
 		commit = revinfo.commit
 		originmastercommit = revinfo.origin_commit
 	else
-		commit = rustg_git_revparse("HEAD")
+		commit = "1234"
 		if(commit)
-			date = rustg_git_commit_date(commit)
-		originmastercommit = rustg_git_revparse("origin/master")
+			date = "1234"
+		originmastercommit = "1234"
 
 	// goes to DD log and config_error.txt
 	log_world(get_log_message())

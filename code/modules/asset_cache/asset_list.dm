@@ -127,6 +127,7 @@ GLOBAL_LIST_EMPTY(asset_datums)
 
 
 /datum/asset/spritesheet/proc/ensure_stripped(sizes_to_strip = sizes)
+	return
 	for(var/size_id in sizes_to_strip)
 		var/size = sizes[size_id]
 		if (size[SPRSZ_STRIPPED])
@@ -153,13 +154,11 @@ GLOBAL_LIST_EMPTY(asset_datums)
 		var/sprite = sprites[sprite_id]
 		var/size_id = sprite[SPR_SIZE]
 		var/idx = sprite[SPR_IDX]
-		var/size = sizes[size_id]
-
-		var/icon/tiny = size[SPRSZ_ICON]
-		var/icon/big = size[SPRSZ_STRIPPED]
-		var/per_line = big.Width() / tiny.Width()
-		var/x = (idx % per_line) * tiny.Width()
-		var/y = round(idx / per_line) * tiny.Height()
+		//var/icon/tiny = size[SPRSZ_ICON]
+		//var/icon/big = size[SPRSZ_STRIPPED]
+		var/per_line = 20
+		var/x = (idx % per_line) * 10
+		var/y = round(idx / per_line) * 10
 
 		out += ".[name][size_id].[sprite_id]{background-position:-[x]px -[y]px;}"
 
