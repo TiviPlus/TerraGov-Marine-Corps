@@ -62,9 +62,6 @@
 	w_uniform = /obj/item/clothing/under/rank/centcom_commander/sa
 	belt = /obj/item/storage/belt/utility/full
 	shoes = /obj/item/clothing/shoes/marinechief/sa
-	gloves = /obj/item/clothing/gloves/marine/officer/chief/sa
-	glasses = /obj/item/clothing/glasses/sunglasses/sa/nodrop
-	back = /obj/item/storage/backpack/marine/satchel
 
 /datum/job/spatial_agent/galaxy_red
 	outfit = /datum/outfit/job/other/spatial_agent/galaxy_red

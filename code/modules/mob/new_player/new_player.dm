@@ -355,8 +355,6 @@
 	if(!SSticker || SSticker.current_state == GAME_STATE_STARTUP)
 		to_chat(src, span_warning("The game is still setting up, please try again later."))
 		return
-	if(tgui_alert(src, "Are you sure you wish to observe?[SSticker.mode?.observe_respawn_message()]", "Observe", list("Yes", "No")) != "Yes")
-		return
 	if(!client)
 		return TRUE
 	var/mob/dead/observer/observer = new()

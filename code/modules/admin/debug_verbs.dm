@@ -446,14 +446,11 @@ GLOBAL_PROTECT(AdminProcCallSpamPrevention)
 	log_admin("[key_name(usr)] viewed the runtimes.")
 
 
-/datum/admins/proc/spatial_agent()
+/datum/admins/proc/spatial_agent(user)
 	set category = "Debug"
 	set name = "Spatial Agent"
 
-	if(!check_rights(R_DEBUG))
-		return
-
-	var/mob/M = usr
+	var/mob/M = user
 	var/mob/living/carbon/human/H
 	var/spatial = FALSE
 	if(ishuman(M))
