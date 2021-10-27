@@ -22,6 +22,7 @@
 /obj/screen/plane_master/proc/Hide(override)
 	alpha = override || hide_alpha
 
+//this proc is called when a mob gets it's HUD objects initialized
 //Why do plane masters need a backdrop sometimes? Read https://secure.byond.com/forum/?post=2141928
 //Trust me, you need one. Period. If you don't think you do, you're doing something extremely wrong.
 /obj/screen/plane_master/proc/backdrop(mob/mymob)
