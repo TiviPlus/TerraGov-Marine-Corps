@@ -6,23 +6,6 @@
 	addtimer(CALLBACK(src, .proc/clear_fullscreen, category, animated), duration)
 
 
-/mob/proc/overlay_fullscreen(category, type, severity)
-	var/obj/screen/fullscreen/screen = fullscreens[category]
-	if (!screen || screen.type != type)
-		// needs to be recreated
-		clear_fullscreen(category, FALSE)
-		fullscreens[category] = screen = new type()
-	else if ((!severity || severity == screen.severity) && (!client || screen.screen_loc != "CENTER-7,CENTER-7" || screen.fs_view == client.view))
-		// doesn't need to be updated
-		return screen
-
-	screen.icon_state = "[initial(screen.icon_state)][severity]"
-	screen.severity = severity
-	if (client && SHOULD_SHOW_TO(src, screen))
-		screen.update_for_view(client.view)
-		client.screen += screen
-
-	return screen
 
 
 /mob/proc/clear_fullscreen(category, animated = 10)
