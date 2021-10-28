@@ -21,9 +21,6 @@
 
 	C.screen |= (C.parallax_layers)
 	var/obj/screen/plane_master/PM = screenmob.hud_used.plane_masters["[PLANE_SPACE]"]
-	if(screenmob != mymob)
-		C.screen -= locate(/obj/screen/plane_master/parallax_white) in C.screen
-		C.screen += PM
 	PM.color = list(
 		0, 0, 0, 0,
 		0, 0, 0, 0,
@@ -38,9 +35,6 @@
 	var/client/C = screenmob.client
 	C.screen -= (C.parallax_layers_cached)
 	var/obj/screen/plane_master/PM = screenmob.hud_used.plane_masters["[PLANE_SPACE]"]
-	if(screenmob != mymob)
-		C.screen -= locate(/obj/screen/plane_master/parallax_white) in C.screen
-		C.screen += PM
 	PM.color = initial(PM.color)
 	C.parallax_layers = null
 

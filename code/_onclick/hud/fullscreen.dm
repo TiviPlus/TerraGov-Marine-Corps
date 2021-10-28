@@ -162,29 +162,6 @@
 	animate(alpha = initial(alpha), time = 20, loop = -1)
 
 
-/obj/screen/fullscreen/lighting_backdrop
-	icon = 'icons/mob/screen/generic.dmi'
-	icon_state = "flash"
-	transform = matrix(200, 0, 0, 0, 200, 0)
-	plane = LIGHTING_PLANE
-	blend_mode = BLEND_OVERLAY
-	show_when_dead = TRUE
-
-/obj/screen/fullscreen/lighting_backdrop/update_for_view(client_view)
-	return
-
-//Provides darkness to the back of the lighting plane
-/obj/screen/fullscreen/lighting_backdrop/lit_secondary
-	invisibility = INVISIBILITY_LIGHTING
-	layer = BACKGROUND_LAYER + LIGHTING_PRIMARY_DIMMER_LAYER
-	color = "#000"
-	alpha = 60
-
-/obj/screen/fullscreen/lighting_backdrop/backplane
-	invisibility = INVISIBILITY_LIGHTING
-	layer = LIGHTING_BACKPLANE_LAYER
-	color = "#000"
-	blend_mode = BLEND_ADD
 
 /obj/screen/fullscreen/see_through_darkness
 	icon_state = "nightvision"
@@ -193,4 +170,3 @@
 	blend_mode = BLEND_ADD
 	show_when_dead = TRUE
 
-#undef SHOULD_SHOW_TO

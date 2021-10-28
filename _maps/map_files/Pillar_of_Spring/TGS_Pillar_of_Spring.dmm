@@ -12099,8 +12099,10 @@
 /turf/closed/wall/mainship,
 /area/mainship/hull/lower_hull)
 "Mc" = (
-/obj/machinery/floodlight/landing,
-/turf/open/floor/mainship/ntlogo/nt2,
+/obj/example_lighting_effect,
+/turf/open/floor/mainship/black{
+	dir = 8
+	},
 /area/mainship/squads/general)
 "Me" = (
 /obj/structure/table/mainship,
@@ -53104,7 +53106,7 @@ YY
 IX
 BY
 YY
-YY
+Mc
 el
 BY
 nc
@@ -53614,7 +53616,7 @@ JE
 Pl
 Oj
 jl
-Mc
+JE
 Pl
 Oj
 jl
