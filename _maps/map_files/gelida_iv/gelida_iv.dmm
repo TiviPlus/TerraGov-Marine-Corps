@@ -1676,7 +1676,7 @@
 /turf/open/floor/prison/blue,
 /area/gelida/indoors/a_block/hallway)
 "bea" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/item/reagent_containers/cup/glass/drinkingglass{
 	pixel_x = 12;
 	pixel_y = 17
@@ -1839,7 +1839,7 @@
 /turf/open/floor/plating/plating_catwalk/prison,
 /area/gelida/indoors/a_block/hallway)
 "bil" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /turf/open/floor/wood,
 /area/gelida/indoors/b_block/bar)
 "bim" = (
@@ -2087,7 +2087,7 @@
 /turf/open/floor/prison/whitegreen/full,
 /area/gelida/indoors/a_block/fitness)
 "brE" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/effect/spawner/random/misc/folder/nooffset{
 	pixel_y = 8
 	},
@@ -2364,7 +2364,7 @@
 /turf/open/floor/plating/ground/snow/layer0,
 /area/gelida/outdoors/colony_streets/central_streets)
 "bCk" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/item/ashtray/bronze{
 	pixel_x = 6;
 	pixel_y = -5
@@ -2876,7 +2876,7 @@
 /turf/open/floor/prison/darkred/full,
 /area/gelida/indoors/a_block/security)
 "bTD" = (
-/obj/structure/table/wood/gambling,
+/obj/structure/table/gamblingtable,
 /obj/machinery/atmospherics/pipe/manifold/green/hidden{
 	dir = 4
 	},
@@ -3874,7 +3874,7 @@
 /turf/open/floor/prison,
 /area/gelida/indoors/c_block/casino)
 "cEC" = (
-/obj/structure/table/wood/gambling,
+/obj/structure/table/gamblingtable,
 /obj/item/reagent_containers/cup/glass/drinkingglass{
 	pixel_x = 6;
 	pixel_y = 12
@@ -4205,7 +4205,7 @@
 /turf/open/floor/prison/sterilewhite/full,
 /area/gelida/indoors/a_block/corpo)
 "cOo" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/item/trash/hotdog{
 	pixel_x = -2;
 	pixel_y = -4
@@ -4362,7 +4362,7 @@
 	},
 /area/gelida/indoors/b_block/hydro)
 "cTr" = (
-/obj/structure/table/wood/gambling,
+/obj/structure/table/gamblingtable,
 /obj/machinery/atmospherics/pipe/simple/green/hidden,
 /turf/open/floor/prison,
 /area/gelida/indoors/c_block/casino)
@@ -5099,7 +5099,7 @@
 	},
 /area/gelida/landing_zone_forecon/UD6_Tornado)
 "dtb" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/item/reagent_containers/food/drinks/bottle/whiskey{
 	pixel_x = -7;
 	pixel_y = 18
@@ -6354,7 +6354,7 @@
 /turf/open/floor/prison/whitegreenfull2,
 /area/gelida/indoors/a_block/fitness)
 "egI" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/item/flashlight/lamp{
 	pixel_x = 7;
 	pixel_y = 14
@@ -7779,7 +7779,7 @@
 /turf/open/floor/plating/plating_catwalk/prison,
 /area/gelida/indoors/c_block/mining)
 "eZs" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/item/radio/off{
 	pixel_x = 6;
 	pixel_y = 7
@@ -9971,7 +9971,7 @@
 /turf/open/floor/mainship/black/full,
 /area/gelida/powergen)
 "gDq" = (
-/obj/structure/table/wood/gambling,
+/obj/structure/table/gamblingtable,
 /obj/item/toy/deck{
 	pixel_x = 4;
 	pixel_y = 12
@@ -11028,7 +11028,7 @@
 /turf/open/floor/prison,
 /area/gelida/landing_zone_1)
 "hmK" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/item/reagent_containers/food/drinks/bottle/whiskey{
 	pixel_x = -7;
 	pixel_y = 15
@@ -11345,7 +11345,7 @@
 	},
 /area/gelida/indoors/a_block/dorms)
 "hxP" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/item/flashlight/lamp/green{
 	pixel_y = 13
 	},
@@ -11770,7 +11770,7 @@
 	},
 /area/gelida/indoors/a_block/admin)
 "hNF" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/item/reagent_containers/food/drinks/flask/detflask{
 	pixel_x = -6;
 	pixel_y = 8
@@ -13288,7 +13288,7 @@
 	pixel_x = 12;
 	pixel_y = 16
 	},
-/obj/structure/table/wood/gambling,
+/obj/structure/table/gamblingtable,
 /turf/open/floor/carpet,
 /area/gelida/indoors/c_block/casino)
 "iLK" = (
@@ -13543,7 +13543,7 @@
 	},
 /area/gelida/indoors/a_block/admin)
 "iUP" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/item/flashlight/lamp/green,
 /turf/open/floor/wood,
 /area/gelida/indoors/a_block/executive)
@@ -13772,7 +13772,7 @@
 /turf/open/floor/prison,
 /area/gelida/outdoors/colony_streets/north_east_street)
 "jbM" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/item/storage/fancy/cigar{
 	pixel_y = 5
 	},
@@ -14199,7 +14199,7 @@
 /turf/open/floor/prison/darkred/full,
 /area/gelida/indoors/a_block/bridges/garden_bridge)
 "jsu" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/machinery/prop/computer/PC{
 	dir = 4;
 	pixel_y = 3
@@ -14218,7 +14218,7 @@
 /turf/open/floor/prison/darkbrown/full,
 /area/gelida/indoors/c_block/mining)
 "jsF" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/item/flashlight/lamp/green{
 	pixel_y = 13
 	},
@@ -14418,7 +14418,7 @@
 /turf/open/floor/mainship/stripesquare,
 /area/gelida/indoors/a_block/corpo)
 "jAn" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/item/storage/pill_bottle/happy{
 	pixel_x = 7;
 	pixel_y = 17
@@ -14578,7 +14578,7 @@
 /turf/open/floor/plating/plating_catwalk/prison,
 /area/gelida/indoors/a_block/dorms)
 "jIQ" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/item/flashlight/lamp/green{
 	pixel_x = 3
 	},
@@ -15365,7 +15365,7 @@
 /turf/open/floor/mainship/stripesquare,
 /area/gelida/indoors/a_block/executive)
 "kfE" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/item/clothing/suit/storage/snow_suit,
 /obj/item/reagent_containers/cup/glass/drinkingglass{
 	pixel_x = -1;
@@ -15460,7 +15460,7 @@
 /turf/open/floor/mainship/black/full,
 /area/gelida/powergen)
 "kip" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/effect/spawner/random/misc/cigarettes{
 	pixel_y = 4
 	},
@@ -15745,7 +15745,7 @@
 /turf/open/floor/plating/ground/snow/layer0,
 /area/gelida/landing_zone_1)
 "ktP" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/item/reagent_containers/food/drinks/bottle/whiskey{
 	pixel_x = -7;
 	pixel_y = 18
@@ -16809,7 +16809,7 @@
 	pixel_x = -1;
 	pixel_y = 7
 	},
-/obj/structure/table/wood,
+/obj/structure/table/woodentable,
 /obj/item/tool/wrench{
 	pixel_y = -6
 	},
@@ -18901,7 +18901,7 @@
 	},
 /area/gelida/indoors/a_block/dorms)
 "muy" = (
-/obj/structure/table/wood/gambling,
+/obj/structure/table/gamblingtable,
 /obj/structure/cable,
 /turf/open/floor/prison,
 /area/gelida/indoors/c_block/casino)
@@ -20496,7 +20496,7 @@
 /turf/open/floor/plating/ground/snow/layer1,
 /area/gelida/outdoors/rock)
 "nBr" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/item/toy/deck{
 	pixel_x = 2;
 	pixel_y = 4
@@ -21046,7 +21046,7 @@
 /turf/open/floor/prison/whitegreenfull2,
 /area/gelida/landing_zone_2)
 "nSp" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/machinery/recharger{
 	pixel_y = 1
 	},
@@ -21925,7 +21925,7 @@
 /turf/open/floor/prison,
 /area/gelida/landing_zone_forecon/landing_zone_4)
 "ozX" = (
-/obj/structure/table/wood/gambling,
+/obj/structure/table/gamblingtable,
 /obj/item/reagent_containers/cup/glass/drinkingglass{
 	pixel_x = 14;
 	pixel_y = 9
@@ -23423,7 +23423,7 @@
 /turf/open/floor/prison/sterilewhite,
 /area/gelida/indoors/lone_buildings/chunk)
 "psL" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/item/weapon/cane,
 /turf/open/floor/tile/yellow/patch,
 /area/gelida/indoors/a_block/corpo)
@@ -23865,7 +23865,7 @@
 /turf/open/floor/mainship/stripesquare,
 /area/gelida/indoors/a_block/bridges/dorms_fitness)
 "pIz" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/item/trash/plate,
 /obj/item/trash/plate{
 	pixel_x = 3;
@@ -24541,7 +24541,7 @@
 /turf/open/floor/plating,
 /area/gelida/indoors/a_block/admin)
 "qdh" = (
-/obj/structure/table/wood/gambling,
+/obj/structure/table/gamblingtable,
 /obj/item/reagent_containers/food/drinks/bottle/sake{
 	pixel_x = 3;
 	pixel_y = 13
@@ -24558,7 +24558,7 @@
 /turf/open/floor/prison/sterilewhite/full,
 /area/gelida/indoors/a_block/medical)
 "qdt" = (
-/obj/structure/table/wood/gambling,
+/obj/structure/table/gamblingtable,
 /obj/item/toy/deck{
 	pixel_x = 4;
 	pixel_y = 12
@@ -24702,7 +24702,7 @@
 /turf/open/floor/prison/plate,
 /area/gelida/outdoors/colony_streets/north_west_street)
 "qic" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/item/trash/plate,
 /turf/open/floor/carpet,
 /area/gelida/indoors/b_block/bar)
@@ -25733,7 +25733,7 @@
 /turf/open/floor/plating/ground/snow/layer0,
 /area/gelida/outdoors/colony_streets/north_east_street)
 "qSq" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/item/flashlight/lamp{
 	pixel_x = 4;
 	pixel_y = 14
@@ -25773,7 +25773,7 @@
 /turf/open/floor/prison,
 /area/gelida/indoors/a_block/dorms)
 "qTA" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/item/reagent_containers/cup/glass/drinkingglass{
 	pixel_x = 13;
 	pixel_y = 17
@@ -26113,7 +26113,7 @@
 /turf/open/floor/plating/ground/desertdam/asphalt/cement,
 /area/gelida/outdoors/colony_streets/east_central_street)
 "rdK" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/machinery/computer/security/wooden_tv,
 /turf/open/floor/wood,
 /area/gelida/indoors/a_block/executive)
@@ -26835,7 +26835,7 @@
 /turf/open/floor/prison/sterilewhite/full,
 /area/gelida/indoors/a_block/corpo)
 "rzs" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/item/ashtray/bronze{
 	pixel_x = -7;
 	pixel_y = 4
@@ -27566,7 +27566,7 @@
 /turf/open/floor/prison/sterilewhite,
 /area/gelida/indoors/a_block/corpo)
 "sar" = (
-/obj/structure/table/wood/gambling,
+/obj/structure/table/gamblingtable,
 /obj/item/toy/deck{
 	pixel_x = 4;
 	pixel_y = 5
@@ -28480,7 +28480,7 @@
 /turf/open/floor/plating/ground/snow/layer0,
 /area/gelida/outdoors/colony_streets/north_east_street)
 "sED" = (
-/obj/structure/table/wood,
+/obj/structure/table/woodentable,
 /obj/item/storage/bible,
 /turf/open/floor/tile/dark2{
 	dir = 8
@@ -28550,7 +28550,7 @@
 /turf/open/floor/plating/plating_catwalk/prison,
 /area/gelida/indoors/c_block/mining)
 "sHx" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/machinery/prop/computer/PC{
 	pixel_y = 3
 	},
@@ -28927,7 +28927,7 @@
 	},
 /area/gelida/outdoors/colony_streets/north_west_street)
 "sTq" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/item/flashlight/lamp/green{
 	pixel_x = -7;
 	pixel_y = 13
@@ -29040,7 +29040,7 @@
 /turf/open/floor/prison,
 /area/gelida/indoors/c_block/casino)
 "sWC" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /turf/open/floor/carpet,
 /area/gelida/indoors/b_block/bar)
 "sWW" = (
@@ -29310,7 +29310,7 @@
 /turf/open/floor/tile/yellow/patch,
 /area/gelida/indoors/a_block/corpo)
 "tgg" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/item/storage/fancy/cigar{
 	pixel_y = 7
 	},
@@ -29842,7 +29842,7 @@
 /turf/open/floor/plating/ground/snow/layer0,
 /area/gelida/landing_zone_2)
 "tAz" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /turf/open/floor/wood,
 /area/gelida/indoors/c_block/casino)
 "tAB" = (
@@ -30200,7 +30200,7 @@
 /turf/open/floor/plating/ground/ice,
 /area/gelida/caves/east_caves/garbledradio)
 "tOF" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/effect/spawner/random/misc/paperbin{
 	pixel_y = 8
 	},
@@ -32037,7 +32037,7 @@
 	},
 /area/gelida/outdoors/colony_streets/east_central_street)
 "vdc" = (
-/obj/structure/table/wood,
+/obj/structure/table/woodentable,
 /obj/machinery/reagentgrinder{
 	pixel_x = 3;
 	pixel_y = 5
@@ -32313,7 +32313,7 @@
 	},
 /area/gelida/landing_zone_forecon/landing_zone_4)
 "vnd" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /turf/open/floor/prison/cleanmarked,
 /area/gelida/landing_zone_forecon/landing_zone_4)
 "vnB" = (
@@ -34062,7 +34062,7 @@
 	},
 /area/gelida/indoors/a_block/admin)
 "wyt" = (
-/obj/structure/table/wood/gambling,
+/obj/structure/table/gamblingtable,
 /turf/open/floor/prison,
 /area/gelida/indoors/c_block/casino)
 "wyE" = (
@@ -34516,7 +34516,7 @@
 	},
 /area/gelida/indoors/lone_buildings/storage_blocks)
 "wRa" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/machinery/computer/security/wooden_tv{
 	desc = "An old TV hooked up to a video cassette recorder, you can even use it to time shift WOW.";
 	dir = 8;
@@ -34550,7 +34550,7 @@
 	},
 /area/gelida/indoors/a_block/dorms)
 "wRS" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/item/flashlight/lamp/green{
 	pixel_y = 2
 	},
@@ -34820,7 +34820,7 @@
 /turf/open/floor/plating,
 /area/gelida/indoors/c_block/garage)
 "xdp" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/item/trash/plate{
 	pixel_y = 6
 	},
@@ -34894,7 +34894,7 @@
 	},
 /area/gelida/outdoors/colony_streets/south_east_street)
 "xiV" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/machinery/light{
 	dir = 4
 	},
@@ -35096,7 +35096,7 @@
 /turf/open/floor/prison/plate,
 /area/gelida/indoors/a_block/hallway)
 "xqu" = (
-/obj/structure/table/wood/fancy,
+/obj/structure/table/fancywoodentable,
 /obj/item/clothing/suit/storage/snow_suit,
 /turf/open/floor/carpet,
 /area/gelida/indoors/b_block/bar)
@@ -35437,7 +35437,7 @@
 /turf/open/floor/plating/ground/snow/layer0,
 /area/gelida/landing_zone_1)
 "xCd" = (
-/obj/structure/table/wood/gambling,
+/obj/structure/table/gamblingtable,
 /obj/item/spacecash/c500{
 	pixel_x = -7;
 	pixel_y = 10

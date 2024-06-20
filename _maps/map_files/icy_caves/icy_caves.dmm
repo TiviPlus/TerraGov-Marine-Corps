@@ -1341,7 +1341,7 @@
 /turf/open/floor/plating/ground/ice,
 /area/icy_caves/caves/south)
 "hv" = (
-/obj/structure/table/wood,
+/obj/structure/table/woodentable,
 /obj/effect/spawner/random/misc/paperbin,
 /obj/item/tool/stamp,
 /turf/open/floor/wood,
@@ -2389,7 +2389,7 @@
 /turf/open/floor/tile/dark,
 /area/icy_caves/caves/northern)
 "mW" = (
-/obj/structure/table/wood,
+/obj/structure/table/woodentable,
 /obj/effect/landmark/corpsespawner/colonist,
 /obj/effect/decal/cleanable/blood,
 /obj/effect/spawner/random/misc/plushie,
@@ -2944,7 +2944,7 @@
 /turf/open/floor/tile/dark,
 /area/icy_caves/caves/northwestmonorail/hallway)
 "pM" = (
-/obj/structure/table/wood,
+/obj/structure/table/woodentable,
 /obj/item/storage/bible/booze,
 /obj/item/reagent_containers/food/drinks/bottle/vodka,
 /obj/effect/spawner/random/weaponry/gun,
@@ -4753,7 +4753,7 @@
 /turf/open/floor/cult,
 /area/icy_caves/caves/south)
 "xP" = (
-/obj/structure/table/wood,
+/obj/structure/table/woodentable,
 /obj/item/tool/kitchen/knife/ritual,
 /obj/effect/decal/cleanable/blood,
 /turf/open/floor/cult,
@@ -4793,7 +4793,7 @@
 /turf/open/floor/prison/bright_clean/two,
 /area/icy_caves/caves/northwestmonorail)
 "yc" = (
-/obj/structure/table/wood,
+/obj/structure/table/woodentable,
 /obj/item/flashlight/lamp,
 /obj/item/tool/pen/blue{
 	pixel_x = 5
@@ -6002,7 +6002,7 @@
 /turf/open/floor/plating/ground/snow/layer0,
 /area/icy_caves/outpost/outside/center)
 "DE" = (
-/obj/structure/table/wood/gambling,
+/obj/structure/table/gamblingtable,
 /obj/effect/spawner/random/weaponry/gun,
 /obj/effect/landmark/weed_node,
 /turf/open/floor/wood,
@@ -9149,7 +9149,7 @@
 /area/icy_caves/caves/northwestmonorail/hallway)
 "SQ" = (
 /obj/item/toy/dice/d20,
-/obj/structure/table/wood/gambling,
+/obj/structure/table/gamblingtable,
 /turf/open/floor/wood,
 /area/icy_caves/caves/underground_cafeteria)
 "SR" = (
@@ -10457,7 +10457,7 @@
 /turf/open/floor/tile/dark,
 /area/icy_caves/outpost/security)
 "YS" = (
-/obj/structure/table/wood,
+/obj/structure/table/woodentable,
 /obj/effect/spawner/random/misc/paperbin,
 /obj/item/tool/stamp,
 /obj/effect/landmark/weed_node,

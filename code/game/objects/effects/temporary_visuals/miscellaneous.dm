@@ -148,6 +148,20 @@ GLOBAL_LIST_EMPTY(blood_particles)
 	animate(src, pixel_y = -5, time=5)
 	animate(icon_state=null, icon=null, time=2) // to vanish it immediately
 
+/obj/effect/temp_visual/maw_impact
+	name = "maw impact animation"
+	icon_state = "maw"
+	layer = ABOVE_ALL_MOB_LAYER
+	duration = 11
+	density = FALSE
+	opacity = FALSE
+
+/obj/effect/temp_visual/maw_impact/Initialize(mapload)
+	. = ..()
+	pixel_y = 600
+	animate(src, pixel_y = -5, time=10)
+	animate(icon_state=null, icon=null, time=1) // to vanish it immediately
+
 /obj/effect/temp_visual/heavyimpact
 	name = "heavy impact"
 	icon = 'icons/effects/heavyimpact.dmi'

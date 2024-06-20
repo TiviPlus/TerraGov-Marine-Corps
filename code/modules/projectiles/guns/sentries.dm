@@ -20,8 +20,6 @@
 	ignored_terrains = list(
 		/obj/machinery/deployable/mounted,
 		/obj/machinery/miner,
-		/obj/hitbox,
-		/obj/vehicle/sealed/armored/multitile,
 	)
 
 	turret_flags = TURRET_HAS_CAMERA|TURRET_SAFETY|TURRET_ALERTS
@@ -111,8 +109,6 @@
 	ignored_terrains = list(
 		/obj/machinery/deployable/mounted,
 		/obj/machinery/miner,
-		/obj/hitbox,
-		/obj/vehicle/sealed/armored/multitile,
 	)
 
 	gun_features_flags = GUN_AMMO_COUNTER|GUN_DEPLOYED_FIRE_ONLY|GUN_WIELDED_FIRING_ONLY|GUN_AMMO_COUNT_BY_SHOTS_REMAINING|GUN_ENERGY|GUN_SMOKE_PARTICLES
