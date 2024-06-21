@@ -702,7 +702,7 @@
 			else
 				client.eye = client.mob
 				client.perspective = MOB_PERSPECTIVE
-		else if(isturf(new_eye))
+		else if(isturf(new_eye)) // TODO SETTING A TURF DOES NOT WORK RN
 			//Set to the turf unless it's our current turf
 			if(new_eye != loc)
 				client.perspective = EYE_PERSPECTIVE
