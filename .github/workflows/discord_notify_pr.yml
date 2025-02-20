@@ -8,10 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Send Discord notification
-        uses: TiviPlus/discord-notify@v1.1
+        uses: TiviPlus/discord-notify@v1.2
         with:
           webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
           message: "${{ github.event.pull_request.html_url }}"
           include_image: true
           avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
           username: Git test bot
+          title_url: "${{ github.event.pull_request.html_url }}"
