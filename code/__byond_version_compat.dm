@@ -9,7 +9,7 @@
 #endif
 #endif
 
-// So we want to have compile time guarantees these methods exist on local type
+// So we want to have compile time guarantees these methods exist on local typ
 // We use wrappers for this in case some part of the api ever changes, and to make their function more clear
 // For the record: GLOBAL_VERB_REF would be useless as verbs can't be global.
 
