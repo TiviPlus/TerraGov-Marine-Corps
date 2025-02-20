@@ -7,7 +7,7 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      - name: "Check for ARTIFACTS_FILE_HOUSE_KEY"
+      - name: "Check for DISCORD_WEBHOOK"
         id: secrets_set
         env:
           ENABLER_SECRET: ${{ secrets.DISCORD_WEBHOOK }}
