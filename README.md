@@ -6,7 +6,6 @@ TerraGov Marine Corps 
 [![Badge Time]][Time]
 
 </h1>
-
 <div align = center>
 
 ![Badge Resentment]![Badge Dept][![Badge Byond]][Byond]
