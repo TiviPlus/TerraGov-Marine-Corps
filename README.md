@@ -16,7 +16,6 @@ TerraGov Marine Corps 
 <br>
 
 ## Licensing
-
 This fork is based on the `July 2018` version of **[ColonialMarines]** .
 
 <br>
