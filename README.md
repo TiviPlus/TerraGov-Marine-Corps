@@ -4,7 +4,6 @@
 TerraGov Marine Corps 
 [![Badge Issues]][Issues]
 [![Badge Time]][Time]
-
 </h1>
 
 <div align = center>
