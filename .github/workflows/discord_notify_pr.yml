@@ -12,6 +12,6 @@ jobs:
         with:
           webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
           include_image: true
-          avatar_url: https://github.com/tgstation/TerraGov-Marine-Corps/blob/master/icons/tgmc_64.png
+          avatar_url: https://raw.githubusercontent.com/tgstation/TerraGov-Marine-Corps/refs/heads/master/icons/tgmc_64.png
           username: mpreg emoji test bot
           title_url: "${{ github.event.pull_request.html_url }}"
