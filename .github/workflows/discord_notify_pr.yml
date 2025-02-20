@@ -7,8 +7,17 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
+      - name: "Check for ARTIFACTS_FILE_HOUSE_KEY"
+        id: secrets_set
+        env:
+          ENABLER_SECRET: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          unset SECRET_EXISTS
+          if [ -n "$ENABLER_SECRET" ]; then SECRET_EXISTS=true ; fi
+          echo "SECRETS_ENABLED=$SECRET_EXISTS" >> $GITHUB_OUTPUT
       - name: Send Discord notification
-        uses: TiviPlus/discord-notify@v1.6
+        uses: TiviPlus/discord-notify@v2
+        if: steps.secrets_set.outputs.SECRETS_ENABLED
         with:
           webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
           include_image: true
