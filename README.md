@@ -23,7 +23,6 @@ This fork is based on the `July 2018` version of **[ColonialMarines]** .
 
 *Contributions, if not otherwise specified,* <br>
 *are licensed under the **[AGPL][License AGPL]** license.*
-
 <br>
 <br>
 
