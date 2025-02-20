@@ -49,7 +49,6 @@ Asset Type      | Source                                 | License
 [Badge Time]: https://isitmaintained.com/badge/resolution/tgstation/TerraGov-Marine-Corps.svg
 [Badge Dept]: https://forthebadge.com/images/badges/contains-technical-debt.svg
 
-
 <!------------------------------{ License Badges }----------------------------->
 
 [Badge CC-BY-NC-SA]: https://licensebuttons.net/l/by-nc-sa/4.0/80x15.png
