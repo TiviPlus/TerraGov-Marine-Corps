@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Send Discord notification
-        uses: TiviPlus/discord-notify@v1.5
+        uses: TiviPlus/discord-notify@v1.6
         with:
           webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
           include_image: true
