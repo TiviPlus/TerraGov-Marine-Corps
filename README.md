@@ -12,7 +12,6 @@ TerraGov Marine Corps 
 ![Badge Resentment]![Badge Dept][![Badge Byond]][Byond]
 
 </div>
-
 <br>
 
 ## Licensing
