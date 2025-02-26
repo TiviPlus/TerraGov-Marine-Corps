@@ -21,7 +21,8 @@ jobs:
         with:
           webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
           include_image: false
-          message: "${{ github.event.pull_request.title }}"
+          title: "${{ format('{0} {1}', github.event.pull_request.user.login, github.event.pull_request.title) }}"
+          message: "test"
           avatar_url: https://raw.githubusercontent.com/tgstation/TerraGov-Marine-Corps/refs/heads/master/icons/tgmc_64.png
           username: mpreg emoji test bot
           title_url: "${{ github.event.pull_request.html_url }}"
