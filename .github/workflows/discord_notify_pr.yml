@@ -24,6 +24,6 @@ jobs:
           message: "GET_ACTION"
           include_image: false
           show_author: false
-          avatar_url: https://raw.githubusercontent.com/tgstation/TerraGov-Marine-Corps/refs/heads/master/icons/tgmc_64.png
+          avatar_url: https://avatars.githubusercontent.com/u/1363778?s=200&v=4
           username: mpreg emoji test bot
           title_url: "${{ github.event.pull_request.html_url }}"
