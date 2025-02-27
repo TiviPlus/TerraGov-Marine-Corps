@@ -16,13 +16,13 @@ jobs:
           if [ -n "$ENABLER_SECRET" ]; then SECRET_EXISTS=true ; fi
           echo "SECRETS_ENABLED=$SECRET_EXISTS" >> $GITHUB_OUTPUT
       - name: Send Discord notification
-        uses: TiviPlus/discord-notify@aabf07e9ca0e971a9a8b70c95d00aed2b4ff2f89
+        uses: TiviPlus/discord-notify@c3b0b09d8c05701274ab10a713a7efc2d5f865a4
         if: steps.secrets_set.outputs.SECRETS_ENABLED
         with:
           webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
-          include_image: false
           title: ${{ github.event.pull_request.user.login }} - ${{ github.event.pull_request.title }}
-          message: "Pull Request #29 Reopened by TiviPlus"
+          message: "GET_ACTION"
+          include_image: false
           show_author: false
           avatar_url: https://raw.githubusercontent.com/tgstation/TerraGov-Marine-Corps/refs/heads/master/icons/tgmc_64.png
           username: mpreg emoji test bot
