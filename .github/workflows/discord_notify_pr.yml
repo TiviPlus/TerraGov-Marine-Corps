@@ -16,7 +16,7 @@ jobs:
           if [ -n "$ENABLER_SECRET" ]; then SECRET_EXISTS=true ; fi
           echo "SECRETS_ENABLED=$SECRET_EXISTS" >> $GITHUB_OUTPUT
       - name: Send Discord notification
-        uses: TiviPlus/discord-notify@0a82ddeddf30deb2a79bc2516d0ca85ed810914b
+        uses: TiviPlus/discord-notify@aabf07e9ca0e971a9a8b70c95d00aed2b4ff2f89
         if: steps.secrets_set.outputs.SECRETS_ENABLED
         with:
           webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
