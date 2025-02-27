@@ -22,7 +22,7 @@ jobs:
           webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
           include_image: false
           title: ${{ github.event.pull_request.user.login }} - ${{ github.event.pull_request.title }}
-          message: "Pull Request #29 Closed by TiviPlus"
+          message: "Pull Request #29 Reopened by TiviPlus"
           show_author: false
           avatar_url: https://raw.githubusercontent.com/tgstation/TerraGov-Marine-Corps/refs/heads/master/icons/tgmc_64.png
           username: mpreg emoji test bot
