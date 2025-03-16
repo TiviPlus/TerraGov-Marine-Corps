@@ -484,6 +484,7 @@ F// DM Environment file for baystation12.dme.
 #include "code\datums\components\larva_queue.dm"
 #include "code\datums\components\mobile_power.dm"
 #include "code\datums\components\mounted_gun.dm"
+#include "code\datums\components\multiz_shadow.dm"
 #include "code\datums\components\orbiter.dm"
 #include "code\datums\components\overlay_lighting.dm"
 #include "code\datums\components\reequip.dm"
