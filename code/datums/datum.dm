@@ -63,7 +63,7 @@
 	var/list/cooldowns
 
 	/// List for handling persistent filters.
-	var/list/filter_data
+	var/list/datum/filter_data/filter_data
 
 #ifdef DATUMVAR_DEBUGGING_MODE
 	var/list/cached_vars
@@ -299,6 +299,51 @@
 		return
 	TIMER_COOLDOWN_END(source, index)
 
+
+/datum/filter_data
+	///Filter priority used when sorting the filter
+	var/priority
+
+	var/draw_original
+	///Assoc List of actual arglist arguments to pass to filter()
+	var/list/arguments
+	/**
+	 * Reference to the filter
+	 * Keep in mind, dm_filter is snowflake cus lummy loves us
+	 * So it runtimes if you access vars on it that it isnt using
+	 * oh also type isnt actually the type, its the string of the filter type
+	 * Just use the fuckin arguments var man
+	 */
+	var/dm_filter/filter
+
+/datum/filter_data/New(priority, list/params, draw_original)
+	. = ..()
+	src.priority = priority
+	src.draw_original = draw_original
+	arguments = params
+	var/atom/renderer = params["render_source"]
+	if(renderer)
+		renderer.relay_render_to(src, draw_original)
+
+///Called when the sources render_target is updated to sync our filters' render_target
+/datum/filter_data/proc/update_render_source()
+	//this is only called by managed render source code so assume render_source is accessible
+	filter?.render_source = rendering_from?.provider.render_target
+	arguments["render_source"] = rendering_from?.provider.render_target
+
+/datum/filter_data/proc/set_render_from(datum/render_relay/new_relay)
+	rendering_from = new_relay
+	update_render_source()
+
+///returns the original args used when creating this filter, unmodified
+/datum/filter_data/proc/get_unmodified_args()
+	RETURN_TYPE(/list)
+	var/list/changed_args = arguments.Copy()
+	if(!changed_args["render_source"])
+		return changed_args
+	changed_args["render_source"] = rendering_from.provider
+	return changed_args
+
 /** Add a filter to the datum.
  * This is on datum level, despite being most commonly / primarily used on atoms, so that filters can be applied to images / mutable appearances.
  * Can also be used to assert a filter's existence. I.E. update a filter regardless if it exists or not.
@@ -307,22 +352,26 @@
  * * name - Filter name
  * * priority - Priority used when sorting the filter.
  * * params - Parameters of the filter.
+ * * update_filters - whether to update filters. should only be used by [/datum/proc/add_filters] to reduce update_filters calls
+ * * update_filters - whether to update filters. should only be used by [/datum/proc/add_filters] to reduce update_filters calls
  */
-/datum/proc/add_filter(name, priority, list/params)
+/datum/proc/add_filter(name, priority, list/params, render_source_keep_original = TRUE, update_filters=TRUE)
+	//while we want to abstract away render source, we still need to use it for the filter
+	if(params["render_source"])
+		ASSERT(isatom(params["render_source"]) || isimage(params["render_source"]), "Do not pass non-atom render_sources to add_filter")
 	LAZYINITLIST(filter_data)
 	var/list/copied_parameters = params.Copy()
-	copied_parameters["priority"] = priority
-	filter_data[name] = copied_parameters
-	update_filters()
+	var/datum/filter_data/data = new(priority, copied_parameters, render_source_keep_original)
+	filter_data[name] = data
+	if(update_filters)
+		update_filters()
 
 ///A version of add_filter that takes a list of filters to add rather than being individual, to limit calls to update_filters().
 /datum/proc/add_filters(list/list/filters)
 	LAZYINITLIST(filter_data)
 	for(var/list/individual_filter as anything in filters)
-		var/list/params = individual_filter["params"]
-		var/list/copied_parameters = params.Copy()
-		copied_parameters["priority"] = individual_filter["priority"]
-		filter_data[individual_filter["name"]] = copied_parameters
+		individual_filter["update_filters"] = FALSE
+		add_filter(arglist(individual_filter))
 	update_filters()
 
 ///Sorts our filters by priority and reapplies them
@@ -332,11 +381,11 @@
 	atom_cast.filters = null
 	filter_data = sortTim(filter_data, GLOBAL_PROC_REF(cmp_filter_data_priority), TRUE)
 	for(var/f in filter_data)
-		var/list/data = filter_data[f]
-		var/list/arguments = data.Copy()
-		arguments -= "priority"
-		atom_cast.filters += filter(arglist(arguments))
-	UNSETEMPTY(filter_data)
+		var/datum/filter_data/data = filter_data[f]
+		var/dm_filter/newfilter = filter(arglist(data.arguments.Copy()))
+		data.filter = newfilter
+		atom_cast.filters += newfilter
+
 /** Update a filter's parameter to the new one. If the filter doesnt exist we won't do anything.
  *
  * Arguments:
@@ -345,14 +394,17 @@
  * * overwrite - TRUE means we replace the parameter list completely. FALSE means we only replace the things on new_params.
  */
 /datum/proc/modify_filter(name, list/new_params, overwrite = FALSE)
-	var/filter = get_filter(name)
-	if(!filter)
+	var/datum/filter_data/data = filter_data[name]
+	if(!data)
 		return
 	if(overwrite)
-		filter_data[name] = new_params
+		data.arguments = new_params
 	else
 		for(var/thing in new_params)
-			filter_data[name][thing] = new_params[thing]
+			data.arguments[thing] = new_params[thing]
+	var/atom/renderer = new_params["render_source"]
+	if(renderer)
+		renderer.relay_render_to(data)
 	update_filters()
 
 /** Update a filter's parameter and animate this change. If the filter doesnt exist we won't do anything.
@@ -371,6 +423,7 @@
 		return
 	// This can get injected by the filter procs, we want to support them so bye byeeeee
 	new_params -= "type"
+	//render_source is implicitly set here to an atom if provided but itll get overridden in a sec by modify filter anyway to relay properly
 	animate(filter, new_params, time = time, easing = easing, loop = loop)
 	modify_filter(name, new_params)
 
@@ -378,16 +431,16 @@
 /datum/proc/change_filter_priority(name, new_priority)
 	if(!filter_data || !filter_data[name])
 		return
-
-	filter_data[name]["priority"] = new_priority
+	var/datum/filter_data/data = filter_data[name]
+	data.priority = new_priority
 	update_filters()
 
 /// Returns the filter associated with the passed key
 /datum/proc/get_filter(name)
 	ASSERT(isatom(src) || isimage(src))
 	if(filter_data && filter_data[name])
-		var/atom/atom_cast = src // filters only work with images or atoms.
-		return atom_cast.filters[filter_data.Find(name)]
+		var/datum/filter_data/data = filter_data[name]
+		return data.filter
 
 /// Returns the indice in filters of the given filter name.
 /// If it is not found, returns null.
@@ -403,11 +456,15 @@
 
 	for(var/name in names)
 		if(filter_data[name])
+			qdel(filter_data[name])
 			filter_data -= name
 	update_filters()
+	UNSETEMPTY(filter_data)
 
 /datum/proc/clear_filters()
 	ASSERT(isatom(src) || isimage(src))
 	var/atom/atom_cast = src // filters only work with images or atoms.
+	for(var/name in filter_data)
+		qdel(filter_data[name])
 	filter_data = null
 	atom_cast.filters = null
