@@ -360,6 +360,8 @@
 	if(params["render_source"])
 		ASSERT(isatom(params["render_source"]) || isimage(params["render_source"]), "Do not pass non-atom render_sources to add_filter")
 	LAZYINITLIST(filter_data)
+	if(filter_data[name])
+		qdel(filter_data[name])
 	var/list/copied_parameters = params.Copy()
 	var/datum/filter_data/data = new(priority, copied_parameters, render_source_keep_original)
 	filter_data[name] = data
