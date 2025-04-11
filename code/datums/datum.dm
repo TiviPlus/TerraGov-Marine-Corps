@@ -356,7 +356,6 @@
  * * update_filters - whether to update filters. should only be used by [/datum/proc/add_filters] to reduce update_filters calls
  */
 /datum/proc/add_filter(name, priority, list/params, render_source_keep_original = TRUE, update_filters=TRUE)
-	//while we want to abstract away render source, we still need to use it for the filter
 	if(params["render_source"])
 		ASSERT(isatom(params["render_source"]) || isimage(params["render_source"]), "Do not pass non-atom render_sources to add_filter")
 	LAZYINITLIST(filter_data)
