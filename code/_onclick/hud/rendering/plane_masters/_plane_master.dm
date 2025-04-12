@@ -36,6 +36,8 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen/plane_master)
 	var/blend_mode_override
 	/// list of current relays this plane is utilizing to render
 	var/list/atom/movable/render_plane_relay/relays = list()
+	///assoc list of render_sourced filters we apply that refer to other planes, plane = list(name, prio, args)
+	var/list/filter_relays = list()
 	/// if render relays have already be generated
 	var/relays_generated = FALSE
 
@@ -107,8 +109,6 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen/plane_master)
 	SET_PLANE_W_SCALAR(src, real_plane, offset)
 	for(var/i in 1 to length(render_relay_planes))
 		render_relay_planes[i] = GET_NEW_PLANE(render_relay_planes[i], offset)
-	if(initial(render_target))
-		render_target = OFFSET_RENDER_TARGET(initial(render_target), offset)
 
 /atom/movable/screen/plane_master/proc/set_alpha(new_alpha)
 	true_alpha = new_alpha
@@ -234,3 +234,37 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen/plane_master)
 
 		return
 	show_to(relevant)
+
+/atom/movable/screen/plane_master/proc/filter_sourced_from_plane(plane, name, prio, list/filter_args)
+	filter_relays["[plane]"] = list(name, prio, filter_args)
+	RegisterSignal(home.our_hud, COMSIG_HUD_PLANES_REBUILT, PROC_REF(planes_rebuilt))
+	var/atom/movable/screen/plane_master/master = home.our_hud?.get_plane_master(plane)
+	if(master)
+		filter_from_plane(master)
+
+/atom/movable/screen/plane_master/proc/remove_sourced_from_plane(plane, name)
+	filter_relays -= plane
+	remove_filter(name)
+
+/atom/movable/screen/plane_master/proc/planes_rebuilt(datum/hud/source, list/new_masters, key)
+	SIGNAL_HANDLER
+	for(var/newplane in filter_relays)
+		var/atom/movable/screen/plane_master/master = new_masters[newplane]
+		if(master)
+			var/list/filter_args = filter_relays["[newplane]"]
+			if(filter_args)
+				remove_filter(filter_args[1])
+			filter_from_plane(master)
+
+/atom/movable/screen/plane_master/proc/filter_from_plane(atom/movable/screen/plane_master/new_plane_master)
+	PRIVATE_PROC(TRUE)
+	var/list/data = filter_relays["[new_plane_master.plane]"]
+	var/list/filter_args = data[3]
+	filter_args["render_source"] = new_plane_master
+	add_filter(data[1], data[2], filter_args, FALSE)
+
+/atom/movable/screen/plane_master/proc/on_plane_del(atom/movable/screen/plane_master/source)
+	SIGNAL_HANDLER
+	PRIVATE_PROC(TRUE)
+	var/list/filter_args = filter_relays["[source.plane]"]
+	remove_filter(filter_args[1])

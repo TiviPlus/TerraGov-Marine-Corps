@@ -34,7 +34,8 @@
 
 		// Now we walk for filters that take from us
 		for(var/filter_id in plane.filter_data)
-			var/list/filter = plane.filter_data[filter_id]
+			var/datum/filter_data/data = plane.filter_data[filter_id]
+			var/list/filter = data.arguments
 			if(!filter["render_source"])
 				continue
 			var/atom/movable/screen/plane_master/target = render_target_to_plane[filter["render_source"]]
