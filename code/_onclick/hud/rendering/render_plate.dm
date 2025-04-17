@@ -313,7 +313,6 @@
 	plane = EMISSIVE_RENDER_PLATE
 	appearance_flags = PLANE_MASTER|NO_CLIENT_COLOR
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
-	render_target = EMISSIVE_RENDER_TARGET
 	render_relay_planes = list()
 	critical = PLANE_CRITICAL_DISPLAY
 
@@ -335,7 +334,6 @@
 	// Fullwhite where there's anything, no color otherwise
 	color = list(255,255,255,255, 255,255,255,255, 255,255,255,255, 255,255,255,255, 0,0,0,0)
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
-	render_target = LIGHT_MASK_RENDER_TARGET
 	// We blend against the game plane, so she's gotta multiply!
 	blend_mode = BLEND_MULTIPLY
 	render_relay_planes = list(RENDER_PLANE_GAME)
