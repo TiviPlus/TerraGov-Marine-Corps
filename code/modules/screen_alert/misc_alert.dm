@@ -131,10 +131,9 @@
 
 	var/mutable_appearance/alphafilter = mutable_appearance('icons/effects/alphacolors.dmi', "announcement")
 	alphafilter.appearance_flags = APPEARANCE_UI
-	alphafilter.render_target = "*mugshots"
 
 	mugshot.overlays += alphafilter
-	mugshot.filters += filter(arglist(alpha_mask_filter(0, 0, null, "*mugshots")))
+	mugshot.filters += filter(arglist(alpha_mask_filter(0, 0, null, alphafilter)))
 
 	holding_movable.overlays += strip_appearance_underlays(mugshot)
 
