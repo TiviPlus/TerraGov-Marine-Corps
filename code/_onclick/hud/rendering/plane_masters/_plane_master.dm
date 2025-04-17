@@ -246,7 +246,8 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen/plane_master)
 
 /atom/movable/screen/plane_master/proc/filter_sourced_from_plane(plane, name, prio, list/filter_args)
 	filter_relays["[plane]"] = list(name, prio, filter_args)
-	RegisterSignal(home.our_hud, COMSIG_HUD_PLANES_REBUILT, PROC_REF(planes_rebuilt))
+	if(!length(filter_relays))
+		RegisterSignal(home.our_hud, COMSIG_HUD_PLANES_REBUILT, PROC_REF(planes_rebuilt))
 	var/atom/movable/screen/plane_master/master = home.our_hud?.get_plane_master(plane)
 	if(master)
 		filter_from_plane(master)
@@ -254,6 +255,8 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen/plane_master)
 /atom/movable/screen/plane_master/proc/remove_sourced_from_plane(plane, name)
 	filter_relays -= plane
 	remove_filter(name)
+	if(!length(filter_relays))
+		UnregisterSignal(home.our_hud, COMSIG_HUD_PLANES_REBUILT)
 
 /atom/movable/screen/plane_master/proc/planes_rebuilt(datum/hud/source, list/new_masters, key)
 	SIGNAL_HANDLER

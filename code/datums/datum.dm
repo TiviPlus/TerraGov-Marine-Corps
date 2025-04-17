@@ -443,6 +443,12 @@
 		var/datum/filter_data/data = filter_data[name]
 		return data.filter
 
+///returns the filter data datum associated with this
+/datum/proc/get_filter_data(name)
+	ASSERT(isatom(src) || isimage(src))
+	if(filter_data && filter_data[name])
+		return filter_data[name]
+
 /// Returns the indice in filters of the given filter name.
 /// If it is not found, returns null.
 /datum/proc/get_filter_index(name)
