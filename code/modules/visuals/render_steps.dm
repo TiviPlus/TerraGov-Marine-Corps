@@ -12,14 +12,14 @@
 	//we'll display using that, so we gotta reset
 	appearance_flags = KEEP_APART|KEEP_TOGETHER|RESET_TRANSFORM
 
-/atom/movable/render_step/Initialize(mapload, atom/source)
+/atom/movable/render_step/Initialize(mapload, atom/source, use_original)
 	. = ..()
 	verbs.Cut() //Cargo cultttttt
 
 	if(!source)
 		return
 
-	render_source = source.render_target
+	source.relay_render_to(src, use_original)
 	SET_PLANE_EXPLICIT(src, initial(plane), source)
 	RegisterSignal(source, COMSIG_QDELETING, PROC_REF(on_source_deleting))
 
@@ -47,7 +47,7 @@
 	//RESET_COLOR is obvious I hope
 	appearance_flags = KEEP_APART|KEEP_TOGETHER|RESET_COLOR|RESET_TRANSFORM
 
-/atom/movable/render_step/color/Initialize(mapload, atom/source, color)
+/atom/movable/render_step/color/Initialize(mapload, atom/source, use_original, color)
 	. = ..()
 	src.color = color
 
@@ -64,7 +64,7 @@
 	plane = EMISSIVE_PLANE
 	appearance_flags = EMISSIVE_APPEARANCE_FLAGS|RESET_TRANSFORM
 
-/atom/movable/render_step/emissive_blocker/Initialize(mapload, atom/source)
+/atom/movable/render_step/emissive_blocker/Initialize(mapload, atom/source, use_original)
 	. = ..()
 	src.color = GLOB.em_block_color
 
@@ -78,6 +78,6 @@
 	plane = EMISSIVE_PLANE
 	appearance_flags = EMISSIVE_APPEARANCE_FLAGS|RESET_TRANSFORM
 
-/atom/movable/render_step/emissive/Initialize(mapload, source)
+/atom/movable/render_step/emissive/Initialize(mapload, atom/source, use_original)
 	. = ..()
 	src.color = GLOB.emissive_color
