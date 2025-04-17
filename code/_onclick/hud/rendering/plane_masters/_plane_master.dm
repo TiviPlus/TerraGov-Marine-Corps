@@ -206,8 +206,13 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen/plane_master)
 	// If we're of critical importance, AND we're below the rendering layer
 	if(critical & PLANE_CRITICAL_DISPLAY)
 		// We here assume that your render target starts with *
-		if(critical & PLANE_CRITICAL_CUT_RENDER && render_target)
-			render_target = copytext_char(render_target, 2)
+		if(critical & PLANE_CRITICAL_CUT_RENDER && rendering_to)
+			var/list/old_rendering_to = LAZYCOPY(rendering_to)
+			for(var/datum/render_relay/relay as anything in old_rendering_to)
+				stop_render_to(relay.target)
+			for(var/datum/render_relay/relay as anything in old_rendering_to)
+				relay_render_to(relay.target, TRUE)
+
 		if(!(critical & PLANE_CRITICAL_NO_RELAY))
 			return
 		var/client/our_client = relevant.client
@@ -222,8 +227,12 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen/plane_master)
 	is_outside_bounds = FALSE
 	if(critical & PLANE_CRITICAL_DISPLAY)
 		// We here assume that your render target starts with *
-		if(critical & PLANE_CRITICAL_CUT_RENDER && render_target)
-			render_target = "*[render_target]"
+		if(critical & PLANE_CRITICAL_CUT_RENDER && rendering_to)
+			var/list/old_rendering_to = LAZYCOPY(rendering_to)
+			for(var/datum/render_relay/relay as anything in old_rendering_to)
+				stop_render_to(relay.target)
+			for(var/datum/render_relay/relay as anything in old_rendering_to)
+				relay_render_to(relay.target, FALSE)
 
 		if(!(critical & PLANE_CRITICAL_NO_RELAY))
 			return
