@@ -83,15 +83,14 @@
 		human.add_atom_colour(COLOR_GRAY, TEMPORARY_COLOR_PRIORITY)
 		human.log_message("has been petrified by [owner] for [PETRIFY_DURATION] ticks", LOG_ATTACK, color="pink")
 
-		var/image/stone_overlay = image('icons/effects/effects.dmi', null, "petrified_overlay")
-		stone_overlay.filters += filter(arglist(alpha_mask_filter(render_source="*[REF(human)]",flags=MASK_INVERSE)))
-
 		var/mutable_appearance/mask = mutable_appearance()
 		mask.appearance = human.appearance
-		mask.render_target = "*[REF(human)]"
+		mask.render_target = null
 		mask.alpha = 125
-		stone_overlay.overlays += mask
 
+		var/image/stone_overlay = image('icons/effects/effects.dmi', null, "petrified_overlay")
+		stone_overlay.filters += filter(arglist(alpha_mask_filter(render_source=mask,flags=MASK_INVERSE)))
+		stone_overlay.overlays += mask
 		human.overlays += stone_overlay
 		petrified_humans[human] = stone_overlay
 
