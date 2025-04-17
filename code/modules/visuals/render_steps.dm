@@ -12,7 +12,7 @@
 	//we'll display using that, so we gotta reset
 	appearance_flags = KEEP_APART|KEEP_TOGETHER|RESET_TRANSFORM
 
-/atom/movable/render_step/Initialize(mapload, atom/source, use_original)
+/atom/movable/render_step/Initialize(mapload, atom/source, use_original=TRUE)
 	. = ..()
 	verbs.Cut() //Cargo cultttttt
 
@@ -47,7 +47,7 @@
 	//RESET_COLOR is obvious I hope
 	appearance_flags = KEEP_APART|KEEP_TOGETHER|RESET_COLOR|RESET_TRANSFORM
 
-/atom/movable/render_step/color/Initialize(mapload, atom/source, use_original, color)
+/atom/movable/render_step/color/Initialize(mapload, atom/source, use_original, color=TRUE)
 	. = ..()
 	src.color = color
 
@@ -64,7 +64,7 @@
 	plane = EMISSIVE_PLANE
 	appearance_flags = EMISSIVE_APPEARANCE_FLAGS|RESET_TRANSFORM
 
-/atom/movable/render_step/emissive_blocker/Initialize(mapload, atom/source, use_original)
+/atom/movable/render_step/emissive_blocker/Initialize(mapload, atom/source, use_original=TRUE)
 	. = ..()
 	src.color = GLOB.em_block_color
 
@@ -78,6 +78,6 @@
 	plane = EMISSIVE_PLANE
 	appearance_flags = EMISSIVE_APPEARANCE_FLAGS|RESET_TRANSFORM
 
-/atom/movable/render_step/emissive/Initialize(mapload, atom/source, use_original)
+/atom/movable/render_step/emissive/Initialize(mapload, atom/source, use_original=TRUE)
 	. = ..()
 	src.color = GLOB.emissive_color
