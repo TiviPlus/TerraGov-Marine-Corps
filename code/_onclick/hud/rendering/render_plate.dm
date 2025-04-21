@@ -431,7 +431,7 @@
 		blend_to_use = blend_mode_override || initial(blend_mode)
 
 	var/atom/movable/render_plane_relay/relay = new()
-	relay_render_to(relay)
+	relay_render_to(relay, FALSE)
 	relay.plane = target_plane
 	relay.screen_loc = relay_loc
 	// There are two rules here
