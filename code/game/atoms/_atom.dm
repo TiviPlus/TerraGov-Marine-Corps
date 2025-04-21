@@ -144,6 +144,8 @@ directive is properly returned.
 			var/datum/atom_hud/alternate_appearance/AA = alternate_appearances[K]
 			AA.remove_from_hud(src)
 
+	if(length(filter_data))
+		clear_filters()
 	return ..()
 
 //===========================================================================

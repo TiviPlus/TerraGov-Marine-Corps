@@ -337,13 +337,8 @@ GLOBAL_LIST_INIT(master_filter_info, list(
 	if(HAS_TRAIT(src, TRAIT_WARPED_INVISIBLE))
 		CRASH("already warped invis, fix your code")
 	var/obj/effect/abstract/normalmap_bumpy/normal_bumpy = new(src)
-	var/render_tgt = "*warped_invis_[REF(normal_bumpy)]"
-	if(render_target)
-		render_tgt += "_oldtgt_" + render_target
-	normal_bumpy.alpha = (255/100) * strength
-	render_target = render_tgt
 	apply_wibbly_filters(normal_bumpy)
-	normal_bumpy.add_filter("mask", 1, alpha_mask_filter(-48, -48, render_source = render_target))
+	normal_bumpy.add_filter("mask", 1, alpha_mask_filter(-48, -48, render_source = src), FALSE)
 	vis_contents += normal_bumpy
 	ADD_TRAIT(src, TRAIT_WARPED_INVISIBLE, TRAIT_GENERIC)
 	RegisterSignal(src, COMSIG_ATOM_POST_UPDATE_OVERLAYS, PROC_REF(on_warped_overlays))
@@ -360,15 +355,7 @@ GLOBAL_LIST_INIT(master_filter_info, list(
 /atom/movable/proc/stop_warped_invisible()
 	if(!HAS_TRAIT(src, TRAIT_WARPED_INVISIBLE))
 		return
-	var/list/split_result = splittext(render_target, "_oldtgt_")
-	var/ref_part = split_result[1]
-	if(length(split_result) > 1)
-		var/old_part = split_result[2]
-		render_target = old_part
-	else
-		render_target = null
-	ref_part = copytext(ref_part, 15)
-	var/obj/effect/abstract/normalmap_bumpy/normal_bumpy = locate(ref_part) in vis_contents
+	var/obj/effect/abstract/normalmap_bumpy/normal_bumpy = locate() in vis_contents
 	vis_contents -= normal_bumpy
 	qdel(normal_bumpy)
 	REMOVE_TRAIT(src, TRAIT_WARPED_INVISIBLE, TRAIT_GENERIC)
