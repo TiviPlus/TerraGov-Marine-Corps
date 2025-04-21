@@ -36,7 +36,12 @@
 /atom/movable/lighting_mask/Initialize(mapload, ...)
 	. = ..()
 	add_filter("pixel_smoother", 3, gauss_blur_filter(2))
-	add_filter("shadow_alpha_masking", 4, alpha_mask_filter(render_source = SHADOW_RENDER_TARGET, flags = MASK_INVERSE))
+
+/atom/movable/lighting_mask/update_filters()
+	. = ..()
+	// todo hack because I had to change this to support multiple targets
+	// its already super cursed and this would be very very cursed
+	filters += filter(arglist(alpha_mask_filter(render_source = SHADOW_RENDER_TARGET, flags = MASK_INVERSE)))
 
 /atom/movable/lighting_mask/Destroy()
 	mask_holder = null
