@@ -207,11 +207,12 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen/plane_master)
 	if(critical & PLANE_CRITICAL_DISPLAY)
 		// We here assume that your render target starts with *
 		if(critical & PLANE_CRITICAL_CUT_RENDER && rendering_to)
-			var/list/old_rendering_to = LAZYCOPY(rendering_to)
-			for(var/datum/render_relay/relay as anything in old_rendering_to)
+			var/list/targets = list()
+			for(var/datum/render_relay/relay as anything in rendering_to)
+				targets += relay.target
 				stop_render_to(relay.target)
-			for(var/datum/render_relay/relay as anything in old_rendering_to)
-				relay_render_to(relay.target, TRUE)
+			for(var/target in targets)
+				relay_render_to(target, TRUE)
 
 		if(!(critical & PLANE_CRITICAL_NO_RELAY))
 			return
@@ -228,11 +229,12 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen/plane_master)
 	if(critical & PLANE_CRITICAL_DISPLAY)
 		// We here assume that your render target starts with *
 		if(critical & PLANE_CRITICAL_CUT_RENDER && rendering_to)
-			var/list/old_rendering_to = LAZYCOPY(rendering_to)
-			for(var/datum/render_relay/relay as anything in old_rendering_to)
+			var/list/targets = list()
+			for(var/datum/render_relay/relay as anything in rendering_to)
+				targets += relay.target
 				stop_render_to(relay.target)
-			for(var/datum/render_relay/relay as anything in old_rendering_to)
-				relay_render_to(relay.target, FALSE)
+			for(var/target in targets)
+				relay_render_to(target, FALSE)
 
 		if(!(critical & PLANE_CRITICAL_NO_RELAY))
 			return

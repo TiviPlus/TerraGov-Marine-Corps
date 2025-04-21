@@ -7,7 +7,9 @@
  *   * atoms
  *   * images (and their child, Mutable appearances) who have the same vars as atoms but arent children
  *   * filters, who are children of datum... but dont let us use any vars (see [/datum/render_relay/var/target])
+ *   * filters, unlike atoms, also support multiple render_sources
  * Hence, we need to add a managing datum to filters
+ * and we have to make render source management a list while forbidding atoms from treating it as such
  * and we have to miscast images as atoms
  * AND we have to do this all at datum level due to images/atoms not inheriting
  *
@@ -26,6 +28,7 @@
 	///flat list of render_relays that we render to. Don't directly use this unless you're a helper or /datum/render_relay please, use a helper instead
 	var/list/datum/render_relay/rendering_to
 	///if this is set, this is the atom we are currently rendering in place of our own appearance
+	///this is only longer than one when we're using a filter, since atoms only support one at once
 	var/datum/render_relay/rendering_from
 
 /**
