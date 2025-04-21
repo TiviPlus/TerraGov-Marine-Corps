@@ -225,7 +225,7 @@
 				var/list/next_relays = next_relay.provider.rendering_to
 				if(LAZYLEN(next_relays))
 					next_renderto += next_relays
-		for(var/datum/render_relay/laterrelay AS in top_relays)
+		for(var/datum/render_relay/laterrelay as anything in top_relays)
 			. |= laterrelay.target
 
 ///Returns the bottommost atom of the render stack. Supports isfilterdata unlike most other render procs

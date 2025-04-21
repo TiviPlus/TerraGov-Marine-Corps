@@ -394,7 +394,7 @@
  * * new_params - New parameters of the filter
  * * overwrite - TRUE means we replace the parameter list completely. FALSE means we only replace the things on new_params.
  */
-/datum/proc/modify_filter(name, list/new_params, overwrite = FALSE)
+/datum/proc/modify_filter(name, list/new_params, overwrite = FALSE, keep_render_original = TRUE)
 	var/datum/filter_data/data = filter_data[name]
 	if(!data)
 		return
@@ -405,7 +405,7 @@
 			data.arguments[thing] = new_params[thing]
 	var/atom/renderer = new_params["render_source"]
 	if(renderer)
-		renderer.relay_render_to(data)
+		renderer.relay_render_to(data, keep_render_original)
 	update_filters()
 
 /** Update a filter's parameter and animate this change. If the filter doesnt exist we won't do anything.
