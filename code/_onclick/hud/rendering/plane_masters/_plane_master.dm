@@ -246,10 +246,17 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen/plane_master)
 		return
 	show_to(relevant)
 
+/**
+ * Adds a filter that uses another plane as a render_source. Automatically finds and tracks the relevant filter
+ * plane: (offset) plane to use
+ * name: name of the filter to add
+ * prio: priority of the filter to add
+ * filter_args: filter args to pass to the filter as provided by the helpers. render_source will be set to the plane master so no need to provide that
+ */
 /atom/movable/screen/plane_master/proc/filter_sourced_from_plane(plane, name, prio, list/filter_args)
-	filter_relays["[plane]"] = list(name, prio, filter_args)
 	if(!length(filter_relays))
 		RegisterSignal(home.our_hud, COMSIG_HUD_PLANES_REBUILT, PROC_REF(planes_rebuilt))
+	filter_relays["[plane]"] = list(name, prio, filter_args)
 	var/atom/movable/screen/plane_master/master = home.our_hud?.get_plane_master(plane)
 	if(master)
 		filter_from_plane(master)
@@ -260,6 +267,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen/plane_master)
 	if(!length(filter_relays))
 		UnregisterSignal(home.our_hud, COMSIG_HUD_PLANES_REBUILT)
 
+///when planes rebuild we need to check if our old plane got deleted and update it again
 /atom/movable/screen/plane_master/proc/planes_rebuilt(datum/hud/source, list/new_masters, key)
 	SIGNAL_HANDLER
 	for(var/newplane in filter_relays)
