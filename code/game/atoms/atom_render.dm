@@ -7,7 +7,9 @@
  *   * atoms
  *   * images (and their child, Mutable appearances) who have the same vars as atoms but arent children
  *   * filters, who are children of datum... but dont let us use any vars (see [/datum/render_relay/var/target])
- *   * filters, unlike atoms, also support multiple render_sources
+ *   * filters, unlike atoms, also support multiple render_sources because they basically work completely differently
+ *  //TODO THE ABOVE IS NOT SUPPORTED YET I AM USING HACKS WHERES ITS NEEDED RN (/atom/movable/lighting_mask)
+ *
  * Hence, we need to add a managing datum to filters
  * and we have to make render source management a list while forbidding atoms from treating it as such
  * and we have to miscast images as atoms
@@ -18,7 +20,7 @@
  *
  * And some usecases also need to be able to walk up and down the render stack to apply some effects
  *
- * Byond also does not give a fuck if you make circular references and will just.. randomly pick a render_target on screen instead of something that makes sense
+ * Byond also does not give a fuck if you make circular references and will just.. randomly pick an unrelated render_target on screen instead of something that makes sense
  * So lets stop people from doing that as well while we're at it
  *
  * Having fun yet?
